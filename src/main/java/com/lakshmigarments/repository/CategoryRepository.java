@@ -16,4 +16,8 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
 	// Custom query to find the code of a category by its name
     @Query("SELECT c.code FROM Category c WHERE c.name = :categoryName")
     Optional<String> findCodeByName(String categoryName);
+    
+    Boolean existsByName(String name);
+    
+    Boolean existsByCode(String code);
 }

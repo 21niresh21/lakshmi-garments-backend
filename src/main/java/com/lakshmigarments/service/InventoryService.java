@@ -7,6 +7,8 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.lakshmigarments.dto.CategoryCountDTO;
@@ -54,8 +56,14 @@ public class InventoryService {
 	
 	public Inventory getCategorySubCategoryCount(String category, String subCategory) {
 		Inventory warehouse = warehouseRepository.findBySubCategoryName(subCategory).orElse(null);
-		System.out.println(category + "  " + subCategory);
+		if (warehouse == null) {
+			warehouse = new Inventory();
+			warehouse.setCount(0);
+		}
 		return warehouse;
 	}
 	
+    public Page<Inventory> getInventories(String category, String subCategory, int page, int size) {
+        return warehouseRepository.findByCategoryAndSubCategory(category, subCategory, PageRequest.of(page, size));
+    }
 }

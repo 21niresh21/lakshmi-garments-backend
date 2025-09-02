@@ -19,7 +19,7 @@ import lombok.NoArgsConstructor;
 public class Transport {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
 	@Column(length = 200, nullable = false, unique = true)

@@ -13,4 +13,8 @@ public class CreateSubCategoryDTO {
 	@Size(max = 200)
 	private String name;
 	
+	@NotBlank(message = "Category name is mandatory")
+	@Size(max = 200)
+	private String categoryName;
+	
 }

@@ -7,5 +7,7 @@ import com.lakshmigarments.model.Transport;
 
 @Repository
 public interface TransportRepository extends JpaRepository<Transport, Long> {
+	
+	Boolean existsByName(String name);
 
 }
