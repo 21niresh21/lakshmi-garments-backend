@@ -1,0 +1,4 @@
+streamlit==1.18.1
+psycopg2==2.9.6
+pandas==1.5.3  # if you are using pandas to handle data
+python-dotenv==1.0.0  # if you're using a .env file for environment variables

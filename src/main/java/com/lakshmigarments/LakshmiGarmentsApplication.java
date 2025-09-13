@@ -14,9 +14,8 @@ public class LakshmiGarmentsApplication {
 		SpringApplication.run(LakshmiGarmentsApplication.class, args);
 	}
 
-//	@Override
-//    public void run(String... args) throws Exception {
-//        StreamlitRunner.startStreamlit();
-//    }
+	public void run(String... args) throws Exception {
+        StreamlitRunner.startStreamlit();
+    }
 	
 }

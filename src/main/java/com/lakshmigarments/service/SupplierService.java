@@ -11,7 +11,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.lakshmigarments.dto.CreateSupplierDTO;
+import com.lakshmigarments.dto.UpdateSupplierDTO;
 import com.lakshmigarments.exception.DuplicateSupplierException;
+import com.lakshmigarments.exception.SupplierNotFoundException;
 import com.lakshmigarments.model.Supplier;
 import com.lakshmigarments.repository.SupplierRepository;
 
@@ -40,21 +42,58 @@ public class SupplierService {
 	    }
 	}
 	
-	public Page<Supplier> getSuppliers(Integer pageNo, Integer pageSize, String sortBy, String sortDir) {
-		
-		if (pageSize == null) {
-			LOGGER.info("Retrieved all suppliers");
-			Pageable wholePage = Pageable.unpaged();
-			return supplierRepository.findAll(wholePage);
-		}
-		
-		Sort sort  = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name())
-						? Sort.by(sortBy).ascending()
-						: Sort.by(sortBy).descending();
-		Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
-		Page<Supplier> supplierPage = supplierRepository.findAll(pageable);
-		
-		LOGGER.info("Retrieved suppliers as pages");
-		return supplierPage;
+	public Page<Supplier> getSuppliers(Integer pageNo, Integer pageSize, String sortBy, String sortDir, String search) {
+
+	    if (pageSize == null) {
+	        LOGGER.info("Retrieved all suppliers");
+	        Pageable wholePage = Pageable.unpaged();
+
+	        if (search != null && !search.trim().isEmpty()) {
+	            return supplierRepository.findByNameContainingIgnoreCase(search.trim(), wholePage);
+	        }
+
+	        return supplierRepository.findAll(wholePage);
+	    }
+
+	    Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name())
+	            ? Sort.by(sortBy).ascending()
+	            : Sort.by(sortBy).descending();
+
+	    Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
+
+	    if (search != null && !search.trim().isEmpty()) {
+	        LOGGER.info("Retrieved suppliers with search: {}", search);
+	        return supplierRepository.findByNameContainingIgnoreCase(search.trim(), pageable);
+	    }
+
+	    LOGGER.info("Retrieved suppliers as pages");
+	    return supplierRepository.findAll(pageable);
 	}
+	
+	public Supplier updateSupplier(Long id, UpdateSupplierDTO dto) {
+	    Supplier supplier = supplierRepository.findById(id)
+	        .orElseThrow(() -> {
+	            LOGGER.error("Supplier not found with ID: {}", id);
+	            return new SupplierNotFoundException("Supplier not found with ID: " + id);
+	        });
+
+	    if (dto.getName() != null && !dto.getName().equalsIgnoreCase(supplier.getName())) {
+	        boolean nameExists = supplierRepository.existsByNameIgnoreCaseAndIdNot(dto.getName(), id);
+	        if (nameExists) {
+	            LOGGER.error("Duplicate supplier name: '{}'", dto.getName());
+	            throw new DuplicateSupplierException("Supplier name already exists: " + dto.getName());
+	        }
+	        supplier.setName(dto.getName());
+	    }
+
+	    if (dto.getLocation() != null) {
+	        supplier.setLocation(dto.getLocation());
+	    }
+
+	    LOGGER.info("Supplier with ID {} updated successfully", id);
+	    return supplierRepository.save(supplier);
+	}
+
+
+
 }

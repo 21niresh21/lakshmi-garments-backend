@@ -11,8 +11,10 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.lakshmigarments.dto.CreateSubCategoryDTO;
+import com.lakshmigarments.dto.UpdateSubCategoryDTO;
 import com.lakshmigarments.exception.CategoryNotFoundException;
 import com.lakshmigarments.exception.DuplicateSubCategoryException;
+import com.lakshmigarments.exception.SubCategoryNotFoundException;
 import com.lakshmigarments.model.Category;
 import com.lakshmigarments.model.SubCategory;
 import com.lakshmigarments.repository.CategoryRepository;
@@ -53,21 +55,74 @@ public class SubCategoryService {
 	}
 
 	
-	public Page<SubCategory> getSubCategories(Integer pageNo, Integer pageSize, String sortBy, String sortDir) {
-		
-		if (pageSize == null) {
-			LOGGER.info("Retrieved all sub categories");
-			Pageable wholePage = Pageable.unpaged();
-			return subCategoryRepository.findAll(wholePage);
-		}
-		
-		Sort sort  = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name())
-						? Sort.by(sortBy).ascending()
-						: Sort.by(sortBy).descending();
-		Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
-		Page<SubCategory> subCategoryPage = subCategoryRepository.findAll(pageable);
-		
-		LOGGER.info("Retrieved sub categories as pages");
-		return subCategoryPage;
+	public Page<SubCategory> getSubCategories(Integer pageNo, Integer pageSize, String sortBy, String sortDir, String search) {
+	    if (pageSize == null) {
+	        LOGGER.info("Retrieved all sub categories");
+	        Pageable wholePage = Pageable.unpaged();
+	        return (search != null && !search.trim().isEmpty())
+	                ? subCategoryRepository.findByNameContainingIgnoreCase(search, wholePage)
+	                : subCategoryRepository.findAll(wholePage);
+	    }
+
+	    Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name())
+	            ? Sort.by(sortBy).ascending()
+	            : Sort.by(sortBy).descending();
+
+	    Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
+
+	    Page<SubCategory> subCategoryPage;
+	    if (search != null && !search.trim().isEmpty()) {
+	        subCategoryPage = subCategoryRepository.findByNameContainingIgnoreCase(search, pageable);
+	    } else {
+	        subCategoryPage = subCategoryRepository.findAll(pageable);
+	    }
+
+	    LOGGER.info("Retrieved sub categories as pages");
+	    return subCategoryPage;
 	}
+	
+	public SubCategory updateSubCategory(Long id, UpdateSubCategoryDTO dto) {
+	    SubCategory subCategory = subCategoryRepository.findById(id)
+	        .orElseThrow(() -> {
+	            LOGGER.error("SubCategory not found with ID: {}", id);
+	            return new SubCategoryNotFoundException("SubCategory not found with ID: " + id);
+	        });
+
+	    String updatedName = dto.getName() != null ? dto.getName() : subCategory.getName();
+	    Long updatedCategoryId = dto.getCategoryId() != null ? dto.getCategoryId() : subCategory.getCategory().getId();
+
+	    // Pre-check for duplicate
+	    boolean exists = subCategoryRepository.existsByNameIgnoreCaseAndCategoryIdAndIdNot(
+	        updatedName,
+	        updatedCategoryId,
+	        id
+	    );
+
+	    if (exists) {
+	        LOGGER.error("Duplicate SubCategory with name '{}' in category ID {}", updatedName, updatedCategoryId);
+	        throw new DuplicateSubCategoryException("SubCategory with this name already exists in the selected category.");
+	    }
+
+	    // Update fields
+	    if (dto.getName() != null) {
+	        subCategory.setName(dto.getName());
+	    }
+	    if (dto.getCategoryId() != null) {
+	        Category category = categoryRepository.findById(dto.getCategoryId())
+	            .orElseThrow(() -> {
+	                LOGGER.error("Category not found with ID: {}", dto.getCategoryId());
+	                return new CategoryNotFoundException("Category not found with ID: " + dto.getCategoryId());
+	            });
+	        subCategory.setCategory(category);
+	    }
+
+	    try {
+	        return subCategoryRepository.save(subCategory);
+	    } catch (DataIntegrityViolationException ex) {
+	        // This means DB unique constraint violated despite pre-check
+	        LOGGER.error("Database constraint violation when updating SubCategory with ID {}: {}", id, ex.getMessage());
+	        throw new DuplicateSubCategoryException("SubCategory with this name already exists in the selected category.");
+	    }
+	}
+
 }

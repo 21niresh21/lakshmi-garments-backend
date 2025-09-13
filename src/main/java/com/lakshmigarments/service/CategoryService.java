@@ -11,6 +11,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.lakshmigarments.dto.CreateCategoryDTO;
+import com.lakshmigarments.dto.UpdateCategoryDTO;
+import com.lakshmigarments.exception.CategoryNotFoundException;
 import com.lakshmigarments.exception.DuplicateCategoryException;
 import com.lakshmigarments.exception.DuplicateSubCategoryException;
 import com.lakshmigarments.model.Category;
@@ -49,21 +51,65 @@ public class CategoryService {
 	}
 
 	
-	public Page<Category> getCategories(Integer pageNo, Integer pageSize, String sortBy, String sortDir) {
-		
-		if (pageSize == null) {
-			LOGGER.info("Retrieved all categories");
-			Pageable wholePage = Pageable.unpaged();
-			return categoryRepository.findAll(wholePage);
-		}
-		
-		Sort sort  = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name())
-						? Sort.by(sortBy).ascending()
-						: Sort.by(sortBy).descending();
-		Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
-		Page<Category> categoryPage = categoryRepository.findAll(pageable);
-		
-		LOGGER.info("Retrieved categories as pages");
-		return categoryPage;
+	public Page<Category> getCategories(Integer pageNo, Integer pageSize, String sortBy, String sortDir, String search) {
+
+	    if (pageSize == null) {
+	        LOGGER.info("Retrieved all categories");
+	        Pageable wholePage = Pageable.unpaged();
+	        
+	        if (search != null && !search.isBlank()) {
+	            return categoryRepository.findByNameContainingIgnoreCase(search, wholePage);
+	        }
+
+	        return categoryRepository.findAll(wholePage);
+	    }
+
+	    Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name())
+	            ? Sort.by(sortBy).ascending()
+	            : Sort.by(sortBy).descending();
+
+	    Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
+
+	    if (search != null && !search.isBlank()) {
+	        LOGGER.info("Searching categories by name: '{}'", search);
+	        return categoryRepository.findByNameContainingIgnoreCase(search, pageable);
+	    }
+
+	    LOGGER.info("Retrieved categories as pages");
+	    return categoryRepository.findAll(pageable);
 	}
+	
+	public Category updateCategory(Long id, UpdateCategoryDTO dto) {
+	    Category category = categoryRepository.findById(id)
+	        .orElseThrow(() -> {
+	            LOGGER.error("Category not found with ID: {}", id);
+	            return new CategoryNotFoundException("Category not found with ID: " + id);
+	        });
+
+	    // Check for duplicate name
+	    if (dto.getName() != null && !dto.getName().equalsIgnoreCase(category.getName())) {
+	        boolean nameExists = categoryRepository.existsByNameIgnoreCaseAndIdNot(dto.getName(), id);
+	        if (nameExists) {
+	            LOGGER.error("Duplicate category name: '{}'", dto.getName());
+	            throw new DuplicateCategoryException("Category name already exists: " + dto.getName());
+	        }
+	        category.setName(dto.getName());
+	    }
+
+	    // Check for duplicate code
+	    if (dto.getCode() != null && !dto.getCode().equalsIgnoreCase(category.getCode())) {
+	        boolean codeExists = categoryRepository.existsByCodeIgnoreCaseAndIdNot(dto.getCode(), id);
+	        if (codeExists) {
+	            LOGGER.error("Duplicate category code: '{}'", dto.getCode());
+	            throw new DuplicateCategoryException("Category code already exists: " + dto.getCode());
+	        }
+	        category.setCode(dto.getCode());
+	    }
+
+	    LOGGER.info("Category with ID {} updated successfully", id);
+	    return categoryRepository.save(category);
+	}
+
+
+
 }
