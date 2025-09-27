@@ -7,11 +7,9 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class BatchSubCategoryDTO {
+public class CreateBatchSubCategoryDTO {
 	
-	private Long id;
-
-	private String subCategory;
+	private Long subCategoryID;
 	
-	private Integer quantity;
+	private Long quantity;
 }

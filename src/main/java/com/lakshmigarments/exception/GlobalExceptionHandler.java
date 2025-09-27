@@ -4,9 +4,46 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-@ControllerAdvice
+@RestControllerAdvice
 public class GlobalExceptionHandler {
+	
+	@ExceptionHandler(CategoryNotFoundException.class)
+	public ResponseEntity<String> handleCategoryNotFound(CategoryNotFoundException ex) {
+		System.out.println("hello");
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+	}
+
+    // inventory not found exception
+    @ExceptionHandler(InventoryNotFoundException.class)
+    public ResponseEntity<String> handleInventoryNotFound(InventoryNotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+    }
+
+    // inventory not sufficient exception
+    @ExceptionHandler(InsufficientInventoryException.class)
+    public ResponseEntity<String> handleInsufficientInventory(InsufficientInventoryException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+    }
+
+    // sub category not found exception
+    @ExceptionHandler(SubCategoryNotFoundException.class)
+    public ResponseEntity<String> handleSubCategoryNotFound(SubCategoryNotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+    }
+
+    // batch status not found exception
+    @ExceptionHandler(BatchStatusNotFoundException.class)
+    public ResponseEntity<String> handleBatchStatusNotFound(BatchStatusNotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+    }
+
+    // duplicate batch exception
+    @ExceptionHandler(DuplicateBatchException.class)
+    public ResponseEntity<String> handleDuplicateBatch(DuplicateBatchException ex) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
+    }
 	
 	@ExceptionHandler(DuplicateSupplierException.class)
     public ResponseEntity<String> handleDuplicateSupplier(DuplicateSupplierException ex) {

@@ -1,5 +1,6 @@
 package com.lakshmigarments.service;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -121,8 +122,13 @@ public Page<InvoiceDTO> getInvoices(Integer pageNo, Integer pageSize, String sor
 		completeInvoiceDTO.setNoOfBales(invoiceRepository.findCountOfBalesByInvoiceID(id));
 
 		Tuple totalQuantityAndValue = invoiceRepository.getTotalQuantityAndValue(id);
-		completeInvoiceDTO.setTotalQuantity(totalQuantityAndValue.get(0, Long.class));
-		completeInvoiceDTO.setValue(totalQuantityAndValue.get(1, Double.class));
+		System.out.println(totalQuantityAndValue.get(1).getClass().getName());
+		BigDecimal quantityBigDecimal = totalQuantityAndValue.get(0, BigDecimal.class);
+		
+		Long quantity = quantityBigDecimal != null ? quantityBigDecimal.longValue() : null;
+		Double price = totalQuantityAndValue.get(1, Double.class);
+		completeInvoiceDTO.setTotalQuantity(quantity);
+		completeInvoiceDTO.setValue(price);
 		completeInvoiceDTO.setCategories(invoiceRepository.findDistinctCategories(id));
 		completeInvoiceDTO.setSubCategories(invoiceRepository.findDistinctSubCategories(id));
 		completeInvoiceDTO.setQualities(invoiceRepository.findDistinctQualities(id));

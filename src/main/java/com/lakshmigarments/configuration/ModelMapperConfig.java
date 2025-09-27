@@ -6,10 +6,14 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.lakshmigarments.dto.BaleDTO;
+import com.lakshmigarments.dto.BatchResponseDTO;
+import com.lakshmigarments.dto.BatchResponseDTO.BatchSubCategoryResponseDTO;
 import com.lakshmigarments.dto.CreateSupplierDTO;
 import com.lakshmigarments.dto.InvoiceDTO;
 import com.lakshmigarments.dto.LorryReceiptDTO;
 import com.lakshmigarments.model.Bale;
+import com.lakshmigarments.model.Batch;
+import com.lakshmigarments.model.BatchSubCategory;
 import com.lakshmigarments.model.Invoice;
 import com.lakshmigarments.model.LorryReceipt;
 
@@ -31,6 +35,15 @@ public class ModelMapperConfig {
         	mapper.map(src -> src.getSubCategory().getCategory().getName(), BaleDTO::setCategory);
         	mapper.map(src -> src.getSubCategory().getName(), BaleDTO::setSubCategory);
         });
+		
+		modelMapper.typeMap(Batch.class, BatchResponseDTO.class).addMappings(mapper -> {
+			mapper.map(src -> src.getCategory().getName(), BatchResponseDTO::setCategoryName);
+			mapper.map(src -> src.getBatchStatus().getName(), BatchResponseDTO::setBatchStatus);
+		});
+		
+		modelMapper.typeMap(BatchSubCategory.class, BatchSubCategoryResponseDTO.class).addMappings(mapper -> {
+			mapper.map(src -> src.getSubCategory().getName(), BatchSubCategoryResponseDTO::setSubCategoryName);
+		});
 		
 		return modelMapper;
 				

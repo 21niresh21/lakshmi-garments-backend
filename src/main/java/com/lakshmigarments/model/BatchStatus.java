@@ -13,7 +13,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "batch_status")
+@Table(name = "batch_statuses")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

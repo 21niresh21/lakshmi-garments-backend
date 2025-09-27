@@ -10,6 +10,8 @@ import org.springframework.data.repository.query.Param;
 import com.lakshmigarments.model.Batch;
 
 public interface BatchRepository extends JpaRepository<Batch, Long> {
+
+    Boolean existsBySerialCode(String serialCode);
 	
 	// JPQL query to get the latest serial code for a given category
     @Query("SELECT b.serialCode FROM Batch b WHERE b.category.name = :categoryName ORDER BY b.createdAt DESC LIMIT 1")

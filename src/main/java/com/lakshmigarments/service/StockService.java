@@ -97,7 +97,12 @@ public class StockService {
 		invoice.setInvoiceDate(createStockDTO.getInvoiceDate());
 		invoice.setInvoiceNumber(createStockDTO.getInvoiceNumber());
 		invoice.setReceivedDate(createStockDTO.getShipmentReceivedDate());
-		invoice.setTransportCost(createStockDTO.getTransportCost());
+		if (createStockDTO.getTransportCost() == null) {
+			invoice.setTransportCost(0d);
+		} else {
+			invoice.setTransportCost(createStockDTO.getTransportCost());
+		}
+		
 		invoice.setIsPaid(createStockDTO.getIsTransportPaid());
 		invoice.setTransport(transport);
 		invoice.setSupplier(supplier);

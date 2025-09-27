@@ -77,7 +77,7 @@ public class SupplierService {
 	            return new SupplierNotFoundException("Supplier not found with ID: " + id);
 	        });
 
-	    if (dto.getName() != null && !dto.getName().equalsIgnoreCase(supplier.getName())) {
+	    if (dto.getName() != null) {
 	        boolean nameExists = supplierRepository.existsByNameIgnoreCaseAndIdNot(dto.getName(), id);
 	        if (nameExists) {
 	            LOGGER.error("Duplicate supplier name: '{}'", dto.getName());
@@ -89,7 +89,7 @@ public class SupplierService {
 	    if (dto.getLocation() != null) {
 	        supplier.setLocation(dto.getLocation());
 	    }
-
+	    System.out.println(supplier.getName());
 	    LOGGER.info("Supplier with ID {} updated successfully", id);
 	    return supplierRepository.save(supplier);
 	}

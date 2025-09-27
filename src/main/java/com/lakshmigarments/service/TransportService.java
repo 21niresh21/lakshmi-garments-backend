@@ -76,7 +76,7 @@ public class TransportService {
 	            return new TransportNotFoundException("Transport not found with ID: " + id);
 	        });
 
-	    if (dto.getName() != null && !dto.getName().equalsIgnoreCase(transport.getName())) {
+	    if (dto.getName() != null) {
 	        boolean nameExists = transportRepository.existsByNameIgnoreCaseAndIdNot(dto.getName(), id);
 	        if (nameExists) {
 	            LOGGER.error("Duplicate transport name: '{}'", dto.getName());

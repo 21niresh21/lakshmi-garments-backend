@@ -5,14 +5,18 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "bales")
+@Table(name = "bales", uniqueConstraints = {
+	    @UniqueConstraint(columnNames = {"baleNumber", "lorry_receipt_id"})
+	})
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -35,7 +39,11 @@ public class Bale {
 	private String quality;
 	
 	@ManyToOne
+	@JoinColumn(name = "lorry_receipt_id")
 	private LorryReceipt lorryReceipt;
+	
+	@ManyToOne
+	private Category category;
 	
 	@ManyToOne
 	private SubCategory subCategory;

@@ -1,6 +1,5 @@
 package com.lakshmigarments.dto;
 
-import java.sql.Timestamp;
 import java.util.List;
 
 import lombok.AllArgsConstructor;
@@ -10,21 +9,17 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class BatchDTO {
+public class CreateBatchDTO {
 	
-	private Long id;
-
-	private String category;
+	private Long categoryID;
 	
 	private String serialCode;
-	
-	private Timestamp createdAt;
-	
-	private String batchStatus;
+		
+	private Long batchStatusID;
 	
 	private Boolean isUrgent;
 	
 	private String remarks;
 	
-	private List<BatchSubCategoryDTO> subCategories;
+	private List<CreateBatchSubCategoryDTO> subCategories;
 }
