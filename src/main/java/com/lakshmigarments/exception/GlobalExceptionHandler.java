@@ -2,18 +2,50 @@ package com.lakshmigarments.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
-	
-	@ExceptionHandler(CategoryNotFoundException.class)
-	public ResponseEntity<String> handleCategoryNotFound(CategoryNotFoundException ex) {
-		System.out.println("hello");
-		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
-	}
+
+    @ExceptionHandler(CategoryNotFoundException.class)
+    public ResponseEntity<String> handleCategoryNotFound(CategoryNotFoundException ex) {
+        System.out.println("hello");
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+    }
+
+    // method argument not valid exception
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<String> handleMethodArgumentNotValid(MethodArgumentNotValidException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getFieldError().getDefaultMessage());
+    }
+
+    // http message not readable exception
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<String> handleHttpMessageNotReadable(HttpMessageNotReadableException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid request body");
+    }
+
+    // employee not found exception
+    @ExceptionHandler(EmployeeNotFoundException.class)
+    public ResponseEntity<String> handleEmployeeNotFound(EmployeeNotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+    }
+
+    // skill not found exception
+    @ExceptionHandler(SkillNotFoundException.class)
+    public ResponseEntity<String> handleSkillNotFound(SkillNotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+    }
+
+    // duplicate employee exception
+    @ExceptionHandler(DuplicateEmployeeException.class)
+    public ResponseEntity<String> handleDuplicateEmployee(DuplicateEmployeeException ex) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
+    }
 
     // duplicate skill exception
     @ExceptionHandler(DuplicateSkillException.class)
@@ -50,28 +82,28 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handleDuplicateBatch(DuplicateBatchException ex) {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
     }
-	
-	@ExceptionHandler(DuplicateSupplierException.class)
+
+    @ExceptionHandler(DuplicateSupplierException.class)
     public ResponseEntity<String> handleDuplicateSupplier(DuplicateSupplierException ex) {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
     }
-	
-	@ExceptionHandler(DuplicateTransportException.class)
+
+    @ExceptionHandler(DuplicateTransportException.class)
     public ResponseEntity<String> handleDuplicateTransport(DuplicateTransportException ex) {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
     }
-	
-	@ExceptionHandler(DuplicateCategoryException.class)
+
+    @ExceptionHandler(DuplicateCategoryException.class)
     public ResponseEntity<String> handleDuplicateCategory(DuplicateCategoryException ex) {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
     }
-	
-	@ExceptionHandler(DuplicateSubCategoryException.class)
+
+    @ExceptionHandler(DuplicateSubCategoryException.class)
     public ResponseEntity<String> handleDuplicateSubCategory(DuplicateSubCategoryException ex) {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
     }
-	
-	@ExceptionHandler(RoleNotFoundException.class)
+
+    @ExceptionHandler(RoleNotFoundException.class)
     public ResponseEntity<String> handleRoleNotFound(RoleNotFoundException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
     }

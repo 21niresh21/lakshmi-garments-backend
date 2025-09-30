@@ -14,4 +14,6 @@ public interface SkillService {
 	
 	List<SkillResponseDTO> getAllSkills(String search);
 
+	SkillResponseDTO updateSkill(Long id, SkillRequestDTO skillRequestDTO);
+
 }

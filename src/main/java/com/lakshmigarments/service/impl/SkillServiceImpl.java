@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import com.lakshmigarments.dto.SkillRequestDTO;
 import com.lakshmigarments.dto.SkillResponseDTO;
 import com.lakshmigarments.exception.DuplicateSkillException;
+import com.lakshmigarments.exception.SkillNotFoundException;
 import com.lakshmigarments.model.Skill;
 import com.lakshmigarments.repository.SkillRepository;
 import com.lakshmigarments.repository.specification.SkillSpecification;
@@ -63,6 +64,28 @@ public class SkillServiceImpl implements SkillService {
                 .map(skill -> modelMapper.map(skill, SkillResponseDTO.class))
                 .collect(Collectors.toList());
 		
+	}
+
+	@Override
+	public SkillResponseDTO updateSkill(Long id, SkillRequestDTO skillRequestDTO) {
+		
+		String skillName = skillRequestDTO.getName().trim();
+		
+		Skill skill = skillRepository.findById(id).orElseThrow(() -> {
+			LOGGER.error("Skill with ID {} not found", id);
+			return new SkillNotFoundException("Skill not found with ID " + id);
+		});
+
+		if (skillRepository.existsByName(skillName)) {
+			LOGGER.error("Skill already exists with name {}", skillName);
+			throw new DuplicateSkillException("Skill already exists with name " + skillName);
+		}
+
+		skill.setName(skillName);
+
+		Skill updatedSkill = skillRepository.save(skill);
+		LOGGER.debug("Skill updated with name {}", updatedSkill.getName());
+		return modelMapper.map(updatedSkill, SkillResponseDTO.class);
 	}
 
 }

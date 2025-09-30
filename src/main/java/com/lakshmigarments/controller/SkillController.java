@@ -50,4 +50,12 @@ public class SkillController {
         return ResponseEntity.ok(skills);
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<SkillResponseDTO> updateSkill(@PathVariable Long id, @RequestBody SkillRequestDTO skillRequestDTO) {
+        LOGGER.info("Received request to update skill with ID: {}", id);
+        SkillResponseDTO skillResponseDTO = skillService.updateSkill(id, skillRequestDTO);
+        LOGGER.info("Skill updated successfully with ID: {}", id);
+        return ResponseEntity.ok(skillResponseDTO);
+    }
+
 }
