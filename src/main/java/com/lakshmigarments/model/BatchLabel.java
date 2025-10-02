@@ -23,7 +23,7 @@ public class BatchLabel {
     @ManyToOne
     private Batch batch;
 
-    @OneToOne
+    @ManyToOne
     private Employee collectedBy;
 
     @CreationTimestamp
