@@ -1,5 +1,6 @@
 package com.lakshmigarments.service;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -120,7 +121,7 @@ public class StockService {
 			
 			for (CreateBaleDTO baleDTO : baleDTOs) {
 				String baleNumber = baleDTO.getBaleNumber();
-				Integer quantity = baleDTO.getQuantity();
+				Long quantity = baleDTO.getQuantity();
 				Double length = baleDTO.getLength();
 				Double price = baleDTO.getPrice();
 				String quality = baleDTO.getQuality();
@@ -159,10 +160,10 @@ public class StockService {
 					inventory.setSubCategory(bale.getSubCategory());
 				}
 		        inventoryRepository.save(inventory);
+
 		    }
 		}
 
 		return null;
 	}
-
 }
