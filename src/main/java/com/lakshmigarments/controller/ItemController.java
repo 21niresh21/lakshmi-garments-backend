@@ -3,6 +3,7 @@ package com.lakshmigarments.controller;
 import com.lakshmigarments.dto.ItemRequestDTO;
 import com.lakshmigarments.dto.ItemResponseDTO;
 import com.lakshmigarments.service.ItemService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,7 +32,7 @@ public class ItemController {
     }
 
     @PostMapping
-    public ResponseEntity<ItemResponseDTO> createItem(@RequestBody ItemRequestDTO itemRequestDTO){
+    public ResponseEntity<ItemResponseDTO> createItem(@Valid @RequestBody ItemRequestDTO itemRequestDTO){
         LOGGER.info("Received request to create item: {}", itemRequestDTO.getName());
         ItemResponseDTO itemResponseDTO = itemService.createItem(itemRequestDTO);
         LOGGER.info("Item created successfully with ID: {}", itemResponseDTO.getId());
@@ -39,7 +40,7 @@ public class ItemController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<ItemResponseDTO> updateItem(@PathVariable Long id, @RequestBody ItemRequestDTO itemRequestDTO){
+    public ResponseEntity<ItemResponseDTO> updateItem(@PathVariable Long id, @Valid @RequestBody ItemRequestDTO itemRequestDTO){
         LOGGER.info("Received request to update item with ID: {}", id);
         ItemResponseDTO itemResponseDTO = itemService.updateItem(id, itemRequestDTO);
         LOGGER.info("Item updated successfully with ID: {}", itemResponseDTO.getId());
