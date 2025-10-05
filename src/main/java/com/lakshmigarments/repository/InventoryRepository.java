@@ -38,4 +38,6 @@ public interface InventoryRepository extends JpaRepository<Inventory, Long> {
     @Query("SELECT i FROM Inventory i WHERE i.category.id = :categoryId AND i.subCategory.id = :subCategoryId")
     Optional<Inventory> findByCategoryIdAndSubCategoryId(@Param("categoryId") Long categoryId,
                                                          @Param("subCategoryId") Long subCategoryId);
+
+    Optional<Inventory> findBySubCategoryName(String subCategoryName);
 }

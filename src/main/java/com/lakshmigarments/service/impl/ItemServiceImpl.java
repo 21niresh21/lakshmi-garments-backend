@@ -8,6 +8,7 @@ import com.lakshmigarments.model.Item;
 import com.lakshmigarments.repository.ItemRepository;
 import com.lakshmigarments.repository.specification.ItemSpecification;
 import com.lakshmigarments.service.ItemService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
@@ -28,6 +29,7 @@ public class ItemServiceImpl implements ItemService {
     private final ModelMapper modelMapper;
 
     @Override
+    @Transactional
     public ItemResponseDTO createItem(ItemRequestDTO item) {
         String itemName = item.getName().trim();
 
@@ -45,6 +47,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
+    @Transactional
     public ItemResponseDTO updateItem(Long id, ItemRequestDTO itemRequestDTO) {
 
         Item existingItem = itemRepository.findById(id).orElseThrow(
@@ -68,15 +71,16 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
+    @Transactional
     public boolean deleteItem(Long id) {
         Item existingItem = itemRepository.findById(id).orElseThrow(
                 ()->{
                     LOGGER.error("Item not found with id {}", id);
-                    throw new ItemNotFoundException("Item not found with id " + id);
+                    return new ItemNotFoundException("Item not found with id " + id);
                 }
         );
 
-        long deletedCount = itemRepository.deleteByItem(existingItem);
+        long deletedCount = itemRepository.deleteItemById(existingItem.getId());
         if(deletedCount > 0){
             LOGGER.debug("Item deleted with id {}", id);
             return true;

@@ -10,13 +10,10 @@ import java.util.List;
 @Service
 public interface ItemService {
 
-    @Transactional
     ItemResponseDTO createItem(ItemRequestDTO item);
 
-    @Transactional
     ItemResponseDTO updateItem(Long id, ItemRequestDTO itemRequestDTO);
 
-    @Transactional
     boolean deleteItem(Long id);
 
     List<ItemResponseDTO> getAllItems(String search);
