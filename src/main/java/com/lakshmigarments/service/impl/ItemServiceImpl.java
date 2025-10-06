@@ -18,7 +18,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
 
-
 @Service
 @RequiredArgsConstructor
 public class ItemServiceImpl implements ItemService {
@@ -31,8 +30,8 @@ public class ItemServiceImpl implements ItemService {
     public ItemResponseDTO createItem(ItemRequestDTO item) {
         String itemName = item.getName().trim();
 
-        if(itemRepository.existsByNameIgnoreCase(itemName)){
-            LOGGER.error("Item already exists with name {}",itemName);
+        if (itemRepository.existsByNameIgnoreCase(itemName)) {
+            LOGGER.error("Item already exists with name {}", itemName);
             throw new DuplicateItemException("Item already exists with name " + itemName);
         }
 
@@ -48,16 +47,15 @@ public class ItemServiceImpl implements ItemService {
     public ItemResponseDTO updateItem(Long id, ItemRequestDTO itemRequestDTO) {
 
         Item existingItem = itemRepository.findById(id).orElseThrow(
-                ()-> {
+                () -> {
                     LOGGER.error("Item not found with id {}", id);
                     return new ItemNotFoundException("Item not found with id " + id);
-                }
-        );
+                });
 
         String updatedName = itemRequestDTO.getName().trim();
 
-        if(itemRepository.existsByNameIgnoreCase(updatedName)){
-            LOGGER.error("Item already exists with name {}",updatedName);
+        if (itemRepository.existsByNameIgnoreCase(updatedName)) {
+            LOGGER.error("Item already exists with name {}", updatedName);
             throw new DuplicateItemException("Item already exists with name " + updatedName);
         }
 
@@ -69,21 +67,15 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public boolean deleteItem(Long id) {
-        Item existingItem = itemRepository.findById(id).orElseThrow(
-                ()->{
+        itemRepository.findById(id).orElseThrow(
+                () -> {
                     LOGGER.error("Item not found with id {}", id);
                     throw new ItemNotFoundException("Item not found with id " + id);
-                }
-        );
+                });
 
-        long deletedCount = itemRepository.deleteByItem(existingItem);
-        if(deletedCount > 0){
-            LOGGER.debug("Item deleted with id {}", id);
-            return true;
-        } else {
-            LOGGER.error("Failed to delete item with id {}", id);
-            return false;
-        }
+        itemRepository.deleteById(id);
+        LOGGER.debug("Item deleted with id {}", id);
+        return true;
     }
 
     @Override
@@ -91,7 +83,8 @@ public class ItemServiceImpl implements ItemService {
         Specification<Item> specification = ItemSpecification.filterByName(search);
         List<Item> items = itemRepository.findAll(specification);
 
-        List<ItemResponseDTO> itemResponseDTOs = items.stream().map(item -> modelMapper.map(item, ItemResponseDTO.class)).collect(Collectors.toList());
+        List<ItemResponseDTO> itemResponseDTOs = items.stream()
+                .map(item -> modelMapper.map(item, ItemResponseDTO.class)).collect(Collectors.toList());
 
         return itemResponseDTOs;
     }
