@@ -17,4 +17,6 @@ public class DamageType {
     private Long id;
 
     private String name;
+
+    private String description;
 }

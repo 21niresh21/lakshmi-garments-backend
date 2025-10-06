@@ -5,17 +5,15 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 
-import java.sql.Date;
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "jobworks")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class JobWork {
+public class Jobwork {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,13 +28,18 @@ public class JobWork {
     @ManyToOne
     private Item item;
 
+    @ManyToOne
+    private JobworkType jobworkType;
+
     private Long quantity;
 
+    private String jobworkNumber;
+
     @CreationTimestamp
-    private Timestamp startedAt;
+    private LocalDateTime startedAt;
 
     @Column(nullable = true)
-    private Timestamp endedAt;
+    private LocalDateTime endedAt;
 
     private String remarks;
 }

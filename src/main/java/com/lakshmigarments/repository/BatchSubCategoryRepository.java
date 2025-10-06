@@ -10,5 +10,7 @@ import java.util.List;
 public interface BatchSubCategoryRepository extends JpaRepository<BatchSubCategory, Long> {
 
 	List<BatchSubCategory> findByBatch(Batch batch);
+
+	List<BatchSubCategory> findByBatchId(Long batchId);
 	
 }

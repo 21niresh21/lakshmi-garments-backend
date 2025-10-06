@@ -17,7 +17,7 @@ public class Damage {
     private Long id;
 
     @ManyToOne
-    private JobWork jobWork;
+    private Jobwork jobWork;
 
     private Integer quantity;
 
@@ -25,8 +25,8 @@ public class Damage {
     private DamageType damageType;
 
     @ManyToOne
-    private JobWork reworkJobWork;
+    private Jobwork reworkJobWork;
 
     @ManyToOne
-    private JobWork reportedBy;
+    private Jobwork reportedBy;
 }

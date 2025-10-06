@@ -15,6 +15,12 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
     }
 
+    // jobwork not found exception
+    @ExceptionHandler(JobworkNotFoundException.class)
+    public ResponseEntity<String> handleJobworkNotFound(JobworkNotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+    }
+
     //supplier not found exception
     @ExceptionHandler(SupplierNotFoundException.class)
     public ResponseEntity<String> handleSupplierNotFound(SupplierNotFoundException ex) {

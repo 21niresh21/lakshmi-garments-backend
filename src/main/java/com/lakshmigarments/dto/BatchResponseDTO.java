@@ -1,5 +1,6 @@
 package com.lakshmigarments.dto;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import lombok.AllArgsConstructor;
@@ -34,6 +35,8 @@ public class BatchResponseDTO {
 	private Boolean isUrgent;
 	
 	private String remarks;
+	
+	private LocalDateTime createdAt;
 	
 	private List<BatchSubCategoryResponseDTO> subCategories;
 
