@@ -29,7 +29,7 @@ public class Bale {
 	@Column(length = 100, nullable = false, unique = true)
 	private String baleNumber;
 	
-	private Integer quantity;
+	private Long quantity;
 	
 	private Double length;
 	
@@ -48,7 +48,7 @@ public class Bale {
 	@ManyToOne
 	private SubCategory subCategory;
 	
-	public Bale(String baleNumber, Integer quantity, Double length, Double price, String quality, 
+	public Bale(String baleNumber, Long quantity, Double length, Double price, String quality,
 			 SubCategory subCategory, LorryReceipt lorryReceipt) {
 		this.baleNumber = baleNumber;
 		this.quantity = quantity;

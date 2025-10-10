@@ -21,19 +21,17 @@ import com.lakshmigarments.dto.EmployeeResponseDTO;
 import com.lakshmigarments.service.EmployeeService;
 
 import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
 
 @RestController
 @RequestMapping("/employees")
 @CrossOrigin(origins = "*", allowedHeaders = "*")
+@AllArgsConstructor
 public class EmployeeController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(EmployeeController.class);
 
     private final EmployeeService employeeService;
-
-    public EmployeeController(EmployeeService employeeService) {
-        this.employeeService = employeeService;
-    }
 
     @GetMapping
     public ResponseEntity<List<EmployeeResponseDTO>> getAllEmployees(@RequestParam(required = false) String search) {
@@ -42,7 +40,7 @@ public class EmployeeController {
         LOGGER.info("Employees retrieved successfully");
         return ResponseEntity.status(HttpStatus.OK).body(employees);
     }
-
+    
     @PostMapping
     public ResponseEntity<EmployeeResponseDTO> createEmployee(
             @Valid @RequestBody EmployeeRequestDTO employeeRequestDTO) {

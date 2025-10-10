@@ -18,26 +18,22 @@ import com.lakshmigarments.repository.SkillRepository;
 import com.lakshmigarments.repository.specification.SkillSpecification;
 import com.lakshmigarments.service.SkillService;
 
+import lombok.AllArgsConstructor;
+
 @Service
+@AllArgsConstructor
 public class SkillServiceImpl implements SkillService {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(SkillServiceImpl.class);
-
 	private final SkillRepository skillRepository;
-	
 	private final ModelMapper modelMapper;
-	
-	public SkillServiceImpl(SkillRepository skillRepository, ModelMapper modelMapper) {
-		this.skillRepository = skillRepository;
-		this.modelMapper = modelMapper;
-	}
 
 	@Override
 	public SkillResponseDTO createSkill(SkillRequestDTO skillRequestDTO) {
 		
 		String skillName = skillRequestDTO.getName().trim();
 		
-		if (skillRepository.existsByName(skillName)) {
+		if (skillRepository.existsByNameIgnoreCase(skillName)) {
 			LOGGER.error("Skill already exists with name {}", skillName);
 			throw new DuplicateSkillException("Skill already exists with name " + skillName);
 		}
@@ -76,7 +72,7 @@ public class SkillServiceImpl implements SkillService {
 			return new SkillNotFoundException("Skill not found with ID " + id);
 		});
 
-		if (skillRepository.existsByName(skillName)) {
+		if (skillRepository.existsByNameIgnoreCase(skillName)) {
 			LOGGER.error("Skill already exists with name {}", skillName);
 			throw new DuplicateSkillException("Skill already exists with name " + skillName);
 		}

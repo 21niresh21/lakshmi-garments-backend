@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 
 import com.lakshmigarments.dto.EmployeeRequestDTO;
 import com.lakshmigarments.dto.EmployeeResponseDTO;
-import com.lakshmigarments.dto.EmployeeUpdateDTO;
 import com.lakshmigarments.dto.SkillResponseDTO;
 import com.lakshmigarments.exception.DuplicateEmployeeException;
 import com.lakshmigarments.exception.EmployeeNotFoundException;
@@ -27,8 +26,10 @@ import com.lakshmigarments.repository.specification.EmployeeSpecification;
 import com.lakshmigarments.service.EmployeeService;
 
 import jakarta.transaction.Transactional;
+import lombok.AllArgsConstructor;
 
 @Service
+@AllArgsConstructor
 public class EmployeeServiceImpl implements EmployeeService {
 
 	private final Logger LOGGER = LoggerFactory.getLogger(EmployeeServiceImpl.class);
@@ -41,16 +42,6 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 	private final ModelMapper modelMapper;
 
-	public EmployeeServiceImpl(EmployeeRepository employeeRepository,
-			SkillRepository skillRepository, EmployeeSkillRepository employeeSkillRepository,
-			ModelMapper modelMapper) {
-		this.employeeRepository = employeeRepository;
-		this.skillRepository = skillRepository;
-		this.employeeSkillRepository = employeeSkillRepository;
-		this.modelMapper = modelMapper;
-	}
-
-	// create employee
 	@Transactional
 	public EmployeeResponseDTO createEmployee(EmployeeRequestDTO employeeRequestDTO) {
 
@@ -103,7 +94,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 		String employeeName = employeeRequestDTO.getName().trim().toLowerCase();
 
 		// Check for duplicate name (excluding current employee)
-		if (employeeRepository.existsByName(employeeName)) {
+		if (employeeRepository.existsByNameAndIdNot(employeeName, id)) {
 			LOGGER.error("Duplicate employee name detected: '{}'", employeeName);
 			throw new DuplicateEmployeeException("Employee already exists with name " + employeeName);
 		}

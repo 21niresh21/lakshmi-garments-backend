@@ -9,6 +9,8 @@ import com.lakshmigarments.model.Employee;
 @Repository
 public interface EmployeeRepository extends JpaRepository<Employee, Long>, JpaSpecificationExecutor<Employee> {
 
+	boolean existsByNameAndIdNot(String name, Long id);
+
 	boolean existsByName(String name);
 
 }

@@ -17,7 +17,7 @@ public class CreateBaleDTO {
 	
 	@Positive(message = "Quantity should be positive")
 	@NotNull(message = "Quantity is mandatory")
-	private Integer quantity;
+	private Long quantity;
 	
 	@Positive(message = "Length should be positive")
 	@NotNull(message = "Length is mandatory")

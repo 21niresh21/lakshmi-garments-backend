@@ -5,6 +5,7 @@ import com.lakshmigarments.dto.SkillResponseDTO;
 import com.lakshmigarments.service.SkillService;
 
 import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
 
 import java.util.List;
 
@@ -18,15 +19,12 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/skills")
 @CrossOrigin(origins = "*", allowedHeaders = "*")
+@AllArgsConstructor
 public class SkillController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SkillController.class);
 
     private final SkillService skillService;
-
-    public SkillController(SkillService skillService) {
-        this.skillService = skillService;
-    }
 
     @PostMapping
     public ResponseEntity<SkillResponseDTO> createSkill(@Valid @RequestBody SkillRequestDTO skillRequestDTO) {
@@ -51,7 +49,7 @@ public class SkillController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<SkillResponseDTO> updateSkill(@PathVariable Long id, @RequestBody SkillRequestDTO skillRequestDTO) {
+    public ResponseEntity<SkillResponseDTO> updateSkill(@PathVariable Long id, @Valid @RequestBody SkillRequestDTO skillRequestDTO) {
         LOGGER.info("Received request to update skill with ID: {}", id);
         SkillResponseDTO skillResponseDTO = skillService.updateSkill(id, skillRequestDTO);
         LOGGER.info("Skill updated successfully with ID: {}", id);

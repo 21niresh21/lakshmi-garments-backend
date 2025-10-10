@@ -6,9 +6,6 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,7 +22,6 @@ import com.lakshmigarments.dto.CompleteInvoiceDTO;
 import com.lakshmigarments.dto.InvoiceDTO;
 import com.lakshmigarments.model.Supplier;
 import com.lakshmigarments.service.InvoiceService;
-import com.lakshmigarments.service.SupplierService;
 
 @RestController
 @RequestMapping("/invoices")

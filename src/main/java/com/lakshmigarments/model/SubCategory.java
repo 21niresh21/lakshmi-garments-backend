@@ -22,7 +22,4 @@ public class SubCategory {
     @Column(length = 200, nullable = false)
     private String name;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "category_id", nullable = false)
-    private Category category;
 }
