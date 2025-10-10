@@ -1,7 +1,10 @@
 package com.lakshmigarments.service;
 
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
@@ -21,6 +24,7 @@ import com.lakshmigarments.model.User;
 import com.lakshmigarments.repository.RoleRepository;
 import com.lakshmigarments.repository.UserRepository;
 import com.lakshmigarments.repository.specification.UserSpecification;
+import com.lakshmigarments.utility.JwtUtil;
 
 
 @Service
@@ -30,11 +34,13 @@ public class UserService {
 	private final UserRepository userRepository;
 	private final RoleRepository roleRepository;
 	private final ModelMapper modelMapper;
+	private final JwtUtil jwtUtil;
 	
-	public UserService(UserRepository userRepository, ModelMapper modelMapper, RoleRepository roleRepository) {
+	public UserService(UserRepository userRepository, ModelMapper modelMapper, RoleRepository roleRepository, JwtUtil jwtUtil) {
 		this.userRepository = userRepository;
 		this.modelMapper = modelMapper;
 		this.roleRepository = roleRepository;
+		this.jwtUtil = jwtUtil;
 	}
 	
 	// GET ALL
@@ -86,7 +92,7 @@ public class UserService {
 		
 		User user = new User();
 		user.setName(userDTO.getName());
-		user.setPassword(userDTO.getPassword());
+		user.setPassword(jwtUtil.hashPassword(userDTO.getPassword()));
 		user.setIsActive(isActive);
 		user.setRole(role);
 		
@@ -122,6 +128,4 @@ public class UserService {
 		LOGGER.info("User updated successfully with ID: {}", updatedUser.getId());
 		return modelMapper.map(updatedUser, UserResponseDTO.class);
 	}
-	
-
 }
