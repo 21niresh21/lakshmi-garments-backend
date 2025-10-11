@@ -1,17 +1,12 @@
 package com.lakshmigarments.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Column;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "jobwork_types")
+@Table(name = "jobwork_type")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -21,7 +16,5 @@ public class JobworkType {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(length = 100, nullable = false, unique = true)
     private String name;
-
 }
