@@ -4,15 +4,19 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
+import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.lakshmigarments.dto.CategorySubCategoryCountDTO;
 import com.lakshmigarments.dto.SubCategoryCountDTO;
+import com.lakshmigarments.dto.SubCategoryResponseDTO;
 import com.lakshmigarments.model.Category;
 import com.lakshmigarments.model.Inventory;
+import com.lakshmigarments.model.SubCategory;
 import com.lakshmigarments.service.InventoryService;
 import com.lakshmigarments.repository.InventoryRepository;
 
@@ -21,9 +25,10 @@ public class InventoryServiceImpl implements InventoryService {
 
     private final Logger LOGGER = LoggerFactory.getLogger(InventoryServiceImpl.class);
     private final InventoryRepository inventoryRepository;
-
-    public InventoryServiceImpl(InventoryRepository inventoryRepository) {
+    private final ModelMapper modelMapper;
+    public InventoryServiceImpl(InventoryRepository inventoryRepository, ModelMapper modelMapper) {
         this.inventoryRepository = inventoryRepository;
+        this.modelMapper = modelMapper;
     }
 
     @Override
@@ -64,12 +69,18 @@ public class InventoryServiceImpl implements InventoryService {
     }
 
     @Override
-    public Long getCategorySubCategoryCount(String category, String subCategory) {
-        Inventory inventory = inventoryRepository.findBySubCategoryNameAndCategoryName(subCategory, category).orElse(null);
+    public Long getCategorySubCategoryCount(Long categoryId, Long subCategoryId) {
+        Inventory inventory = inventoryRepository.findByCategoryIdAndSubCategoryId(categoryId, subCategoryId).orElse(null);
         if (inventory == null) {
-            LOGGER.error("Inventory not found with subCategory {} and category {}", subCategory, category);
+            LOGGER.error("Inventory not found with subCategory {} and category {}", subCategoryId, categoryId);
             return 0L;
         }
         return inventory.getCount().longValue();
+    }
+
+    @Override
+    public List<SubCategoryResponseDTO> getSubCategories(Long categoryId) {
+        List<SubCategory> subCategories = inventoryRepository.findSubCategoriesByCategoryId(categoryId);
+        return subCategories.stream().map(subCategory -> modelMapper.map(subCategory, SubCategoryResponseDTO.class)).collect(Collectors.toList());
     }
 }

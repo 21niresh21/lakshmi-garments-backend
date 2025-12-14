@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lakshmigarments.dto.CategorySubCategoryCountDTO;
+import com.lakshmigarments.dto.SubCategoryResponseDTO;
+import com.lakshmigarments.dto.CategoryResponseDTO;
+import com.lakshmigarments.service.CategoryService;
 import com.lakshmigarments.service.InventoryService;
 
 @RestController
@@ -20,9 +23,11 @@ public class InventoryController {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(InventoryController.class);
 	private final InventoryService inventoryService;
+	private final CategoryService categoryService;
 
-	public InventoryController(InventoryService inventoryService) {
+	public InventoryController(InventoryService inventoryService, CategoryService categoryService) {
 		this.inventoryService = inventoryService;
+		this.categoryService = categoryService;
 	}
 
 	@GetMapping("/categories/subcategory-counts")
@@ -34,12 +39,28 @@ public class InventoryController {
 	}
 
 	@GetMapping("/count")
-	public Long getCategorySubCategoryCount(@RequestParam String category,
-			@RequestParam(name = "subcategory") String subCategory) {
-		LOGGER.info("Received request to fetch count for category: '{}' and subCategory: '{}'", category, subCategory);
-		Long count = inventoryService.getCategorySubCategoryCount(category, subCategory);
-		LOGGER.debug("Fetched count: {} for category: '{}' and subCategory: '{}'", count, category, subCategory);
+	public Long getCategorySubCategoryCount(@RequestParam(name = "category-id") Long categoryId,
+			@RequestParam(name = "subcategory-id") Long subCategoryId) {
+		LOGGER.info("Received request to fetch count for category: '{}' and subCategory: '{}'", categoryId, subCategoryId);
+		Long count = inventoryService.getCategorySubCategoryCount(categoryId, subCategoryId);
+		LOGGER.debug("Fetched count: {} for category: '{}' and subCategory: '{}'", count, categoryId, subCategoryId);
 		return count;
 	}
 
+	@GetMapping("/categories")	
+	public List<CategoryResponseDTO> getCategories() {
+		LOGGER.info("Received request to fetch categories.");
+		List<CategoryResponseDTO> categories = categoryService.getAllCategories(null);
+		LOGGER.debug("Fetched {} categories.", categories.size());
+		return categories;
+	}
+
+	// get all subcategories for a given category
+	@GetMapping("/sub-categories")
+	public List<SubCategoryResponseDTO> getSubCategories(@RequestParam(name = "category-id") Long categoryId) {
+		LOGGER.info("Received request to fetch subcategories for category: '{}'", categoryId);
+		List<SubCategoryResponseDTO> subCategories = inventoryService.getSubCategories(categoryId);
+		LOGGER.debug("Fetched {} subcategories for category: '{}'", subCategories.size(), categoryId);
+		return subCategories;
+	}
 }

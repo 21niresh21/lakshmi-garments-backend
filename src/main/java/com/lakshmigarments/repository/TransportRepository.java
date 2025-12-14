@@ -1,5 +1,7 @@
 package com.lakshmigarments.repository;
 
+import java.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
@@ -12,5 +14,7 @@ public interface TransportRepository extends JpaRepository<Transport, Long>, Jpa
 	boolean existsByNameIgnoreCase(String name);
 
 	boolean existsByNameIgnoreCaseAndIdNot(String name, Long id);
+
+	Optional<Transport> findByNameIgnoreCase(String name);
 
 }

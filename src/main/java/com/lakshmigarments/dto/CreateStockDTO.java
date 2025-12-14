@@ -3,6 +3,8 @@ package com.lakshmigarments.dto;
 import java.sql.Date;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PastOrPresent;
@@ -20,9 +22,11 @@ public class CreateStockDTO {
 	private String invoiceNumber;
 	
 	@PastOrPresent
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
 	private Date invoiceDate;
 	
 	@PastOrPresent
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
 	private Date shipmentReceivedDate;
 	
 	@NotNull(message = "Supplier ID is mandatory")

@@ -11,12 +11,13 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.lakshmigarments.model.Inventory;
+import com.lakshmigarments.model.SubCategory;
 
 @Repository
 public interface InventoryRepository extends JpaRepository<Inventory, Long> {
 
     // ✅ Grouped count by Category and SubCategory names
-    @Query("SELECT i.category.name, i.subCategory.name, SUM(i.count) " +
+    @Query("SELECT i.category, i.subCategory.name, SUM(i.count) " +
            "FROM Inventory i " +
            "GROUP BY i.category.name, i.subCategory.name")
     List<Object[]> getCategorySubCategoryCount();
@@ -38,4 +39,8 @@ public interface InventoryRepository extends JpaRepository<Inventory, Long> {
     @Query("SELECT i FROM Inventory i WHERE i.category.id = :categoryId AND i.subCategory.id = :subCategoryId")
     Optional<Inventory> findByCategoryIdAndSubCategoryId(@Param("categoryId") Long categoryId,
                                                          @Param("subCategoryId") Long subCategoryId);
+
+    // ✅ Lookup by category ID and return all subcategories
+    @Query("SELECT DISTINCT i.subCategory FROM Inventory i WHERE i.category.id = :categoryId")
+    List<SubCategory> findSubCategoriesByCategoryId(@Param("categoryId") Long categoryId);
 }

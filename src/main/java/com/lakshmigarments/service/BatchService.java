@@ -1,14 +1,15 @@
 package com.lakshmigarments.service;
 
 import java.util.List;
+import java.util.Date;
 
 import com.lakshmigarments.dto.BatchSerialDTO;
 import com.lakshmigarments.dto.BatchTimelineDTO;
 import com.lakshmigarments.dto.BatchRequestDTO;
 import com.lakshmigarments.dto.BatchResponseDTO;
+import com.lakshmigarments.dto.BatchUpdateDTO;
 
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -22,6 +23,10 @@ public interface BatchService {
 
     Long getBatchCount(Long batchId);
 
-    Page<BatchResponseDTO> getAllBatches(Pageable pageable);
+    Page<BatchResponseDTO> getAllBatches(Integer pageNo, Integer pageSize, String sortBy, String sortOrder,
+            String search, List<String> batchStatusNames, 
+            List<String> categoryNames, List<Boolean> isUrgents, Date startDate, Date endDate);
 
+    void updateBatch(Long batchId, BatchUpdateDTO batchUpdateDTO);
+    
 }

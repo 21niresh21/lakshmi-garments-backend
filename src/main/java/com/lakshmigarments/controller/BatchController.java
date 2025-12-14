@@ -1,10 +1,12 @@
 package com.lakshmigarments.controller;
 
 import java.util.List;
+import java.util.Date;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Pageable;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,9 +39,20 @@ public class BatchController {
 	}
 
 	@GetMapping
-	public ResponseEntity<Page<BatchResponseDTO>> getAllBatches(Pageable pageable) {
+	public ResponseEntity<Page<BatchResponseDTO>> getAllBatches(
+		@RequestParam(required = false) Integer pageNo,
+	@RequestParam(required = false) Integer pageSize,
+	@RequestParam(required = false, defaultValue = "isUrgent") String sortBy,
+	@RequestParam(required = false, defaultValue = "asc") String sortOrder,
+	@RequestParam(required = false) String search,
+	@RequestParam(required = false) List<String> batchStatusNames,
+	@RequestParam(required = false) List<String> categoryNames,
+	@RequestParam(required = false) List<Boolean> isUrgent,
+	@RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date startDate,
+	@RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date endDate
+	) {
 		LOGGER.info("Received request to get all batches");
-		Page<BatchResponseDTO> batchResponseDTOs = batchService.getAllBatches(pageable);
+		Page<BatchResponseDTO> batchResponseDTOs = batchService.getAllBatches(pageNo, pageSize, sortBy, sortOrder, search, batchStatusNames, categoryNames, isUrgent, startDate, endDate);
 		LOGGER.info("Found {} batches", batchResponseDTOs.getTotalElements());
 		return new ResponseEntity<>(batchResponseDTOs, HttpStatus.OK);
 	}
