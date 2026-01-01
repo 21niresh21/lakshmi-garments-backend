@@ -34,6 +34,8 @@ public class Batch {
 	@CreationTimestamp
 	private LocalDateTime createdAt;
 	
+	private Long availableQuantity;
+	
 	@ManyToOne
 	private User createdBy;
 	

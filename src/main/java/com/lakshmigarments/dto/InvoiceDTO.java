@@ -1,7 +1,12 @@
 package com.lakshmigarments.dto;
 
 import java.sql.Date;
+import java.time.LocalDateTime;
 
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.validation.annotation.Validated;
+
+import jakarta.validation.Valid;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -13,8 +18,10 @@ public class InvoiceDTO {
 	
 	private String invoiceNumber;
 	
+	@DateTimeFormat(pattern = "dd/MM/yyyy")
 	private Date invoiceDate;
 	
+	@DateTimeFormat(pattern = "dd/MM/yyyy")
 	private Date receivedDate;
 	
 	private String supplierName;
@@ -24,5 +31,9 @@ public class InvoiceDTO {
 	private Boolean isTransportPaid;
 	
 	private Double transportCost;
+	
+	private String createdBy;
+	
+	private LocalDateTime createdAt; 
 
 }

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -23,11 +24,12 @@ import com.lakshmigarments.service.CategoryService;
 
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/categories")
 @CrossOrigin(origins = "*")
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class CategoryController {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(CategoryController.class);
@@ -53,7 +55,7 @@ public class CategoryController {
 		return ResponseEntity.ok(categories);
 	}
 
-	@PatchMapping("/{id}")
+	@PutMapping("/{id}")
 	public ResponseEntity<CategoryResponseDTO> updateCategory(
 			@PathVariable Long id,
 			@RequestBody @Valid CategoryRequestDTO updateCategoryDTO) {

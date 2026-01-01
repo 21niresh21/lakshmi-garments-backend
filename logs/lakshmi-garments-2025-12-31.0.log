@@ -1,0 +1,1132 @@
+2025-12-31 08:00:08 INFO  [File Watcher] o.s.b.d.a.LocalDevToolsAutoConfiguration$RestartingClassPathChangeChangedEventListener - Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2025-12-31 08:00:08 INFO  [Thread-554] o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2025-12-31 08:00:08 INFO  [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+2025-12-31 08:00:08 INFO  [Thread-554] o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-12-31 08:00:08 INFO  [Thread-554] com.zaxxer.hikari.HikariDataSource - HikariPool-146 - Shutdown initiated...
+2025-12-31 08:00:08 INFO  [Thread-554] com.zaxxer.hikari.HikariDataSource - HikariPool-146 - Shutdown completed.
+2025-12-31 08:00:08 INFO  [restartedMain] c.l.LakshmiGarmentsApplication - Starting LakshmiGarmentsApplication using Java 17.0.17 with PID 17636 (C:\Users\KEX1COB\Desktop\PERSONAL\LG\lakshmi-garments-backend\target\classes started by KEX1COB in C:\Users\KEX1COB\Desktop\PERSONAL\LG\lakshmi-garments-backend)
+2025-12-31 08:00:08 INFO  [restartedMain] c.l.LakshmiGarmentsApplication - No active profile set, falling back to 1 default profile: "default"
+2025-12-31 08:00:10 INFO  [restartedMain] o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-12-31 08:00:10 INFO  [restartedMain] o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 27 ms. Found 23 JPA repository interfaces.
+2025-12-31 08:00:10 INFO  [restartedMain] o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2025-12-31 08:00:10 INFO  [restartedMain] o.a.catalina.core.StandardService - Starting service [Tomcat]
+2025-12-31 08:00:10 INFO  [restartedMain] o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.34]
+2025-12-31 08:00:10 INFO  [restartedMain] o.a.c.c.C.[.[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2025-12-31 08:00:10 INFO  [restartedMain] o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1661 ms
+2025-12-31 08:00:10 INFO  [restartedMain] o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-12-31 08:00:10 INFO  [restartedMain] o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2025-12-31 08:00:10 INFO  [restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-12-31 08:00:10 INFO  [restartedMain] com.zaxxer.hikari.HikariDataSource - HikariPool-147 - Starting...
+2025-12-31 08:00:10 INFO  [restartedMain] com.zaxxer.hikari.pool.HikariPool - HikariPool-147 - Added connection com.mysql.cj.jdbc.ConnectionImpl@2e849650
+2025-12-31 08:00:10 INFO  [restartedMain] com.zaxxer.hikari.HikariDataSource - HikariPool-147 - Start completed.
+2025-12-31 08:00:10 WARN  [restartedMain] org.hibernate.orm.deprecation - HHH90000025: MySQL8Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-12-31 08:00:10 WARN  [restartedMain] org.hibernate.orm.deprecation - HHH90000026: MySQL8Dialect has been deprecated; use org.hibernate.dialect.MySQLDialect instead
+2025-12-31 08:00:10 INFO  [restartedMain] o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-147)']
+	Database driver: undefined/unknown
+	Database version: 8.0
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-12-31 08:00:10 INFO  [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-12-31 08:00:10 INFO  [restartedMain] o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-12-31 08:00:10 WARN  [restartedMain] o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-12-31 08:00:10 INFO  [restartedMain] o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2025-12-31 08:00:10 INFO  [restartedMain] o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
+2025-12-31 08:00:10 INFO  [restartedMain] c.l.LakshmiGarmentsApplication - Started LakshmiGarmentsApplication in 2.313 seconds (process running for 115937.367)
+2025-12-31 08:00:10 INFO  [restartedMain] o.s.b.d.a.ConditionEvaluationDeltaLoggingListener - Condition evaluation unchanged
+2025-12-31 08:00:13 INFO  [http-nio-8080-exec-2] o.a.c.c.C.[.[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-12-31 08:00:13 INFO  [http-nio-8080-exec-2] o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2025-12-31 08:00:13 INFO  [http-nio-8080-exec-2] o.s.web.servlet.DispatcherServlet - Completed initialization in 1 ms
+2025-12-31 08:00:32 INFO  [File Watcher] o.s.b.d.a.LocalDevToolsAutoConfiguration$RestartingClassPathChangeChangedEventListener - Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2025-12-31 08:00:32 INFO  [Thread-558] o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2025-12-31 08:00:32 INFO  [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+2025-12-31 08:00:32 INFO  [Thread-558] o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-12-31 08:00:32 INFO  [Thread-558] com.zaxxer.hikari.HikariDataSource - HikariPool-147 - Shutdown initiated...
+2025-12-31 08:00:32 INFO  [Thread-558] com.zaxxer.hikari.HikariDataSource - HikariPool-147 - Shutdown completed.
+2025-12-31 08:00:32 INFO  [restartedMain] c.l.LakshmiGarmentsApplication - Starting LakshmiGarmentsApplication using Java 17.0.17 with PID 17636 (C:\Users\KEX1COB\Desktop\PERSONAL\LG\lakshmi-garments-backend\target\classes started by KEX1COB in C:\Users\KEX1COB\Desktop\PERSONAL\LG\lakshmi-garments-backend)
+2025-12-31 08:00:32 INFO  [restartedMain] c.l.LakshmiGarmentsApplication - No active profile set, falling back to 1 default profile: "default"
+2025-12-31 08:00:33 INFO  [restartedMain] o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-12-31 08:00:33 INFO  [restartedMain] o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 60 ms. Found 23 JPA repository interfaces.
+2025-12-31 08:00:33 INFO  [restartedMain] o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2025-12-31 08:00:33 INFO  [restartedMain] o.a.catalina.core.StandardService - Starting service [Tomcat]
+2025-12-31 08:00:33 INFO  [restartedMain] o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.34]
+2025-12-31 08:00:33 INFO  [restartedMain] o.a.c.c.C.[.[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2025-12-31 08:00:33 INFO  [restartedMain] o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 393 ms
+2025-12-31 08:00:33 INFO  [restartedMain] o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-12-31 08:00:33 INFO  [restartedMain] o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2025-12-31 08:00:33 INFO  [restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-12-31 08:00:33 INFO  [restartedMain] com.zaxxer.hikari.HikariDataSource - HikariPool-148 - Starting...
+2025-12-31 08:00:33 INFO  [restartedMain] com.zaxxer.hikari.pool.HikariPool - HikariPool-148 - Added connection com.mysql.cj.jdbc.ConnectionImpl@30336ab9
+2025-12-31 08:00:33 INFO  [restartedMain] com.zaxxer.hikari.HikariDataSource - HikariPool-148 - Start completed.
+2025-12-31 08:00:33 WARN  [restartedMain] org.hibernate.orm.deprecation - HHH90000025: MySQL8Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-12-31 08:00:33 WARN  [restartedMain] org.hibernate.orm.deprecation - HHH90000026: MySQL8Dialect has been deprecated; use org.hibernate.dialect.MySQLDialect instead
+2025-12-31 08:00:33 INFO  [restartedMain] o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-148)']
+	Database driver: undefined/unknown
+	Database version: 8.0
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-12-31 08:00:33 INFO  [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-12-31 08:00:33 INFO  [restartedMain] o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-12-31 08:00:34 WARN  [restartedMain] o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-12-31 08:00:34 INFO  [restartedMain] o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2025-12-31 08:00:34 INFO  [restartedMain] o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
+2025-12-31 08:00:34 INFO  [restartedMain] c.l.LakshmiGarmentsApplication - Started LakshmiGarmentsApplication in 2.051 seconds (process running for 115961.22)
+2025-12-31 08:00:34 INFO  [restartedMain] o.s.b.d.a.ConditionEvaluationDeltaLoggingListener - Condition evaluation unchanged
+2025-12-31 08:00:36 INFO  [http-nio-8080-exec-3] o.a.c.c.C.[.[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-12-31 08:00:36 INFO  [http-nio-8080-exec-3] o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2025-12-31 08:00:36 INFO  [http-nio-8080-exec-3] o.s.web.servlet.DispatcherServlet - Completed initialization in 0 ms
+2025-12-31 08:01:38 INFO  [File Watcher] o.s.b.d.a.LocalDevToolsAutoConfiguration$RestartingClassPathChangeChangedEventListener - Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2025-12-31 08:01:38 INFO  [Thread-562] o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2025-12-31 08:01:38 INFO  [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+2025-12-31 08:01:38 INFO  [Thread-562] o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-12-31 08:01:38 INFO  [Thread-562] com.zaxxer.hikari.HikariDataSource - HikariPool-148 - Shutdown initiated...
+2025-12-31 08:01:38 INFO  [Thread-562] com.zaxxer.hikari.HikariDataSource - HikariPool-148 - Shutdown completed.
+2025-12-31 08:01:38 INFO  [restartedMain] c.l.LakshmiGarmentsApplication - Starting LakshmiGarmentsApplication using Java 17.0.17 with PID 17636 (C:\Users\KEX1COB\Desktop\PERSONAL\LG\lakshmi-garments-backend\target\classes started by KEX1COB in C:\Users\KEX1COB\Desktop\PERSONAL\LG\lakshmi-garments-backend)
+2025-12-31 08:01:38 INFO  [restartedMain] c.l.LakshmiGarmentsApplication - No active profile set, falling back to 1 default profile: "default"
+2025-12-31 08:01:38 INFO  [restartedMain] o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-12-31 08:01:38 INFO  [restartedMain] o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 31 ms. Found 23 JPA repository interfaces.
+2025-12-31 08:01:38 INFO  [restartedMain] o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2025-12-31 08:01:38 INFO  [restartedMain] o.a.catalina.core.StandardService - Starting service [Tomcat]
+2025-12-31 08:01:38 INFO  [restartedMain] o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.34]
+2025-12-31 08:01:38 INFO  [restartedMain] o.a.c.c.C.[.[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2025-12-31 08:01:38 INFO  [restartedMain] o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 208 ms
+2025-12-31 08:01:38 INFO  [restartedMain] o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-12-31 08:01:38 INFO  [restartedMain] o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2025-12-31 08:01:38 INFO  [restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-12-31 08:01:38 INFO  [restartedMain] com.zaxxer.hikari.HikariDataSource - HikariPool-149 - Starting...
+2025-12-31 08:01:38 INFO  [restartedMain] com.zaxxer.hikari.pool.HikariPool - HikariPool-149 - Added connection com.mysql.cj.jdbc.ConnectionImpl@1c614fbe
+2025-12-31 08:01:38 INFO  [restartedMain] com.zaxxer.hikari.HikariDataSource - HikariPool-149 - Start completed.
+2025-12-31 08:01:38 WARN  [restartedMain] org.hibernate.orm.deprecation - HHH90000025: MySQL8Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-12-31 08:01:38 WARN  [restartedMain] org.hibernate.orm.deprecation - HHH90000026: MySQL8Dialect has been deprecated; use org.hibernate.dialect.MySQLDialect instead
+2025-12-31 08:01:38 INFO  [restartedMain] o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-149)']
+	Database driver: undefined/unknown
+	Database version: 8.0
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-12-31 08:01:39 INFO  [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-12-31 08:01:39 INFO  [restartedMain] o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-12-31 08:01:39 WARN  [restartedMain] o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-12-31 08:01:39 INFO  [restartedMain] o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2025-12-31 08:01:39 INFO  [restartedMain] o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
+2025-12-31 08:01:39 INFO  [restartedMain] c.l.LakshmiGarmentsApplication - Started LakshmiGarmentsApplication in 0.855 seconds (process running for 116025.913)
+2025-12-31 08:01:39 INFO  [restartedMain] o.s.b.d.a.ConditionEvaluationDeltaLoggingListener - Condition evaluation unchanged
+2025-12-31 08:01:53 INFO  [http-nio-8080-exec-5] o.a.c.c.C.[.[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-12-31 08:01:53 INFO  [http-nio-8080-exec-5] o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2025-12-31 08:01:53 INFO  [http-nio-8080-exec-5] o.s.web.servlet.DispatcherServlet - Completed initialization in 0 ms
+2025-12-31 08:02:19 INFO  [File Watcher] o.s.b.d.a.LocalDevToolsAutoConfiguration$RestartingClassPathChangeChangedEventListener - Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2025-12-31 08:02:19 INFO  [Thread-566] o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2025-12-31 08:02:19 INFO  [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+2025-12-31 08:02:19 INFO  [Thread-566] o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-12-31 08:02:19 INFO  [Thread-566] com.zaxxer.hikari.HikariDataSource - HikariPool-149 - Shutdown initiated...
+2025-12-31 08:02:19 INFO  [Thread-566] com.zaxxer.hikari.HikariDataSource - HikariPool-149 - Shutdown completed.
+2025-12-31 08:02:19 INFO  [restartedMain] c.l.LakshmiGarmentsApplication - Starting LakshmiGarmentsApplication using Java 17.0.17 with PID 17636 (C:\Users\KEX1COB\Desktop\PERSONAL\LG\lakshmi-garments-backend\target\classes started by KEX1COB in C:\Users\KEX1COB\Desktop\PERSONAL\LG\lakshmi-garments-backend)
+2025-12-31 08:02:19 INFO  [restartedMain] c.l.LakshmiGarmentsApplication - No active profile set, falling back to 1 default profile: "default"
+2025-12-31 08:02:19 INFO  [restartedMain] o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-12-31 08:02:19 INFO  [restartedMain] o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 27 ms. Found 23 JPA repository interfaces.
+2025-12-31 08:02:19 INFO  [restartedMain] o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2025-12-31 08:02:19 INFO  [restartedMain] o.a.catalina.core.StandardService - Starting service [Tomcat]
+2025-12-31 08:02:19 INFO  [restartedMain] o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.34]
+2025-12-31 08:02:19 INFO  [restartedMain] o.a.c.c.C.[.[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2025-12-31 08:02:19 INFO  [restartedMain] o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 187 ms
+2025-12-31 08:02:19 INFO  [restartedMain] o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-12-31 08:02:19 INFO  [restartedMain] o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2025-12-31 08:02:19 INFO  [restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-12-31 08:02:19 INFO  [restartedMain] com.zaxxer.hikari.HikariDataSource - HikariPool-150 - Starting...
+2025-12-31 08:02:19 INFO  [restartedMain] com.zaxxer.hikari.pool.HikariPool - HikariPool-150 - Added connection com.mysql.cj.jdbc.ConnectionImpl@10f58a90
+2025-12-31 08:02:19 INFO  [restartedMain] com.zaxxer.hikari.HikariDataSource - HikariPool-150 - Start completed.
+2025-12-31 08:02:19 WARN  [restartedMain] org.hibernate.orm.deprecation - HHH90000025: MySQL8Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-12-31 08:02:19 WARN  [restartedMain] org.hibernate.orm.deprecation - HHH90000026: MySQL8Dialect has been deprecated; use org.hibernate.dialect.MySQLDialect instead
+2025-12-31 08:02:19 INFO  [restartedMain] o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-150)']
+	Database driver: undefined/unknown
+	Database version: 8.0
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-12-31 08:02:20 INFO  [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-12-31 08:02:20 INFO  [restartedMain] o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-12-31 08:02:20 WARN  [restartedMain] o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-12-31 08:02:20 INFO  [restartedMain] o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2025-12-31 08:02:20 INFO  [restartedMain] o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
+2025-12-31 08:02:20 INFO  [restartedMain] c.l.LakshmiGarmentsApplication - Started LakshmiGarmentsApplication in 0.723 seconds (process running for 116066.813)
+2025-12-31 08:02:20 INFO  [restartedMain] o.s.b.d.a.ConditionEvaluationDeltaLoggingListener - Condition evaluation unchanged
+2025-12-31 08:02:30 INFO  [File Watcher] o.s.b.d.a.LocalDevToolsAutoConfiguration$RestartingClassPathChangeChangedEventListener - Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2025-12-31 08:02:30 INFO  [Thread-570] o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2025-12-31 08:02:30 INFO  [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+2025-12-31 08:02:30 INFO  [Thread-570] o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-12-31 08:02:30 INFO  [Thread-570] com.zaxxer.hikari.HikariDataSource - HikariPool-150 - Shutdown initiated...
+2025-12-31 08:02:30 INFO  [Thread-570] com.zaxxer.hikari.HikariDataSource - HikariPool-150 - Shutdown completed.
+2025-12-31 08:02:30 INFO  [restartedMain] c.l.LakshmiGarmentsApplication - Starting LakshmiGarmentsApplication using Java 17.0.17 with PID 17636 (C:\Users\KEX1COB\Desktop\PERSONAL\LG\lakshmi-garments-backend\target\classes started by KEX1COB in C:\Users\KEX1COB\Desktop\PERSONAL\LG\lakshmi-garments-backend)
+2025-12-31 08:02:30 INFO  [restartedMain] c.l.LakshmiGarmentsApplication - No active profile set, falling back to 1 default profile: "default"
+2025-12-31 08:02:30 INFO  [restartedMain] o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-12-31 08:02:30 INFO  [restartedMain] o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 23 ms. Found 23 JPA repository interfaces.
+2025-12-31 08:02:30 INFO  [restartedMain] o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2025-12-31 08:02:30 INFO  [restartedMain] o.a.catalina.core.StandardService - Starting service [Tomcat]
+2025-12-31 08:02:30 INFO  [restartedMain] o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.34]
+2025-12-31 08:02:30 INFO  [restartedMain] o.a.c.c.C.[.[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2025-12-31 08:02:30 INFO  [restartedMain] o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 170 ms
+2025-12-31 08:02:30 INFO  [restartedMain] o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-12-31 08:02:30 INFO  [restartedMain] o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2025-12-31 08:02:30 INFO  [restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-12-31 08:02:30 INFO  [restartedMain] com.zaxxer.hikari.HikariDataSource - HikariPool-151 - Starting...
+2025-12-31 08:02:30 INFO  [restartedMain] com.zaxxer.hikari.pool.HikariPool - HikariPool-151 - Added connection com.mysql.cj.jdbc.ConnectionImpl@28ae498c
+2025-12-31 08:02:30 INFO  [restartedMain] com.zaxxer.hikari.HikariDataSource - HikariPool-151 - Start completed.
+2025-12-31 08:02:30 WARN  [restartedMain] org.hibernate.orm.deprecation - HHH90000025: MySQL8Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-12-31 08:02:30 WARN  [restartedMain] org.hibernate.orm.deprecation - HHH90000026: MySQL8Dialect has been deprecated; use org.hibernate.dialect.MySQLDialect instead
+2025-12-31 08:02:30 INFO  [restartedMain] o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-151)']
+	Database driver: undefined/unknown
+	Database version: 8.0
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-12-31 08:02:30 INFO  [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-12-31 08:02:30 INFO  [restartedMain] o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-12-31 08:02:30 WARN  [restartedMain] o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-12-31 08:02:30 INFO  [restartedMain] o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2025-12-31 08:02:30 INFO  [restartedMain] o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
+2025-12-31 08:02:30 INFO  [restartedMain] c.l.LakshmiGarmentsApplication - Started LakshmiGarmentsApplication in 0.696 seconds (process running for 116077.391)
+2025-12-31 08:02:30 INFO  [restartedMain] o.s.b.d.a.ConditionEvaluationDeltaLoggingListener - Condition evaluation unchanged
+2025-12-31 08:02:33 INFO  [http-nio-8080-exec-3] o.a.c.c.C.[.[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-12-31 08:02:33 INFO  [http-nio-8080-exec-3] o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2025-12-31 08:02:33 INFO  [http-nio-8080-exec-3] o.s.web.servlet.DispatcherServlet - Completed initialization in 1 ms
+2025-12-31 08:02:49 INFO  [File Watcher] o.s.b.d.a.LocalDevToolsAutoConfiguration$RestartingClassPathChangeChangedEventListener - Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2025-12-31 08:02:49 INFO  [Thread-574] o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2025-12-31 08:02:49 INFO  [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+2025-12-31 08:02:49 INFO  [Thread-574] o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-12-31 08:02:49 INFO  [Thread-574] com.zaxxer.hikari.HikariDataSource - HikariPool-151 - Shutdown initiated...
+2025-12-31 08:02:49 INFO  [Thread-574] com.zaxxer.hikari.HikariDataSource - HikariPool-151 - Shutdown completed.
+2025-12-31 08:02:49 INFO  [restartedMain] c.l.LakshmiGarmentsApplication - Starting LakshmiGarmentsApplication using Java 17.0.17 with PID 17636 (C:\Users\KEX1COB\Desktop\PERSONAL\LG\lakshmi-garments-backend\target\classes started by KEX1COB in C:\Users\KEX1COB\Desktop\PERSONAL\LG\lakshmi-garments-backend)
+2025-12-31 08:02:49 INFO  [restartedMain] c.l.LakshmiGarmentsApplication - No active profile set, falling back to 1 default profile: "default"
+2025-12-31 08:02:49 INFO  [restartedMain] o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-12-31 08:02:49 INFO  [restartedMain] o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 29 ms. Found 23 JPA repository interfaces.
+2025-12-31 08:02:49 INFO  [restartedMain] o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2025-12-31 08:02:49 INFO  [restartedMain] o.a.catalina.core.StandardService - Starting service [Tomcat]
+2025-12-31 08:02:49 INFO  [restartedMain] o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.34]
+2025-12-31 08:02:49 INFO  [restartedMain] o.a.c.c.C.[.[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2025-12-31 08:02:49 INFO  [restartedMain] o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 165 ms
+2025-12-31 08:02:49 INFO  [restartedMain] o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-12-31 08:02:49 INFO  [restartedMain] o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2025-12-31 08:02:49 INFO  [restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-12-31 08:02:49 INFO  [restartedMain] com.zaxxer.hikari.HikariDataSource - HikariPool-152 - Starting...
+2025-12-31 08:02:49 INFO  [restartedMain] com.zaxxer.hikari.pool.HikariPool - HikariPool-152 - Added connection com.mysql.cj.jdbc.ConnectionImpl@2fca6c3
+2025-12-31 08:02:49 INFO  [restartedMain] com.zaxxer.hikari.HikariDataSource - HikariPool-152 - Start completed.
+2025-12-31 08:02:49 WARN  [restartedMain] org.hibernate.orm.deprecation - HHH90000025: MySQL8Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-12-31 08:02:49 WARN  [restartedMain] org.hibernate.orm.deprecation - HHH90000026: MySQL8Dialect has been deprecated; use org.hibernate.dialect.MySQLDialect instead
+2025-12-31 08:02:49 INFO  [restartedMain] o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-152)']
+	Database driver: undefined/unknown
+	Database version: 8.0
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-12-31 08:02:49 INFO  [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-12-31 08:02:49 INFO  [restartedMain] o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-12-31 08:02:49 WARN  [restartedMain] o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-12-31 08:02:50 INFO  [restartedMain] o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2025-12-31 08:02:50 INFO  [restartedMain] o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
+2025-12-31 08:02:50 INFO  [restartedMain] c.l.LakshmiGarmentsApplication - Started LakshmiGarmentsApplication in 0.69 seconds (process running for 116096.437)
+2025-12-31 08:02:50 INFO  [restartedMain] o.s.b.d.a.ConditionEvaluationDeltaLoggingListener - Condition evaluation unchanged
+2025-12-31 08:02:51 INFO  [http-nio-8080-exec-4] o.a.c.c.C.[.[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-12-31 08:02:51 INFO  [http-nio-8080-exec-4] o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2025-12-31 08:02:51 INFO  [http-nio-8080-exec-4] o.s.web.servlet.DispatcherServlet - Completed initialization in 0 ms
+2025-12-31 08:03:04 INFO  [File Watcher] o.s.b.d.a.LocalDevToolsAutoConfiguration$RestartingClassPathChangeChangedEventListener - Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2025-12-31 08:03:04 INFO  [Thread-578] o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2025-12-31 08:03:05 INFO  [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+2025-12-31 08:03:05 INFO  [Thread-578] o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-12-31 08:03:05 INFO  [Thread-578] com.zaxxer.hikari.HikariDataSource - HikariPool-152 - Shutdown initiated...
+2025-12-31 08:03:05 INFO  [Thread-578] com.zaxxer.hikari.HikariDataSource - HikariPool-152 - Shutdown completed.
+2025-12-31 08:03:05 INFO  [restartedMain] c.l.LakshmiGarmentsApplication - Starting LakshmiGarmentsApplication using Java 17.0.17 with PID 17636 (C:\Users\KEX1COB\Desktop\PERSONAL\LG\lakshmi-garments-backend\target\classes started by KEX1COB in C:\Users\KEX1COB\Desktop\PERSONAL\LG\lakshmi-garments-backend)
+2025-12-31 08:03:05 INFO  [restartedMain] c.l.LakshmiGarmentsApplication - No active profile set, falling back to 1 default profile: "default"
+2025-12-31 08:03:05 INFO  [restartedMain] o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-12-31 08:03:05 INFO  [restartedMain] o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 27 ms. Found 23 JPA repository interfaces.
+2025-12-31 08:03:05 INFO  [restartedMain] o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2025-12-31 08:03:05 INFO  [restartedMain] o.a.catalina.core.StandardService - Starting service [Tomcat]
+2025-12-31 08:03:05 INFO  [restartedMain] o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.34]
+2025-12-31 08:03:05 INFO  [restartedMain] o.a.c.c.C.[.[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2025-12-31 08:03:05 INFO  [restartedMain] o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 173 ms
+2025-12-31 08:03:05 INFO  [restartedMain] o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-12-31 08:03:05 INFO  [restartedMain] o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2025-12-31 08:03:05 INFO  [restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-12-31 08:03:05 INFO  [restartedMain] com.zaxxer.hikari.HikariDataSource - HikariPool-153 - Starting...
+2025-12-31 08:03:05 INFO  [restartedMain] com.zaxxer.hikari.pool.HikariPool - HikariPool-153 - Added connection com.mysql.cj.jdbc.ConnectionImpl@40805e81
+2025-12-31 08:03:05 INFO  [restartedMain] com.zaxxer.hikari.HikariDataSource - HikariPool-153 - Start completed.
+2025-12-31 08:03:05 WARN  [restartedMain] org.hibernate.orm.deprecation - HHH90000025: MySQL8Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-12-31 08:03:05 WARN  [restartedMain] org.hibernate.orm.deprecation - HHH90000026: MySQL8Dialect has been deprecated; use org.hibernate.dialect.MySQLDialect instead
+2025-12-31 08:03:05 INFO  [restartedMain] o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-153)']
+	Database driver: undefined/unknown
+	Database version: 8.0
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-12-31 08:03:05 INFO  [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-12-31 08:03:05 INFO  [restartedMain] o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-12-31 08:03:05 WARN  [restartedMain] o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-12-31 08:03:05 INFO  [restartedMain] o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2025-12-31 08:03:05 INFO  [restartedMain] o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
+2025-12-31 08:03:05 INFO  [restartedMain] c.l.LakshmiGarmentsApplication - Started LakshmiGarmentsApplication in 0.728 seconds (process running for 116112.318)
+2025-12-31 08:03:05 INFO  [restartedMain] o.s.b.d.a.ConditionEvaluationDeltaLoggingListener - Condition evaluation unchanged
+2025-12-31 08:03:09 INFO  [http-nio-8080-exec-2] o.a.c.c.C.[.[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-12-31 08:03:09 INFO  [http-nio-8080-exec-2] o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2025-12-31 08:03:09 INFO  [http-nio-8080-exec-2] o.s.web.servlet.DispatcherServlet - Completed initialization in 1 ms
+2025-12-31 08:03:18 INFO  [File Watcher] o.s.b.d.a.LocalDevToolsAutoConfiguration$RestartingClassPathChangeChangedEventListener - Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2025-12-31 08:03:18 INFO  [Thread-582] o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2025-12-31 08:03:18 INFO  [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+2025-12-31 08:03:18 INFO  [Thread-582] o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-12-31 08:03:18 INFO  [Thread-582] com.zaxxer.hikari.HikariDataSource - HikariPool-153 - Shutdown initiated...
+2025-12-31 08:03:18 INFO  [Thread-582] com.zaxxer.hikari.HikariDataSource - HikariPool-153 - Shutdown completed.
+2025-12-31 08:03:18 INFO  [restartedMain] c.l.LakshmiGarmentsApplication - Starting LakshmiGarmentsApplication using Java 17.0.17 with PID 17636 (C:\Users\KEX1COB\Desktop\PERSONAL\LG\lakshmi-garments-backend\target\classes started by KEX1COB in C:\Users\KEX1COB\Desktop\PERSONAL\LG\lakshmi-garments-backend)
+2025-12-31 08:03:18 INFO  [restartedMain] c.l.LakshmiGarmentsApplication - No active profile set, falling back to 1 default profile: "default"
+2025-12-31 08:03:19 INFO  [restartedMain] o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-12-31 08:03:19 INFO  [restartedMain] o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 24 ms. Found 23 JPA repository interfaces.
+2025-12-31 08:03:19 INFO  [restartedMain] o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2025-12-31 08:03:19 INFO  [restartedMain] o.a.catalina.core.StandardService - Starting service [Tomcat]
+2025-12-31 08:03:19 INFO  [restartedMain] o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.34]
+2025-12-31 08:03:19 INFO  [restartedMain] o.a.c.c.C.[.[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2025-12-31 08:03:19 INFO  [restartedMain] o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 163 ms
+2025-12-31 08:03:19 INFO  [restartedMain] o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-12-31 08:03:19 INFO  [restartedMain] o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2025-12-31 08:03:19 INFO  [restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-12-31 08:03:19 INFO  [restartedMain] com.zaxxer.hikari.HikariDataSource - HikariPool-154 - Starting...
+2025-12-31 08:03:19 INFO  [restartedMain] com.zaxxer.hikari.pool.HikariPool - HikariPool-154 - Added connection com.mysql.cj.jdbc.ConnectionImpl@5c9e2d40
+2025-12-31 08:03:19 INFO  [restartedMain] com.zaxxer.hikari.HikariDataSource - HikariPool-154 - Start completed.
+2025-12-31 08:03:19 WARN  [restartedMain] org.hibernate.orm.deprecation - HHH90000025: MySQL8Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-12-31 08:03:19 WARN  [restartedMain] org.hibernate.orm.deprecation - HHH90000026: MySQL8Dialect has been deprecated; use org.hibernate.dialect.MySQLDialect instead
+2025-12-31 08:03:19 INFO  [restartedMain] o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-154)']
+	Database driver: undefined/unknown
+	Database version: 8.0
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-12-31 08:03:19 INFO  [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-12-31 08:03:19 INFO  [restartedMain] o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-12-31 08:03:19 WARN  [restartedMain] o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-12-31 08:03:19 INFO  [restartedMain] o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2025-12-31 08:03:19 INFO  [restartedMain] o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
+2025-12-31 08:03:19 INFO  [restartedMain] c.l.LakshmiGarmentsApplication - Started LakshmiGarmentsApplication in 0.684 seconds (process running for 116126.01)
+2025-12-31 08:03:19 INFO  [restartedMain] o.s.b.d.a.ConditionEvaluationDeltaLoggingListener - Condition evaluation unchanged
+2025-12-31 08:03:22 INFO  [http-nio-8080-exec-1] o.a.c.c.C.[.[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-12-31 08:03:22 INFO  [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2025-12-31 08:03:22 INFO  [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet - Completed initialization in 1 ms
+2025-12-31 08:03:33 INFO  [File Watcher] o.s.b.d.a.LocalDevToolsAutoConfiguration$RestartingClassPathChangeChangedEventListener - Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2025-12-31 08:03:33 INFO  [Thread-586] o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2025-12-31 08:03:33 INFO  [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+2025-12-31 08:03:33 INFO  [Thread-586] o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-12-31 08:03:33 INFO  [Thread-586] com.zaxxer.hikari.HikariDataSource - HikariPool-154 - Shutdown initiated...
+2025-12-31 08:03:33 INFO  [Thread-586] com.zaxxer.hikari.HikariDataSource - HikariPool-154 - Shutdown completed.
+2025-12-31 08:03:33 INFO  [restartedMain] c.l.LakshmiGarmentsApplication - Starting LakshmiGarmentsApplication using Java 17.0.17 with PID 17636 (C:\Users\KEX1COB\Desktop\PERSONAL\LG\lakshmi-garments-backend\target\classes started by KEX1COB in C:\Users\KEX1COB\Desktop\PERSONAL\LG\lakshmi-garments-backend)
+2025-12-31 08:03:33 INFO  [restartedMain] c.l.LakshmiGarmentsApplication - No active profile set, falling back to 1 default profile: "default"
+2025-12-31 08:03:33 INFO  [restartedMain] o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-12-31 08:03:33 INFO  [restartedMain] o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 27 ms. Found 23 JPA repository interfaces.
+2025-12-31 08:03:33 INFO  [restartedMain] o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2025-12-31 08:03:33 INFO  [restartedMain] o.a.catalina.core.StandardService - Starting service [Tomcat]
+2025-12-31 08:03:33 INFO  [restartedMain] o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.34]
+2025-12-31 08:03:33 INFO  [restartedMain] o.a.c.c.C.[.[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2025-12-31 08:03:33 INFO  [restartedMain] o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 179 ms
+2025-12-31 08:03:33 INFO  [restartedMain] o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-12-31 08:03:33 INFO  [restartedMain] o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2025-12-31 08:03:33 INFO  [restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-12-31 08:03:33 INFO  [restartedMain] com.zaxxer.hikari.HikariDataSource - HikariPool-155 - Starting...
+2025-12-31 08:03:33 INFO  [restartedMain] com.zaxxer.hikari.pool.HikariPool - HikariPool-155 - Added connection com.mysql.cj.jdbc.ConnectionImpl@39c57ea4
+2025-12-31 08:03:33 INFO  [restartedMain] com.zaxxer.hikari.HikariDataSource - HikariPool-155 - Start completed.
+2025-12-31 08:03:33 WARN  [restartedMain] org.hibernate.orm.deprecation - HHH90000025: MySQL8Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-12-31 08:03:33 WARN  [restartedMain] org.hibernate.orm.deprecation - HHH90000026: MySQL8Dialect has been deprecated; use org.hibernate.dialect.MySQLDialect instead
+2025-12-31 08:03:33 INFO  [restartedMain] o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-155)']
+	Database driver: undefined/unknown
+	Database version: 8.0
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-12-31 08:03:33 INFO  [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-12-31 08:03:34 INFO  [restartedMain] o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-12-31 08:03:34 WARN  [restartedMain] o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-12-31 08:03:34 INFO  [restartedMain] o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2025-12-31 08:03:34 INFO  [restartedMain] o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
+2025-12-31 08:03:34 INFO  [restartedMain] c.l.LakshmiGarmentsApplication - Started LakshmiGarmentsApplication in 0.745 seconds (process running for 116140.788)
+2025-12-31 08:03:34 INFO  [restartedMain] o.s.b.d.a.ConditionEvaluationDeltaLoggingListener - Condition evaluation unchanged
+2025-12-31 08:03:36 INFO  [http-nio-8080-exec-1] o.a.c.c.C.[.[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-12-31 08:03:36 INFO  [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2025-12-31 08:03:36 INFO  [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet - Completed initialization in 1 ms
+2025-12-31 08:05:38 INFO  [File Watcher] o.s.b.d.a.LocalDevToolsAutoConfiguration$RestartingClassPathChangeChangedEventListener - Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2025-12-31 08:05:38 INFO  [Thread-590] o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2025-12-31 08:05:38 INFO  [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+2025-12-31 08:05:38 INFO  [Thread-590] o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-12-31 08:05:38 INFO  [Thread-590] com.zaxxer.hikari.HikariDataSource - HikariPool-155 - Shutdown initiated...
+2025-12-31 08:05:38 INFO  [Thread-590] com.zaxxer.hikari.HikariDataSource - HikariPool-155 - Shutdown completed.
+2025-12-31 08:05:38 INFO  [restartedMain] c.l.LakshmiGarmentsApplication - Starting LakshmiGarmentsApplication using Java 17.0.17 with PID 17636 (C:\Users\KEX1COB\Desktop\PERSONAL\LG\lakshmi-garments-backend\target\classes started by KEX1COB in C:\Users\KEX1COB\Desktop\PERSONAL\LG\lakshmi-garments-backend)
+2025-12-31 08:05:38 INFO  [restartedMain] c.l.LakshmiGarmentsApplication - No active profile set, falling back to 1 default profile: "default"
+2025-12-31 08:05:38 INFO  [restartedMain] o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-12-31 08:05:38 INFO  [restartedMain] o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 34 ms. Found 23 JPA repository interfaces.
+2025-12-31 08:05:38 INFO  [restartedMain] o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2025-12-31 08:05:38 INFO  [restartedMain] o.a.catalina.core.StandardService - Starting service [Tomcat]
+2025-12-31 08:05:38 INFO  [restartedMain] o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.34]
+2025-12-31 08:05:38 INFO  [restartedMain] o.a.c.c.C.[.[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2025-12-31 08:05:38 INFO  [restartedMain] o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 210 ms
+2025-12-31 08:05:38 INFO  [restartedMain] o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-12-31 08:05:38 INFO  [restartedMain] o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2025-12-31 08:05:38 INFO  [restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-12-31 08:05:38 INFO  [restartedMain] com.zaxxer.hikari.HikariDataSource - HikariPool-156 - Starting...
+2025-12-31 08:05:38 INFO  [restartedMain] com.zaxxer.hikari.pool.HikariPool - HikariPool-156 - Added connection com.mysql.cj.jdbc.ConnectionImpl@7fc6e3e5
+2025-12-31 08:05:38 INFO  [restartedMain] com.zaxxer.hikari.HikariDataSource - HikariPool-156 - Start completed.
+2025-12-31 08:05:38 WARN  [restartedMain] org.hibernate.orm.deprecation - HHH90000025: MySQL8Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-12-31 08:05:38 WARN  [restartedMain] org.hibernate.orm.deprecation - HHH90000026: MySQL8Dialect has been deprecated; use org.hibernate.dialect.MySQLDialect instead
+2025-12-31 08:05:38 INFO  [restartedMain] o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-156)']
+	Database driver: undefined/unknown
+	Database version: 8.0
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-12-31 08:05:39 INFO  [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-12-31 08:05:39 INFO  [restartedMain] o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-12-31 08:05:39 WARN  [restartedMain] o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-12-31 08:05:39 INFO  [restartedMain] o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2025-12-31 08:05:39 INFO  [restartedMain] o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
+2025-12-31 08:05:39 INFO  [restartedMain] c.l.LakshmiGarmentsApplication - Started LakshmiGarmentsApplication in 0.765 seconds (process running for 116265.803)
+2025-12-31 08:05:39 INFO  [restartedMain] o.s.b.d.a.ConditionEvaluationDeltaLoggingListener - Condition evaluation unchanged
+2025-12-31 08:05:40 INFO  [http-nio-8080-exec-5] o.a.c.c.C.[.[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-12-31 08:05:40 INFO  [http-nio-8080-exec-5] o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2025-12-31 08:05:40 INFO  [http-nio-8080-exec-5] o.s.web.servlet.DispatcherServlet - Completed initialization in 1 ms
+2025-12-31 08:05:49 INFO  [File Watcher] o.s.b.d.a.LocalDevToolsAutoConfiguration$RestartingClassPathChangeChangedEventListener - Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2025-12-31 08:05:49 INFO  [Thread-594] o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2025-12-31 08:05:49 INFO  [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+2025-12-31 08:05:49 INFO  [Thread-594] o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-12-31 08:05:49 INFO  [Thread-594] com.zaxxer.hikari.HikariDataSource - HikariPool-156 - Shutdown initiated...
+2025-12-31 08:05:49 INFO  [Thread-594] com.zaxxer.hikari.HikariDataSource - HikariPool-156 - Shutdown completed.
+2025-12-31 08:05:49 INFO  [restartedMain] c.l.LakshmiGarmentsApplication - Starting LakshmiGarmentsApplication using Java 17.0.17 with PID 17636 (C:\Users\KEX1COB\Desktop\PERSONAL\LG\lakshmi-garments-backend\target\classes started by KEX1COB in C:\Users\KEX1COB\Desktop\PERSONAL\LG\lakshmi-garments-backend)
+2025-12-31 08:05:49 INFO  [restartedMain] c.l.LakshmiGarmentsApplication - No active profile set, falling back to 1 default profile: "default"
+2025-12-31 08:05:49 INFO  [restartedMain] o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-12-31 08:05:49 INFO  [restartedMain] o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 25 ms. Found 23 JPA repository interfaces.
+2025-12-31 08:05:49 INFO  [restartedMain] o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2025-12-31 08:05:49 INFO  [restartedMain] o.a.catalina.core.StandardService - Starting service [Tomcat]
+2025-12-31 08:05:49 INFO  [restartedMain] o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.34]
+2025-12-31 08:05:49 INFO  [restartedMain] o.a.c.c.C.[.[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2025-12-31 08:05:49 INFO  [restartedMain] o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 181 ms
+2025-12-31 08:05:49 INFO  [restartedMain] o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-12-31 08:05:49 INFO  [restartedMain] o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2025-12-31 08:05:49 INFO  [restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-12-31 08:05:49 INFO  [restartedMain] com.zaxxer.hikari.HikariDataSource - HikariPool-157 - Starting...
+2025-12-31 08:05:49 INFO  [restartedMain] com.zaxxer.hikari.pool.HikariPool - HikariPool-157 - Added connection com.mysql.cj.jdbc.ConnectionImpl@4940bbf2
+2025-12-31 08:05:49 INFO  [restartedMain] com.zaxxer.hikari.HikariDataSource - HikariPool-157 - Start completed.
+2025-12-31 08:05:49 WARN  [restartedMain] org.hibernate.orm.deprecation - HHH90000025: MySQL8Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-12-31 08:05:49 WARN  [restartedMain] org.hibernate.orm.deprecation - HHH90000026: MySQL8Dialect has been deprecated; use org.hibernate.dialect.MySQLDialect instead
+2025-12-31 08:05:49 INFO  [restartedMain] o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-157)']
+	Database driver: undefined/unknown
+	Database version: 8.0
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-12-31 08:05:49 INFO  [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-12-31 08:05:49 INFO  [restartedMain] o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-12-31 08:05:49 WARN  [restartedMain] o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-12-31 08:05:50 INFO  [restartedMain] o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2025-12-31 08:05:50 INFO  [restartedMain] o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
+2025-12-31 08:05:50 INFO  [restartedMain] c.l.LakshmiGarmentsApplication - Started LakshmiGarmentsApplication in 0.69 seconds (process running for 116276.453)
+2025-12-31 08:05:50 INFO  [restartedMain] o.s.b.d.a.ConditionEvaluationDeltaLoggingListener - Condition evaluation unchanged
+2025-12-31 08:05:52 INFO  [http-nio-8080-exec-2] o.a.c.c.C.[.[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-12-31 08:05:52 INFO  [http-nio-8080-exec-2] o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2025-12-31 08:05:52 INFO  [http-nio-8080-exec-2] o.s.web.servlet.DispatcherServlet - Completed initialization in 1 ms
+2025-12-31 08:07:44 INFO  [File Watcher] o.s.b.d.a.LocalDevToolsAutoConfiguration$RestartingClassPathChangeChangedEventListener - Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2025-12-31 08:07:44 INFO  [Thread-598] o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2025-12-31 08:07:44 INFO  [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+2025-12-31 08:07:44 INFO  [Thread-598] o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-12-31 08:07:44 INFO  [Thread-598] com.zaxxer.hikari.HikariDataSource - HikariPool-157 - Shutdown initiated...
+2025-12-31 08:07:44 INFO  [Thread-598] com.zaxxer.hikari.HikariDataSource - HikariPool-157 - Shutdown completed.
+2025-12-31 08:07:44 INFO  [restartedMain] c.l.LakshmiGarmentsApplication - Starting LakshmiGarmentsApplication using Java 17.0.17 with PID 17636 (C:\Users\KEX1COB\Desktop\PERSONAL\LG\lakshmi-garments-backend\target\classes started by KEX1COB in C:\Users\KEX1COB\Desktop\PERSONAL\LG\lakshmi-garments-backend)
+2025-12-31 08:07:44 INFO  [restartedMain] c.l.LakshmiGarmentsApplication - No active profile set, falling back to 1 default profile: "default"
+2025-12-31 08:07:46 INFO  [restartedMain] o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-12-31 08:07:46 INFO  [restartedMain] o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 26 ms. Found 23 JPA repository interfaces.
+2025-12-31 08:07:46 INFO  [restartedMain] o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2025-12-31 08:07:46 INFO  [restartedMain] o.a.catalina.core.StandardService - Starting service [Tomcat]
+2025-12-31 08:07:46 INFO  [restartedMain] o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.34]
+2025-12-31 08:07:46 INFO  [restartedMain] o.a.c.c.C.[.[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2025-12-31 08:07:46 INFO  [restartedMain] o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1759 ms
+2025-12-31 08:07:46 INFO  [restartedMain] o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-12-31 08:07:46 INFO  [restartedMain] o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2025-12-31 08:07:46 INFO  [restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-12-31 08:07:46 INFO  [restartedMain] com.zaxxer.hikari.HikariDataSource - HikariPool-158 - Starting...
+2025-12-31 08:07:46 INFO  [restartedMain] com.zaxxer.hikari.pool.HikariPool - HikariPool-158 - Added connection com.mysql.cj.jdbc.ConnectionImpl@71d99124
+2025-12-31 08:07:46 INFO  [restartedMain] com.zaxxer.hikari.HikariDataSource - HikariPool-158 - Start completed.
+2025-12-31 08:07:46 WARN  [restartedMain] org.hibernate.orm.deprecation - HHH90000025: MySQL8Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-12-31 08:07:46 WARN  [restartedMain] org.hibernate.orm.deprecation - HHH90000026: MySQL8Dialect has been deprecated; use org.hibernate.dialect.MySQLDialect instead
+2025-12-31 08:07:46 INFO  [restartedMain] o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-158)']
+	Database driver: undefined/unknown
+	Database version: 8.0
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-12-31 08:07:46 INFO  [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-12-31 08:07:46 INFO  [restartedMain] o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-12-31 08:07:46 WARN  [restartedMain] o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-12-31 08:07:47 INFO  [restartedMain] o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2025-12-31 08:07:47 INFO  [restartedMain] o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
+2025-12-31 08:07:47 INFO  [restartedMain] c.l.LakshmiGarmentsApplication - Started LakshmiGarmentsApplication in 2.256 seconds (process running for 116393.437)
+2025-12-31 08:07:47 INFO  [restartedMain] o.s.b.d.a.ConditionEvaluationDeltaLoggingListener - Condition evaluation unchanged
+2025-12-31 08:07:50 INFO  [http-nio-8080-exec-2] o.a.c.c.C.[.[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-12-31 08:07:50 INFO  [http-nio-8080-exec-2] o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2025-12-31 08:07:50 INFO  [http-nio-8080-exec-2] o.s.web.servlet.DispatcherServlet - Completed initialization in 0 ms
+2025-12-31 08:07:59 INFO  [File Watcher] o.s.b.d.a.LocalDevToolsAutoConfiguration$RestartingClassPathChangeChangedEventListener - Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2025-12-31 08:07:59 INFO  [Thread-602] o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2025-12-31 08:07:59 INFO  [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+2025-12-31 08:07:59 INFO  [Thread-602] o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-12-31 08:07:59 INFO  [Thread-602] com.zaxxer.hikari.HikariDataSource - HikariPool-158 - Shutdown initiated...
+2025-12-31 08:07:59 INFO  [Thread-602] com.zaxxer.hikari.HikariDataSource - HikariPool-158 - Shutdown completed.
+2025-12-31 08:08:00 INFO  [restartedMain] c.l.LakshmiGarmentsApplication - Starting LakshmiGarmentsApplication using Java 17.0.17 with PID 17636 (C:\Users\KEX1COB\Desktop\PERSONAL\LG\lakshmi-garments-backend\target\classes started by KEX1COB in C:\Users\KEX1COB\Desktop\PERSONAL\LG\lakshmi-garments-backend)
+2025-12-31 08:08:00 INFO  [restartedMain] c.l.LakshmiGarmentsApplication - No active profile set, falling back to 1 default profile: "default"
+2025-12-31 08:08:00 INFO  [restartedMain] o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-12-31 08:08:00 INFO  [restartedMain] o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 25 ms. Found 23 JPA repository interfaces.
+2025-12-31 08:08:00 INFO  [restartedMain] o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2025-12-31 08:08:00 INFO  [restartedMain] o.a.catalina.core.StandardService - Starting service [Tomcat]
+2025-12-31 08:08:00 INFO  [restartedMain] o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.34]
+2025-12-31 08:08:00 INFO  [restartedMain] o.a.c.c.C.[.[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2025-12-31 08:08:00 INFO  [restartedMain] o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 168 ms
+2025-12-31 08:08:00 INFO  [restartedMain] o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-12-31 08:08:00 INFO  [restartedMain] o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2025-12-31 08:08:00 INFO  [restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-12-31 08:08:00 INFO  [restartedMain] com.zaxxer.hikari.HikariDataSource - HikariPool-159 - Starting...
+2025-12-31 08:08:00 INFO  [restartedMain] com.zaxxer.hikari.pool.HikariPool - HikariPool-159 - Added connection com.mysql.cj.jdbc.ConnectionImpl@1a3075f6
+2025-12-31 08:08:00 INFO  [restartedMain] com.zaxxer.hikari.HikariDataSource - HikariPool-159 - Start completed.
+2025-12-31 08:08:00 WARN  [restartedMain] org.hibernate.orm.deprecation - HHH90000025: MySQL8Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-12-31 08:08:00 WARN  [restartedMain] org.hibernate.orm.deprecation - HHH90000026: MySQL8Dialect has been deprecated; use org.hibernate.dialect.MySQLDialect instead
+2025-12-31 08:08:00 INFO  [restartedMain] o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-159)']
+	Database driver: undefined/unknown
+	Database version: 8.0
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-12-31 08:08:00 INFO  [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-12-31 08:08:00 INFO  [restartedMain] o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-12-31 08:08:00 WARN  [restartedMain] o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-12-31 08:08:00 INFO  [restartedMain] o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2025-12-31 08:08:00 INFO  [restartedMain] o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
+2025-12-31 08:08:00 INFO  [restartedMain] c.l.LakshmiGarmentsApplication - Started LakshmiGarmentsApplication in 0.667 seconds (process running for 116407.078)
+2025-12-31 08:08:00 INFO  [restartedMain] o.s.b.d.a.ConditionEvaluationDeltaLoggingListener - Condition evaluation unchanged
+2025-12-31 08:08:02 INFO  [http-nio-8080-exec-3] o.a.c.c.C.[.[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-12-31 08:08:02 INFO  [http-nio-8080-exec-3] o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2025-12-31 08:08:02 INFO  [http-nio-8080-exec-3] o.s.web.servlet.DispatcherServlet - Completed initialization in 0 ms
+2025-12-31 08:08:20 INFO  [File Watcher] o.s.b.d.a.LocalDevToolsAutoConfiguration$RestartingClassPathChangeChangedEventListener - Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2025-12-31 08:08:20 INFO  [Thread-606] o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2025-12-31 08:08:20 INFO  [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+2025-12-31 08:08:20 INFO  [Thread-606] o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-12-31 08:08:20 INFO  [Thread-606] com.zaxxer.hikari.HikariDataSource - HikariPool-159 - Shutdown initiated...
+2025-12-31 08:08:20 INFO  [Thread-606] com.zaxxer.hikari.HikariDataSource - HikariPool-159 - Shutdown completed.
+2025-12-31 08:08:20 INFO  [restartedMain] c.l.LakshmiGarmentsApplication - Starting LakshmiGarmentsApplication using Java 17.0.17 with PID 17636 (C:\Users\KEX1COB\Desktop\PERSONAL\LG\lakshmi-garments-backend\target\classes started by KEX1COB in C:\Users\KEX1COB\Desktop\PERSONAL\LG\lakshmi-garments-backend)
+2025-12-31 08:08:20 INFO  [restartedMain] c.l.LakshmiGarmentsApplication - No active profile set, falling back to 1 default profile: "default"
+2025-12-31 08:08:20 INFO  [restartedMain] o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-12-31 08:08:20 INFO  [restartedMain] o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 26 ms. Found 23 JPA repository interfaces.
+2025-12-31 08:08:21 INFO  [restartedMain] o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2025-12-31 08:08:21 INFO  [restartedMain] o.a.catalina.core.StandardService - Starting service [Tomcat]
+2025-12-31 08:08:21 INFO  [restartedMain] o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.34]
+2025-12-31 08:08:21 INFO  [restartedMain] o.a.c.c.C.[.[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2025-12-31 08:08:21 INFO  [restartedMain] o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 171 ms
+2025-12-31 08:08:21 INFO  [restartedMain] o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-12-31 08:08:21 INFO  [restartedMain] o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2025-12-31 08:08:21 INFO  [restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-12-31 08:08:21 INFO  [restartedMain] com.zaxxer.hikari.HikariDataSource - HikariPool-160 - Starting...
+2025-12-31 08:08:21 INFO  [restartedMain] com.zaxxer.hikari.pool.HikariPool - HikariPool-160 - Added connection com.mysql.cj.jdbc.ConnectionImpl@66ded532
+2025-12-31 08:08:21 INFO  [restartedMain] com.zaxxer.hikari.HikariDataSource - HikariPool-160 - Start completed.
+2025-12-31 08:08:21 WARN  [restartedMain] org.hibernate.orm.deprecation - HHH90000025: MySQL8Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-12-31 08:08:21 WARN  [restartedMain] org.hibernate.orm.deprecation - HHH90000026: MySQL8Dialect has been deprecated; use org.hibernate.dialect.MySQLDialect instead
+2025-12-31 08:08:21 INFO  [restartedMain] o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-160)']
+	Database driver: undefined/unknown
+	Database version: 8.0
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-12-31 08:08:21 INFO  [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-12-31 08:08:21 INFO  [restartedMain] o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-12-31 08:08:21 WARN  [restartedMain] o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-12-31 08:08:21 INFO  [restartedMain] o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2025-12-31 08:08:21 INFO  [restartedMain] o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
+2025-12-31 08:08:21 INFO  [restartedMain] c.l.LakshmiGarmentsApplication - Started LakshmiGarmentsApplication in 0.697 seconds (process running for 116427.951)
+2025-12-31 08:08:21 INFO  [restartedMain] o.s.b.d.a.ConditionEvaluationDeltaLoggingListener - Condition evaluation unchanged
+2025-12-31 08:08:23 INFO  [http-nio-8080-exec-1] o.a.c.c.C.[.[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-12-31 08:08:23 INFO  [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2025-12-31 08:08:23 INFO  [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet - Completed initialization in 1 ms
+2025-12-31 08:08:31 INFO  [File Watcher] o.s.b.d.a.LocalDevToolsAutoConfiguration$RestartingClassPathChangeChangedEventListener - Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2025-12-31 08:08:31 INFO  [Thread-610] o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2025-12-31 08:08:31 INFO  [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+2025-12-31 08:08:31 INFO  [Thread-610] o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-12-31 08:08:31 INFO  [Thread-610] com.zaxxer.hikari.HikariDataSource - HikariPool-160 - Shutdown initiated...
+2025-12-31 08:08:31 INFO  [Thread-610] com.zaxxer.hikari.HikariDataSource - HikariPool-160 - Shutdown completed.
+2025-12-31 08:08:31 INFO  [restartedMain] c.l.LakshmiGarmentsApplication - Starting LakshmiGarmentsApplication using Java 17.0.17 with PID 17636 (C:\Users\KEX1COB\Desktop\PERSONAL\LG\lakshmi-garments-backend\target\classes started by KEX1COB in C:\Users\KEX1COB\Desktop\PERSONAL\LG\lakshmi-garments-backend)
+2025-12-31 08:08:31 INFO  [restartedMain] c.l.LakshmiGarmentsApplication - No active profile set, falling back to 1 default profile: "default"
+2025-12-31 08:08:31 INFO  [restartedMain] o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-12-31 08:08:31 INFO  [restartedMain] o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 25 ms. Found 23 JPA repository interfaces.
+2025-12-31 08:08:31 INFO  [restartedMain] o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2025-12-31 08:08:31 INFO  [restartedMain] o.a.catalina.core.StandardService - Starting service [Tomcat]
+2025-12-31 08:08:31 INFO  [restartedMain] o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.34]
+2025-12-31 08:08:31 INFO  [restartedMain] o.a.c.c.C.[.[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2025-12-31 08:08:31 INFO  [restartedMain] o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 173 ms
+2025-12-31 08:08:31 INFO  [restartedMain] o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-12-31 08:08:31 INFO  [restartedMain] o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2025-12-31 08:08:31 INFO  [restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-12-31 08:08:31 INFO  [restartedMain] com.zaxxer.hikari.HikariDataSource - HikariPool-161 - Starting...
+2025-12-31 08:08:31 INFO  [restartedMain] com.zaxxer.hikari.pool.HikariPool - HikariPool-161 - Added connection com.mysql.cj.jdbc.ConnectionImpl@3117a328
+2025-12-31 08:08:31 INFO  [restartedMain] com.zaxxer.hikari.HikariDataSource - HikariPool-161 - Start completed.
+2025-12-31 08:08:31 WARN  [restartedMain] org.hibernate.orm.deprecation - HHH90000025: MySQL8Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-12-31 08:08:31 WARN  [restartedMain] org.hibernate.orm.deprecation - HHH90000026: MySQL8Dialect has been deprecated; use org.hibernate.dialect.MySQLDialect instead
+2025-12-31 08:08:31 INFO  [restartedMain] o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-161)']
+	Database driver: undefined/unknown
+	Database version: 8.0
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-12-31 08:08:31 INFO  [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-12-31 08:08:31 INFO  [restartedMain] o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-12-31 08:08:32 WARN  [restartedMain] o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-12-31 08:08:32 INFO  [restartedMain] o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2025-12-31 08:08:32 INFO  [restartedMain] o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
+2025-12-31 08:08:32 INFO  [restartedMain] c.l.LakshmiGarmentsApplication - Started LakshmiGarmentsApplication in 0.71 seconds (process running for 116438.547)
+2025-12-31 08:08:32 INFO  [restartedMain] o.s.b.d.a.ConditionEvaluationDeltaLoggingListener - Condition evaluation unchanged
+2025-12-31 08:10:21 INFO  [http-nio-8080-exec-1] o.a.c.c.C.[.[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-12-31 08:10:21 INFO  [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2025-12-31 08:10:21 INFO  [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet - Completed initialization in 0 ms
+2025-12-31 08:10:36 INFO  [http-nio-8080-exec-2] c.l.controller.BatchController - Received request to get all batches
+2025-12-31 08:10:36 INFO  [http-nio-8080-exec-2] c.l.controller.BatchController - Found 3 batches
+2025-12-31 08:10:36 WARN  [http-nio-8080-exec-2] o.s.d.w.c.SpringDataJacksonConfiguration$PageModule$WarningLoggingModifier - Serializing PageImpl instances as-is is not supported, meaning that there is no guarantee about the stability of the resulting JSON structure!
+	For a stable JSON structure, please use Spring Data's PagedModel (globally via @EnableSpringDataWebSupport(pageSerializationMode = VIA_DTO))
+	or Spring HATEOAS and Spring Data's PagedResourcesAssembler as documented in https://docs.spring.io/spring-data/commons/reference/repositories/core-extensions.html#core.web.pageables.
+
+2025-12-31 08:10:45 INFO  [http-nio-8080-exec-8] c.l.controller.SupplierController - Received request to fetch all suppliers with search: null
+2025-12-31 08:10:45 INFO  [http-nio-8080-exec-10] c.l.controller.SubCategoryController - Received request to fetch all sub categories with search: null
+2025-12-31 08:10:45 INFO  [http-nio-8080-exec-5] c.l.controller.TransportController - Received request to fetch all transports with search: null
+2025-12-31 08:10:45 INFO  [http-nio-8080-exec-9] c.l.controller.CategoryController - Received request to fetch all categories with search: null
+2025-12-31 08:10:45 INFO  [http-nio-8080-exec-8] c.l.controller.SupplierController - Returning 2 supplier(s)
+2025-12-31 08:10:45 INFO  [http-nio-8080-exec-5] c.l.controller.TransportController - Returning 2 transport(s)
+2025-12-31 08:10:45 INFO  [http-nio-8080-exec-9] c.l.controller.CategoryController - Returning 2 category(s)
+2025-12-31 08:10:45 INFO  [http-nio-8080-exec-10] c.l.controller.SubCategoryController - Returning 3 sub category(s)
+2025-12-31 08:10:45 INFO  [http-nio-8080-exec-8] c.l.controller.TransportController - Received request to fetch all transports with search: null
+2025-12-31 08:10:45 INFO  [http-nio-8080-exec-3] c.l.controller.CategoryController - Received request to fetch all categories with search: null
+2025-12-31 08:10:45 INFO  [http-nio-8080-exec-2] c.l.controller.SupplierController - Received request to fetch all suppliers with search: null
+2025-12-31 08:10:45 INFO  [http-nio-8080-exec-4] c.l.controller.SubCategoryController - Received request to fetch all sub categories with search: null
+2025-12-31 08:10:45 INFO  [http-nio-8080-exec-2] c.l.controller.SupplierController - Returning 2 supplier(s)
+2025-12-31 08:10:45 INFO  [http-nio-8080-exec-3] c.l.controller.CategoryController - Returning 2 category(s)
+2025-12-31 08:10:45 INFO  [http-nio-8080-exec-8] c.l.controller.TransportController - Returning 2 transport(s)
+2025-12-31 08:10:45 INFO  [http-nio-8080-exec-4] c.l.controller.SubCategoryController - Returning 3 sub category(s)
+2025-12-31 08:10:49 INFO  [http-nio-8080-exec-7] c.l.controller.BatchController - Received request to get pending batches
+2025-12-31 08:10:49 INFO  [http-nio-8080-exec-7] c.l.service.impl.BatchServiceImpl - Fetching unpackaged batches
+2025-12-31 08:10:49 INFO  [http-nio-8080-exec-9] c.l.controller.BatchController - Received request to get all batches
+2025-12-31 08:10:49 INFO  [http-nio-8080-exec-6] c.l.controller.BatchController - Received request to get all batches
+2025-12-31 08:10:49 INFO  [http-nio-8080-exec-6] c.l.controller.BatchController - Found 0 batches
+2025-12-31 08:10:49 INFO  [http-nio-8080-exec-7] c.l.service.impl.BatchServiceImpl - Found 1 unpackaged batches
+2025-12-31 08:10:49 INFO  [http-nio-8080-exec-7] c.l.controller.BatchController - Found 1 pending batches
+2025-12-31 08:10:49 INFO  [http-nio-8080-exec-10] c.l.controller.BatchController - Received request to get pending batches
+2025-12-31 08:10:49 INFO  [http-nio-8080-exec-10] c.l.service.impl.BatchServiceImpl - Fetching unpackaged batches
+2025-12-31 08:10:49 INFO  [http-nio-8080-exec-1] c.l.controller.BatchController - Received request to get all batches
+2025-12-31 08:10:49 INFO  [http-nio-8080-exec-10] c.l.service.impl.BatchServiceImpl - Found 1 unpackaged batches
+2025-12-31 08:10:49 INFO  [http-nio-8080-exec-10] c.l.controller.BatchController - Found 1 pending batches
+2025-12-31 08:10:49 INFO  [http-nio-8080-exec-9] c.l.controller.BatchController - Found 3 batches
+2025-12-31 08:10:49 INFO  [http-nio-8080-exec-1] c.l.controller.BatchController - Found 0 batches
+2025-12-31 08:10:49 INFO  [http-nio-8080-exec-3] c.l.controller.BatchController - Received request to get all batches
+2025-12-31 08:10:49 INFO  [http-nio-8080-exec-3] c.l.controller.BatchController - Found 3 batches
+2025-12-31 08:10:51 INFO  [http-nio-8080-exec-8] c.l.controller.BatchController - Received request to get all batches
+2025-12-31 08:10:51 INFO  [http-nio-8080-exec-4] c.l.controller.BatchController - Received request to fetch the allowed transitions for the batch
+2025-12-31 08:10:51 INFO  [http-nio-8080-exec-8] c.l.controller.BatchController - Found 1 batches
+2025-12-31 08:10:52 INFO  [http-nio-8080-exec-6] c.l.controller.EmployeeController - Received request to get all employees
+2025-12-31 08:10:52 INFO  [http-nio-8080-exec-6] c.l.controller.EmployeeController - Employees retrieved successfully
+2025-12-31 08:11:45 INFO  [http-nio-8080-exec-2] c.l.controller.BatchController - Received request to get pending batches
+2025-12-31 08:11:45 INFO  [http-nio-8080-exec-2] c.l.service.impl.BatchServiceImpl - Fetching unpackaged batches
+2025-12-31 08:11:45 INFO  [http-nio-8080-exec-10] c.l.controller.BatchController - Received request to get all batches
+2025-12-31 08:11:45 INFO  [http-nio-8080-exec-1] c.l.controller.BatchController - Received request to get all batches
+2025-12-31 08:11:45 INFO  [http-nio-8080-exec-2] c.l.service.impl.BatchServiceImpl - Found 1 unpackaged batches
+2025-12-31 08:11:45 INFO  [http-nio-8080-exec-10] c.l.controller.BatchController - Found 0 batches
+2025-12-31 08:11:45 INFO  [http-nio-8080-exec-2] c.l.controller.BatchController - Found 1 pending batches
+2025-12-31 08:11:45 INFO  [http-nio-8080-exec-1] c.l.controller.BatchController - Found 3 batches
+2025-12-31 08:11:46 INFO  [http-nio-8080-exec-4] c.l.controller.BatchController - Received request to get pending batches
+2025-12-31 08:11:46 INFO  [http-nio-8080-exec-3] c.l.controller.BatchController - Received request to get all batches
+2025-12-31 08:11:46 INFO  [http-nio-8080-exec-4] c.l.service.impl.BatchServiceImpl - Fetching unpackaged batches
+2025-12-31 08:11:46 INFO  [http-nio-8080-exec-6] c.l.controller.BatchController - Received request to get all batches
+2025-12-31 08:11:46 INFO  [http-nio-8080-exec-4] c.l.service.impl.BatchServiceImpl - Found 1 unpackaged batches
+2025-12-31 08:11:46 INFO  [http-nio-8080-exec-4] c.l.controller.BatchController - Found 1 pending batches
+2025-12-31 08:11:46 INFO  [http-nio-8080-exec-3] c.l.controller.BatchController - Found 0 batches
+2025-12-31 08:11:46 INFO  [http-nio-8080-exec-6] c.l.controller.BatchController - Found 3 batches
+2025-12-31 08:12:13 INFO  [http-nio-8080-exec-7] c.l.controller.BatchController - Received request to fetch the allowed transitions for the batch
+2025-12-31 08:12:13 INFO  [http-nio-8080-exec-5] c.l.controller.BatchController - Received request to get all batches
+2025-12-31 08:12:13 INFO  [http-nio-8080-exec-5] c.l.controller.BatchController - Found 1 batches
+2025-12-31 08:12:14 INFO  [http-nio-8080-exec-10] c.l.controller.EmployeeController - Received request to get all employees
+2025-12-31 08:12:14 INFO  [http-nio-8080-exec-10] c.l.controller.EmployeeController - Employees retrieved successfully
+2025-12-31 08:25:54 INFO  [http-nio-8080-exec-5] c.l.controller.BatchController - Received request to get pending batches
+2025-12-31 08:25:54 INFO  [http-nio-8080-exec-5] c.l.service.impl.BatchServiceImpl - Fetching unpackaged batches
+2025-12-31 08:25:54 INFO  [http-nio-8080-exec-9] c.l.controller.BatchController - Received request to get all batches
+2025-12-31 08:25:54 INFO  [http-nio-8080-exec-7] c.l.controller.BatchController - Received request to get all batches
+2025-12-31 08:25:54 INFO  [http-nio-8080-exec-5] c.l.service.impl.BatchServiceImpl - Found 1 unpackaged batches
+2025-12-31 08:25:54 INFO  [http-nio-8080-exec-5] c.l.controller.BatchController - Found 1 pending batches
+2025-12-31 08:25:54 INFO  [http-nio-8080-exec-7] c.l.controller.BatchController - Found 0 batches
+2025-12-31 08:25:54 INFO  [http-nio-8080-exec-9] c.l.controller.BatchController - Found 3 batches
+2025-12-31 08:26:05 INFO  [http-nio-8080-exec-4] c.l.controller.BatchController - Received request to get pending batches
+2025-12-31 08:26:05 INFO  [http-nio-8080-exec-4] c.l.service.impl.BatchServiceImpl - Fetching unpackaged batches
+2025-12-31 08:26:05 INFO  [http-nio-8080-exec-3] c.l.controller.BatchController - Received request to get all batches
+2025-12-31 08:26:05 INFO  [http-nio-8080-exec-2] c.l.controller.BatchController - Received request to get all batches
+2025-12-31 08:26:05 INFO  [http-nio-8080-exec-4] c.l.service.impl.BatchServiceImpl - Found 1 unpackaged batches
+2025-12-31 08:26:05 INFO  [http-nio-8080-exec-4] c.l.controller.BatchController - Found 1 pending batches
+2025-12-31 08:26:05 INFO  [http-nio-8080-exec-2] c.l.controller.BatchController - Found 0 batches
+2025-12-31 08:26:05 INFO  [http-nio-8080-exec-3] c.l.controller.BatchController - Found 3 batches
+2025-12-31 08:26:13 INFO  [http-nio-8080-exec-8] c.l.controller.EmployeeController - Received request to get all employees
+2025-12-31 08:26:13 INFO  [http-nio-8080-exec-8] c.l.controller.EmployeeController - Employees retrieved successfully
+2025-12-31 08:26:13 INFO  [http-nio-8080-exec-6] c.l.controller.EmployeeController - Received request to get all employees
+2025-12-31 08:26:13 INFO  [http-nio-8080-exec-6] c.l.controller.EmployeeController - Employees retrieved successfully
+2025-12-31 08:26:14 INFO  [http-nio-8080-exec-10] c.l.controller.BatchController - Received request to get pending batches
+2025-12-31 08:26:14 INFO  [http-nio-8080-exec-10] c.l.service.impl.BatchServiceImpl - Fetching unpackaged batches
+2025-12-31 08:26:14 INFO  [http-nio-8080-exec-7] c.l.controller.BatchController - Received request to get all batches
+2025-12-31 08:26:14 INFO  [http-nio-8080-exec-5] c.l.controller.BatchController - Received request to get all batches
+2025-12-31 08:26:14 INFO  [http-nio-8080-exec-10] c.l.service.impl.BatchServiceImpl - Found 1 unpackaged batches
+2025-12-31 08:26:14 INFO  [http-nio-8080-exec-10] c.l.controller.BatchController - Found 1 pending batches
+2025-12-31 08:26:14 INFO  [http-nio-8080-exec-4] c.l.controller.BatchController - Received request to get pending batches
+2025-12-31 08:26:14 INFO  [http-nio-8080-exec-4] c.l.service.impl.BatchServiceImpl - Fetching unpackaged batches
+2025-12-31 08:26:14 INFO  [http-nio-8080-exec-4] c.l.service.impl.BatchServiceImpl - Found 1 unpackaged batches
+2025-12-31 08:26:14 INFO  [http-nio-8080-exec-4] c.l.controller.BatchController - Found 1 pending batches
+2025-12-31 08:26:14 INFO  [http-nio-8080-exec-5] c.l.controller.BatchController - Found 0 batches
+2025-12-31 08:26:14 INFO  [http-nio-8080-exec-7] c.l.controller.BatchController - Found 3 batches
+2025-12-31 08:26:14 INFO  [http-nio-8080-exec-2] c.l.controller.BatchController - Received request to get all batches
+2025-12-31 08:26:14 INFO  [http-nio-8080-exec-3] c.l.controller.BatchController - Received request to get all batches
+2025-12-31 08:26:14 INFO  [http-nio-8080-exec-2] c.l.controller.BatchController - Found 0 batches
+2025-12-31 08:26:14 INFO  [http-nio-8080-exec-3] c.l.controller.BatchController - Found 3 batches
+2025-12-31 08:26:18 INFO  [http-nio-8080-exec-8] c.l.controller.BatchController - Received request to fetch the allowed transitions for the batch
+2025-12-31 08:26:18 INFO  [http-nio-8080-exec-6] c.l.controller.BatchController - Received request to get all batches
+2025-12-31 08:26:18 INFO  [http-nio-8080-exec-6] c.l.controller.BatchController - Found 1 batches
+2025-12-31 08:26:20 INFO  [http-nio-8080-exec-10] c.l.controller.EmployeeController - Received request to get all employees
+2025-12-31 08:26:20 INFO  [http-nio-8080-exec-10] c.l.controller.EmployeeController - Employees retrieved successfully
+2025-12-31 08:26:27 INFO  [http-nio-8080-exec-5] c.l.controller.BatchController - Received request to get all batches
+2025-12-31 08:26:27 INFO  [http-nio-8080-exec-9] c.l.controller.BatchController - Received request to get all batches
+2025-12-31 08:26:27 INFO  [http-nio-8080-exec-4] c.l.controller.BatchController - Received request to get pending batches
+2025-12-31 08:26:27 INFO  [http-nio-8080-exec-4] c.l.service.impl.BatchServiceImpl - Fetching unpackaged batches
+2025-12-31 08:26:27 INFO  [http-nio-8080-exec-9] c.l.controller.BatchController - Found 0 batches
+2025-12-31 08:26:27 INFO  [http-nio-8080-exec-4] c.l.service.impl.BatchServiceImpl - Found 1 unpackaged batches
+2025-12-31 08:26:27 INFO  [http-nio-8080-exec-4] c.l.controller.BatchController - Found 1 pending batches
+2025-12-31 08:26:27 INFO  [http-nio-8080-exec-5] c.l.controller.BatchController - Found 3 batches
+2025-12-31 08:26:38 INFO  [http-nio-8080-exec-2] c.l.controller.BatchController - Received request to get all batches
+2025-12-31 08:26:38 INFO  [http-nio-8080-exec-7] c.l.controller.BatchController - Received request to fetch the allowed transitions for the batch
+2025-12-31 08:26:38 INFO  [http-nio-8080-exec-2] c.l.controller.BatchController - Found 1 batches
+2025-12-31 08:26:39 INFO  [http-nio-8080-exec-3] c.l.controller.EmployeeController - Received request to get all employees
+2025-12-31 08:26:39 INFO  [http-nio-8080-exec-3] c.l.controller.EmployeeController - Employees retrieved successfully
+2025-12-31 08:27:39 INFO  [http-nio-8080-exec-4] c.l.controller.EmployeeController - Received request to get all employees
+2025-12-31 08:27:39 INFO  [http-nio-8080-exec-1] c.l.controller.SkillController - Received request to fetch all skills with search: 
+2025-12-31 08:27:39 INFO  [http-nio-8080-exec-4] c.l.controller.EmployeeController - Employees retrieved successfully
+2025-12-31 08:27:39 INFO  [http-nio-8080-exec-9] c.l.controller.EmployeeController - Received request to get all employees
+2025-12-31 08:27:39 INFO  [http-nio-8080-exec-1] c.l.controller.SkillController - Returning 3 skill(s)
+2025-12-31 08:27:39 INFO  [http-nio-8080-exec-5] c.l.controller.SkillController - Received request to fetch all skills with search: 
+2025-12-31 08:27:39 INFO  [http-nio-8080-exec-9] c.l.controller.EmployeeController - Employees retrieved successfully
+2025-12-31 08:27:39 INFO  [http-nio-8080-exec-5] c.l.controller.SkillController - Returning 3 skill(s)
+2025-12-31 08:27:50 INFO  [http-nio-8080-exec-2] c.l.controller.EmployeeController - Received request to create employee: haris
+2025-12-31 08:27:50 INFO  [http-nio-8080-exec-2] c.l.service.impl.EmployeeServiceImpl - Employee saved with ID: 2
+2025-12-31 08:27:50 INFO  [http-nio-8080-exec-2] c.l.service.impl.EmployeeServiceImpl - Associated 2 skill(s) to employee ID: 2
+2025-12-31 08:27:50 INFO  [http-nio-8080-exec-2] c.l.controller.EmployeeController - Employee created successfully with ID: 2
+2025-12-31 08:27:50 INFO  [http-nio-8080-exec-3] c.l.controller.EmployeeController - Received request to get all employees
+2025-12-31 08:27:50 INFO  [http-nio-8080-exec-3] c.l.controller.EmployeeController - Employees retrieved successfully
+2025-12-31 08:27:54 INFO  [http-nio-8080-exec-6] c.l.service.impl.JobworkServiceImpl - Fetched 1 jobworks
+2025-12-31 08:27:54 INFO  [http-nio-8080-exec-8] c.l.service.impl.JobworkServiceImpl - Fetched 1 jobworks
+2025-12-31 08:27:56 INFO  [http-nio-8080-exec-10] c.l.controller.BatchController - Received request to get pending batches
+2025-12-31 08:27:56 INFO  [http-nio-8080-exec-10] c.l.service.impl.BatchServiceImpl - Fetching unpackaged batches
+2025-12-31 08:27:56 INFO  [http-nio-8080-exec-4] c.l.controller.BatchController - Received request to get all batches
+2025-12-31 08:27:56 INFO  [http-nio-8080-exec-9] c.l.controller.BatchController - Received request to get all batches
+2025-12-31 08:27:56 INFO  [http-nio-8080-exec-4] c.l.controller.BatchController - Found 0 batches
+2025-12-31 08:27:56 INFO  [http-nio-8080-exec-10] c.l.service.impl.BatchServiceImpl - Found 1 unpackaged batches
+2025-12-31 08:27:56 INFO  [http-nio-8080-exec-10] c.l.controller.BatchController - Found 1 pending batches
+2025-12-31 08:27:56 INFO  [http-nio-8080-exec-7] c.l.controller.BatchController - Received request to get all batches
+2025-12-31 08:27:56 INFO  [http-nio-8080-exec-2] c.l.controller.BatchController - Received request to get pending batches
+2025-12-31 08:27:56 INFO  [http-nio-8080-exec-2] c.l.service.impl.BatchServiceImpl - Fetching unpackaged batches
+2025-12-31 08:27:56 INFO  [http-nio-8080-exec-7] c.l.controller.BatchController - Found 0 batches
+2025-12-31 08:27:56 INFO  [http-nio-8080-exec-9] c.l.controller.BatchController - Found 3 batches
+2025-12-31 08:27:56 INFO  [http-nio-8080-exec-2] c.l.service.impl.BatchServiceImpl - Found 1 unpackaged batches
+2025-12-31 08:27:56 INFO  [http-nio-8080-exec-2] c.l.controller.BatchController - Found 1 pending batches
+2025-12-31 08:27:56 INFO  [http-nio-8080-exec-3] c.l.controller.BatchController - Received request to get all batches
+2025-12-31 08:27:56 INFO  [http-nio-8080-exec-3] c.l.controller.BatchController - Found 3 batches
+2025-12-31 08:27:58 INFO  [http-nio-8080-exec-6] c.l.controller.BatchController - Received request to fetch the allowed transitions for the batch
+2025-12-31 08:27:58 INFO  [http-nio-8080-exec-8] c.l.controller.BatchController - Received request to get all batches
+2025-12-31 08:27:58 INFO  [http-nio-8080-exec-8] c.l.controller.BatchController - Found 1 batches
+2025-12-31 08:27:59 INFO  [http-nio-8080-exec-1] c.l.controller.EmployeeController - Received request to get all employees
+2025-12-31 08:27:59 INFO  [http-nio-8080-exec-1] c.l.controller.EmployeeController - Employees retrieved successfully
+2025-12-31 08:28:13 INFO  [http-nio-8080-exec-4] c.l.controller.EmployeeController - Received request to get all employees
+2025-12-31 08:28:13 INFO  [http-nio-8080-exec-4] c.l.controller.EmployeeController - Employees retrieved successfully
+2025-12-31 08:34:09 INFO  [http-nio-8080-exec-3] c.l.controller.EmployeeController - Received request to get all employees
+2025-12-31 08:34:09 INFO  [http-nio-8080-exec-3] c.l.controller.EmployeeController - Employees retrieved successfully
+2025-12-31 08:34:09 INFO  [http-nio-8080-exec-6] c.l.controller.EmployeeController - Received request to get all employees
+2025-12-31 08:34:09 INFO  [http-nio-8080-exec-6] c.l.controller.EmployeeController - Employees retrieved successfully
+2025-12-31 08:34:10 INFO  [http-nio-8080-exec-1] c.l.controller.BatchController - Received request to get pending batches
+2025-12-31 08:34:10 INFO  [http-nio-8080-exec-1] c.l.service.impl.BatchServiceImpl - Fetching unpackaged batches
+2025-12-31 08:34:10 INFO  [http-nio-8080-exec-5] c.l.controller.BatchController - Received request to get all batches
+2025-12-31 08:34:10 INFO  [http-nio-8080-exec-8] c.l.controller.BatchController - Received request to get all batches
+2025-12-31 08:34:10 INFO  [http-nio-8080-exec-1] c.l.service.impl.BatchServiceImpl - Found 1 unpackaged batches
+2025-12-31 08:34:10 INFO  [http-nio-8080-exec-1] c.l.controller.BatchController - Found 1 pending batches
+2025-12-31 08:34:10 INFO  [http-nio-8080-exec-8] c.l.controller.BatchController - Found 0 batches
+2025-12-31 08:34:10 INFO  [http-nio-8080-exec-7] c.l.controller.BatchController - Received request to get pending batches
+2025-12-31 08:34:10 INFO  [http-nio-8080-exec-7] c.l.service.impl.BatchServiceImpl - Fetching unpackaged batches
+2025-12-31 08:34:10 INFO  [http-nio-8080-exec-9] c.l.controller.BatchController - Received request to get all batches
+2025-12-31 08:34:10 INFO  [http-nio-8080-exec-7] c.l.service.impl.BatchServiceImpl - Found 1 unpackaged batches
+2025-12-31 08:34:10 INFO  [http-nio-8080-exec-7] c.l.controller.BatchController - Found 1 pending batches
+2025-12-31 08:34:10 INFO  [http-nio-8080-exec-5] c.l.controller.BatchController - Found 3 batches
+2025-12-31 08:34:10 INFO  [http-nio-8080-exec-9] c.l.controller.BatchController - Found 0 batches
+2025-12-31 08:34:10 INFO  [http-nio-8080-exec-2] c.l.controller.BatchController - Received request to get all batches
+2025-12-31 08:34:10 INFO  [http-nio-8080-exec-2] c.l.controller.BatchController - Found 3 batches
+2025-12-31 08:34:13 INFO  [http-nio-8080-exec-3] c.l.controller.BatchController - Received request to fetch the allowed transitions for the batch
+2025-12-31 08:34:13 INFO  [http-nio-8080-exec-6] c.l.controller.BatchController - Received request to get all batches
+2025-12-31 08:34:13 INFO  [http-nio-8080-exec-6] c.l.controller.BatchController - Found 1 batches
+2025-12-31 08:34:15 INFO  [http-nio-8080-exec-1] c.l.controller.EmployeeController - Received request to get all employees
+2025-12-31 08:34:15 INFO  [http-nio-8080-exec-1] c.l.controller.EmployeeController - Employees retrieved successfully
+2025-12-31 08:34:18 INFO  [http-nio-8080-exec-4] c.l.controller.BatchController - Received request to get all batches
+2025-12-31 08:34:18 INFO  [http-nio-8080-exec-8] c.l.controller.BatchController - Received request to get pending batches
+2025-12-31 08:34:18 INFO  [http-nio-8080-exec-8] c.l.service.impl.BatchServiceImpl - Fetching unpackaged batches
+2025-12-31 08:34:18 INFO  [http-nio-8080-exec-7] c.l.controller.BatchController - Received request to get all batches
+2025-12-31 08:34:18 INFO  [http-nio-8080-exec-4] c.l.controller.BatchController - Found 0 batches
+2025-12-31 08:34:18 INFO  [http-nio-8080-exec-8] c.l.service.impl.BatchServiceImpl - Found 1 unpackaged batches
+2025-12-31 08:34:18 INFO  [http-nio-8080-exec-8] c.l.controller.BatchController - Found 1 pending batches
+2025-12-31 08:34:18 INFO  [http-nio-8080-exec-7] c.l.controller.BatchController - Found 3 batches
+2025-12-31 08:35:14 INFO  [http-nio-8080-exec-9] c.l.controller.BatchController - Received request to get pending batches
+2025-12-31 08:35:14 INFO  [http-nio-8080-exec-9] c.l.service.impl.BatchServiceImpl - Fetching unpackaged batches
+2025-12-31 08:35:14 INFO  [http-nio-8080-exec-5] c.l.controller.BatchController - Received request to get all batches
+2025-12-31 08:35:14 INFO  [http-nio-8080-exec-3] c.l.controller.BatchController - Received request to get all batches
+2025-12-31 08:35:14 INFO  [http-nio-8080-exec-9] c.l.service.impl.BatchServiceImpl - Found 1 unpackaged batches
+2025-12-31 08:35:14 INFO  [http-nio-8080-exec-9] c.l.controller.BatchController - Found 1 pending batches
+2025-12-31 08:35:14 INFO  [http-nio-8080-exec-5] c.l.controller.BatchController - Found 0 batches
+2025-12-31 08:35:14 INFO  [http-nio-8080-exec-3] c.l.controller.BatchController - Found 3 batches
+2025-12-31 08:35:16 INFO  [http-nio-8080-exec-6] c.l.controller.BatchController - Received request to get all batches
+2025-12-31 08:35:16 INFO  [http-nio-8080-exec-8] c.l.controller.BatchController - Received request to get all batches
+2025-12-31 08:35:16 INFO  [http-nio-8080-exec-1] c.l.controller.BatchController - Received request to get pending batches
+2025-12-31 08:35:16 INFO  [http-nio-8080-exec-1] c.l.service.impl.BatchServiceImpl - Fetching unpackaged batches
+2025-12-31 08:35:16 INFO  [http-nio-8080-exec-6] c.l.controller.BatchController - Found 0 batches
+2025-12-31 08:35:16 INFO  [http-nio-8080-exec-1] c.l.service.impl.BatchServiceImpl - Found 1 unpackaged batches
+2025-12-31 08:35:16 INFO  [http-nio-8080-exec-1] c.l.controller.BatchController - Found 1 pending batches
+2025-12-31 08:35:16 INFO  [http-nio-8080-exec-8] c.l.controller.BatchController - Found 3 batches
+2025-12-31 08:35:18 INFO  [http-nio-8080-exec-10] c.l.controller.BatchController - Received request to fetch the allowed transitions for the batch
+2025-12-31 08:35:18 INFO  [http-nio-8080-exec-7] c.l.controller.BatchController - Received request to get all batches
+2025-12-31 08:35:18 INFO  [http-nio-8080-exec-7] c.l.controller.BatchController - Found 1 batches
+2025-12-31 08:35:21 INFO  [http-nio-8080-exec-9] c.l.controller.EmployeeController - Received request to get all employees
+2025-12-31 08:35:21 INFO  [http-nio-8080-exec-9] c.l.controller.EmployeeController - Employees retrieved successfully
+2025-12-31 08:35:54 INFO  [http-nio-8080-exec-2] c.l.controller.BatchController - Received request to get all batches
+2025-12-31 08:35:54 INFO  [http-nio-8080-exec-2] c.l.controller.BatchController - Found 3 batches
+2025-12-31 08:35:57 INFO  [http-nio-8080-exec-5] c.l.controller.BatchController - Received request to fetch the allowed transitions for the batch
+2025-12-31 08:35:57 INFO  [http-nio-8080-exec-3] c.l.controller.BatchController - Received request to get all batches
+2025-12-31 08:35:57 INFO  [http-nio-8080-exec-3] c.l.controller.BatchController - Found 1 batches
+2025-12-31 08:36:38 INFO  [File Watcher] o.s.b.d.a.LocalDevToolsAutoConfiguration$RestartingClassPathChangeChangedEventListener - Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2025-12-31 08:36:38 INFO  [Thread-614] o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2025-12-31 08:36:38 INFO  [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+2025-12-31 08:36:38 INFO  [Thread-614] o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-12-31 08:36:38 INFO  [Thread-614] com.zaxxer.hikari.HikariDataSource - HikariPool-161 - Shutdown initiated...
+2025-12-31 08:36:38 INFO  [Thread-614] com.zaxxer.hikari.HikariDataSource - HikariPool-161 - Shutdown completed.
+2025-12-31 08:36:38 INFO  [restartedMain] c.l.LakshmiGarmentsApplication - Starting LakshmiGarmentsApplication using Java 17.0.17 with PID 17636 (C:\Users\KEX1COB\Desktop\PERSONAL\LG\lakshmi-garments-backend\target\classes started by KEX1COB in C:\Users\KEX1COB\Desktop\PERSONAL\LG\lakshmi-garments-backend)
+2025-12-31 08:36:38 INFO  [restartedMain] c.l.LakshmiGarmentsApplication - No active profile set, falling back to 1 default profile: "default"
+2025-12-31 08:36:39 INFO  [restartedMain] o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-12-31 08:36:39 INFO  [restartedMain] o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 44 ms. Found 23 JPA repository interfaces.
+2025-12-31 08:36:39 INFO  [restartedMain] o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2025-12-31 08:36:39 INFO  [restartedMain] o.a.catalina.core.StandardService - Starting service [Tomcat]
+2025-12-31 08:36:39 INFO  [restartedMain] o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.34]
+2025-12-31 08:36:39 INFO  [restartedMain] o.a.c.c.C.[.[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2025-12-31 08:36:39 INFO  [restartedMain] o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 322 ms
+2025-12-31 08:36:39 INFO  [restartedMain] o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-12-31 08:36:39 INFO  [restartedMain] o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2025-12-31 08:36:39 INFO  [restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-12-31 08:36:39 INFO  [restartedMain] com.zaxxer.hikari.HikariDataSource - HikariPool-162 - Starting...
+2025-12-31 08:36:39 INFO  [restartedMain] com.zaxxer.hikari.pool.HikariPool - HikariPool-162 - Added connection com.mysql.cj.jdbc.ConnectionImpl@34ec9f2d
+2025-12-31 08:36:39 INFO  [restartedMain] com.zaxxer.hikari.HikariDataSource - HikariPool-162 - Start completed.
+2025-12-31 08:36:39 WARN  [restartedMain] org.hibernate.orm.deprecation - HHH90000025: MySQL8Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-12-31 08:36:39 WARN  [restartedMain] org.hibernate.orm.deprecation - HHH90000026: MySQL8Dialect has been deprecated; use org.hibernate.dialect.MySQLDialect instead
+2025-12-31 08:36:39 INFO  [restartedMain] o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-162)']
+	Database driver: undefined/unknown
+	Database version: 8.0
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-12-31 08:36:39 INFO  [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-12-31 08:36:39 INFO  [restartedMain] o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-12-31 08:36:40 WARN  [restartedMain] o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-12-31 08:36:40 INFO  [restartedMain] o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2025-12-31 08:36:40 INFO  [restartedMain] o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
+2025-12-31 08:36:40 INFO  [restartedMain] c.l.LakshmiGarmentsApplication - Started LakshmiGarmentsApplication in 1.288 seconds (process running for 118126.637)
+2025-12-31 08:36:40 INFO  [restartedMain] o.s.b.d.a.ConditionEvaluationDeltaLoggingListener - Condition evaluation unchanged
+2025-12-31 08:36:47 INFO  [http-nio-8080-exec-1] o.a.c.c.C.[.[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-12-31 08:36:47 INFO  [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2025-12-31 08:36:47 INFO  [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet - Completed initialization in 1 ms
+2025-12-31 08:36:47 INFO  [http-nio-8080-exec-1] c.l.controller.BatchController - Received request to get all batches
+2025-12-31 08:36:47 INFO  [http-nio-8080-exec-2] c.l.controller.BatchController - Received request to get pending batches
+2025-12-31 08:36:47 INFO  [http-nio-8080-exec-2] c.l.service.impl.BatchServiceImpl - Fetching unpackaged batches
+2025-12-31 08:36:47 INFO  [http-nio-8080-exec-4] c.l.controller.BatchController - Received request to get all batches
+2025-12-31 08:36:47 INFO  [http-nio-8080-exec-2] c.l.service.impl.BatchServiceImpl - Found 1 unpackaged batches
+2025-12-31 08:36:47 INFO  [http-nio-8080-exec-2] c.l.controller.BatchController - Found 1 pending batches
+2025-12-31 08:36:47 INFO  [http-nio-8080-exec-1] c.l.controller.BatchController - Found 0 batches
+2025-12-31 08:36:47 WARN  [http-nio-8080-exec-1] o.s.d.w.c.SpringDataJacksonConfiguration$PageModule$WarningLoggingModifier - Serializing PageImpl instances as-is is not supported, meaning that there is no guarantee about the stability of the resulting JSON structure!
+	For a stable JSON structure, please use Spring Data's PagedModel (globally via @EnableSpringDataWebSupport(pageSerializationMode = VIA_DTO))
+	or Spring HATEOAS and Spring Data's PagedResourcesAssembler as documented in https://docs.spring.io/spring-data/commons/reference/repositories/core-extensions.html#core.web.pageables.
+
+2025-12-31 08:36:47 INFO  [http-nio-8080-exec-4] c.l.controller.BatchController - Found 3 batches
+2025-12-31 08:36:49 INFO  [http-nio-8080-exec-5] c.l.controller.BatchController - Received request to fetch the allowed transitions for the batch
+2025-12-31 08:36:49 INFO  [http-nio-8080-exec-6] c.l.controller.BatchController - Received request to get all batches
+2025-12-31 08:36:49 INFO  [http-nio-8080-exec-6] c.l.controller.BatchController - Found 1 batches
+2025-12-31 08:37:00 INFO  [http-nio-8080-exec-7] c.l.controller.EmployeeController - Received request to get all employees
+2025-12-31 08:37:00 INFO  [http-nio-8080-exec-7] c.l.controller.EmployeeController - Employees retrieved successfully
+2025-12-31 08:37:12 INFO  [http-nio-8080-exec-9] c.l.controller.EmployeeController - Received request to get all employees
+2025-12-31 08:37:12 INFO  [http-nio-8080-exec-9] c.l.controller.EmployeeController - Employees retrieved successfully
+2025-12-31 08:37:12 INFO  [http-nio-8080-exec-8] c.l.controller.EmployeeController - Received request to get all employees
+2025-12-31 08:37:12 INFO  [http-nio-8080-exec-8] c.l.controller.EmployeeController - Employees retrieved successfully
+2025-12-31 08:37:14 INFO  [http-nio-8080-exec-10] c.l.controller.BatchController - Received request to get all batches
+2025-12-31 08:37:14 INFO  [http-nio-8080-exec-3] c.l.controller.BatchController - Received request to get pending batches
+2025-12-31 08:37:14 INFO  [http-nio-8080-exec-3] c.l.service.impl.BatchServiceImpl - Fetching unpackaged batches
+2025-12-31 08:37:14 INFO  [http-nio-8080-exec-10] c.l.controller.BatchController - Found 0 batches
+2025-12-31 08:37:14 INFO  [http-nio-8080-exec-3] c.l.service.impl.BatchServiceImpl - Found 1 unpackaged batches
+2025-12-31 08:37:14 INFO  [http-nio-8080-exec-3] c.l.controller.BatchController - Found 1 pending batches
+2025-12-31 08:37:14 INFO  [http-nio-8080-exec-1] c.l.controller.BatchController - Received request to get all batches
+2025-12-31 08:37:14 INFO  [http-nio-8080-exec-4] c.l.controller.BatchController - Received request to get all batches
+2025-12-31 08:37:14 INFO  [http-nio-8080-exec-5] c.l.controller.BatchController - Received request to get pending batches
+2025-12-31 08:37:14 INFO  [http-nio-8080-exec-5] c.l.service.impl.BatchServiceImpl - Fetching unpackaged batches
+2025-12-31 08:37:14 INFO  [http-nio-8080-exec-4] c.l.controller.BatchController - Found 0 batches
+2025-12-31 08:37:14 INFO  [http-nio-8080-exec-5] c.l.service.impl.BatchServiceImpl - Found 1 unpackaged batches
+2025-12-31 08:37:14 INFO  [http-nio-8080-exec-5] c.l.controller.BatchController - Found 1 pending batches
+2025-12-31 08:37:14 INFO  [http-nio-8080-exec-1] c.l.controller.BatchController - Found 3 batches
+2025-12-31 08:37:14 INFO  [http-nio-8080-exec-7] c.l.controller.BatchController - Received request to get all batches
+2025-12-31 08:37:14 INFO  [http-nio-8080-exec-7] c.l.controller.BatchController - Found 3 batches
+2025-12-31 08:37:15 INFO  [http-nio-8080-exec-9] c.l.controller.BatchController - Received request to fetch the allowed transitions for the batch
+2025-12-31 08:37:15 INFO  [http-nio-8080-exec-8] c.l.controller.BatchController - Received request to get all batches
+2025-12-31 08:37:15 INFO  [http-nio-8080-exec-8] c.l.controller.BatchController - Found 1 batches
+2025-12-31 08:37:16 INFO  [http-nio-8080-exec-10] c.l.controller.EmployeeController - Received request to get all employees
+2025-12-31 08:37:16 INFO  [http-nio-8080-exec-10] c.l.controller.EmployeeController - Employees retrieved successfully
+2025-12-31 08:37:21 INFO  [http-nio-8080-exec-2] c.l.controller.EmployeeController - Received request to get all employees
+2025-12-31 08:37:21 INFO  [http-nio-8080-exec-2] c.l.controller.EmployeeController - Employees retrieved successfully
+2025-12-31 08:37:24 INFO  [http-nio-8080-exec-3] c.l.controller.EmployeeController - Received request to get all employees
+2025-12-31 08:37:24 INFO  [http-nio-8080-exec-3] c.l.controller.EmployeeController - Employees retrieved successfully
+2025-12-31 08:39:34 INFO  [http-nio-8080-exec-9] c.l.controller.BatchController - Received request to get pending batches
+2025-12-31 08:39:34 INFO  [http-nio-8080-exec-9] c.l.service.impl.BatchServiceImpl - Fetching unpackaged batches
+2025-12-31 08:39:34 INFO  [http-nio-8080-exec-10] c.l.controller.BatchController - Received request to get all batches
+2025-12-31 08:39:34 INFO  [http-nio-8080-exec-7] c.l.controller.BatchController - Received request to get all batches
+2025-12-31 08:39:34 INFO  [http-nio-8080-exec-9] c.l.service.impl.BatchServiceImpl - Found 1 unpackaged batches
+2025-12-31 08:39:34 INFO  [http-nio-8080-exec-9] c.l.controller.BatchController - Found 1 pending batches
+2025-12-31 08:39:34 INFO  [http-nio-8080-exec-7] c.l.controller.BatchController - Found 0 batches
+2025-12-31 08:39:34 INFO  [http-nio-8080-exec-10] c.l.controller.BatchController - Found 3 batches
+2025-12-31 08:39:35 INFO  [http-nio-8080-exec-3] c.l.controller.BatchController - Received request to fetch the allowed transitions for the batch
+2025-12-31 08:39:35 INFO  [http-nio-8080-exec-2] c.l.controller.BatchController - Received request to get all batches
+2025-12-31 08:39:35 INFO  [http-nio-8080-exec-2] c.l.controller.BatchController - Found 1 batches
+2025-12-31 08:39:36 INFO  [http-nio-8080-exec-4] c.l.controller.EmployeeController - Received request to get all employees
+2025-12-31 08:39:36 INFO  [http-nio-8080-exec-4] c.l.controller.EmployeeController - Employees retrieved successfully
+2025-12-31 08:40:42 INFO  [http-nio-8080-exec-8] c.l.controller.EmployeeController - Received request to get all employees
+2025-12-31 08:40:42 INFO  [http-nio-8080-exec-8] c.l.controller.EmployeeController - Employees retrieved successfully
+2025-12-31 08:40:42 INFO  [http-nio-8080-exec-7] c.l.controller.EmployeeController - Received request to get all employees
+2025-12-31 08:40:42 INFO  [http-nio-8080-exec-7] c.l.controller.EmployeeController - Employees retrieved successfully
+2025-12-31 08:40:57 INFO  [http-nio-8080-exec-3] c.l.controller.ItemController - Received request to get all items
+2025-12-31 08:40:57 INFO  [http-nio-8080-exec-3] c.l.controller.ItemController - Items retrieved successfully
+2025-12-31 08:40:57 INFO  [http-nio-8080-exec-2] c.l.controller.ItemController - Received request to get all items
+2025-12-31 08:40:57 INFO  [http-nio-8080-exec-2] c.l.controller.ItemController - Items retrieved successfully
+2025-12-31 08:41:59 INFO  [http-nio-8080-exec-1] c.l.controller.TransportController - Received request to fetch all transports with search: null
+2025-12-31 08:41:59 INFO  [http-nio-8080-exec-5] c.l.controller.SupplierController - Received request to fetch all suppliers with search: null
+2025-12-31 08:41:59 INFO  [http-nio-8080-exec-6] c.l.controller.CategoryController - Received request to fetch all categories with search: null
+2025-12-31 08:41:59 INFO  [http-nio-8080-exec-9] c.l.controller.SubCategoryController - Received request to fetch all sub categories with search: null
+2025-12-31 08:41:59 INFO  [http-nio-8080-exec-1] c.l.controller.TransportController - Returning 2 transport(s)
+2025-12-31 08:41:59 INFO  [http-nio-8080-exec-8] c.l.controller.TransportController - Received request to fetch all transports with search: null
+2025-12-31 08:41:59 INFO  [http-nio-8080-exec-8] c.l.controller.TransportController - Returning 2 transport(s)
+2025-12-31 08:41:59 INFO  [http-nio-8080-exec-9] c.l.controller.SubCategoryController - Returning 3 sub category(s)
+2025-12-31 08:41:59 INFO  [http-nio-8080-exec-7] c.l.controller.SubCategoryController - Received request to fetch all sub categories with search: null
+2025-12-31 08:41:59 INFO  [http-nio-8080-exec-7] c.l.controller.SubCategoryController - Returning 3 sub category(s)
+2025-12-31 08:41:59 INFO  [http-nio-8080-exec-6] c.l.controller.CategoryController - Returning 2 category(s)
+2025-12-31 08:41:59 INFO  [http-nio-8080-exec-10] c.l.controller.CategoryController - Received request to fetch all categories with search: null
+2025-12-31 08:41:59 INFO  [http-nio-8080-exec-10] c.l.controller.CategoryController - Returning 2 category(s)
+2025-12-31 08:41:59 INFO  [http-nio-8080-exec-5] c.l.controller.SupplierController - Returning 2 supplier(s)
+2025-12-31 08:41:59 INFO  [http-nio-8080-exec-3] c.l.controller.SupplierController - Received request to fetch all suppliers with search: null
+2025-12-31 08:41:59 INFO  [http-nio-8080-exec-3] c.l.controller.SupplierController - Returning 2 supplier(s)
+2025-12-31 08:42:06 INFO  [http-nio-8080-exec-1] c.l.controller.BatchController - Received request to get all batches
+2025-12-31 08:42:06 INFO  [http-nio-8080-exec-8] c.l.controller.BatchController - Received request to get pending batches
+2025-12-31 08:42:06 INFO  [http-nio-8080-exec-8] c.l.service.impl.BatchServiceImpl - Fetching unpackaged batches
+2025-12-31 08:42:06 INFO  [http-nio-8080-exec-7] c.l.controller.BatchController - Received request to get all batches
+2025-12-31 08:42:06 INFO  [http-nio-8080-exec-1] c.l.controller.BatchController - Found 0 batches
+2025-12-31 08:42:06 INFO  [http-nio-8080-exec-8] c.l.service.impl.BatchServiceImpl - Found 1 unpackaged batches
+2025-12-31 08:42:06 INFO  [http-nio-8080-exec-8] c.l.controller.BatchController - Found 1 pending batches
+2025-12-31 08:42:06 INFO  [http-nio-8080-exec-6] c.l.controller.BatchController - Received request to get all batches
+2025-12-31 08:42:06 INFO  [http-nio-8080-exec-10] c.l.controller.BatchController - Received request to get pending batches
+2025-12-31 08:42:06 INFO  [http-nio-8080-exec-10] c.l.service.impl.BatchServiceImpl - Fetching unpackaged batches
+2025-12-31 08:42:06 INFO  [http-nio-8080-exec-10] c.l.service.impl.BatchServiceImpl - Found 1 unpackaged batches
+2025-12-31 08:42:06 INFO  [http-nio-8080-exec-10] c.l.controller.BatchController - Found 1 pending batches
+2025-12-31 08:42:06 INFO  [http-nio-8080-exec-6] c.l.controller.BatchController - Found 0 batches
+2025-12-31 08:42:06 INFO  [http-nio-8080-exec-7] c.l.controller.BatchController - Found 3 batches
+2025-12-31 08:42:06 INFO  [http-nio-8080-exec-3] c.l.controller.BatchController - Received request to get all batches
+2025-12-31 08:42:06 INFO  [http-nio-8080-exec-3] c.l.controller.BatchController - Found 3 batches
+2025-12-31 08:42:07 INFO  [http-nio-8080-exec-2] c.l.controller.EmployeeController - Received request to get all employees
+2025-12-31 08:42:07 INFO  [http-nio-8080-exec-2] c.l.controller.EmployeeController - Employees retrieved successfully
+2025-12-31 08:42:07 INFO  [http-nio-8080-exec-4] c.l.controller.EmployeeController - Received request to get all employees
+2025-12-31 08:42:07 INFO  [http-nio-8080-exec-4] c.l.controller.EmployeeController - Employees retrieved successfully
+2025-12-31 08:42:08 INFO  [http-nio-8080-exec-1] c.l.service.impl.JobworkServiceImpl - Fetched 1 jobworks
+2025-12-31 08:42:08 INFO  [http-nio-8080-exec-8] c.l.service.impl.JobworkServiceImpl - Fetched 1 jobworks
+2025-12-31 08:42:11 INFO  [http-nio-8080-exec-9] c.l.controller.EmployeeController - Received request to get all employees
+2025-12-31 08:42:11 INFO  [http-nio-8080-exec-9] c.l.controller.EmployeeController - Employees retrieved successfully
+2025-12-31 08:42:11 INFO  [http-nio-8080-exec-10] c.l.controller.EmployeeController - Received request to get all employees
+2025-12-31 08:42:11 INFO  [http-nio-8080-exec-10] c.l.controller.EmployeeController - Employees retrieved successfully
+2025-12-31 08:42:42 INFO  [http-nio-8080-exec-6] c.l.service.impl.JobworkServiceImpl - Fetched 1 jobworks
+2025-12-31 08:42:42 INFO  [http-nio-8080-exec-5] c.l.service.impl.JobworkServiceImpl - Fetched 1 jobworks
+2025-12-31 08:43:07 INFO  [http-nio-8080-exec-3] c.l.controller.BatchController - Received request to get pending batches
+2025-12-31 08:43:07 INFO  [http-nio-8080-exec-3] c.l.service.impl.BatchServiceImpl - Fetching unpackaged batches
+2025-12-31 08:43:07 INFO  [http-nio-8080-exec-4] c.l.controller.BatchController - Received request to get all batches
+2025-12-31 08:43:07 INFO  [http-nio-8080-exec-7] c.l.controller.BatchController - Received request to get all batches
+2025-12-31 08:43:07 INFO  [http-nio-8080-exec-3] c.l.service.impl.BatchServiceImpl - Found 1 unpackaged batches
+2025-12-31 08:43:07 INFO  [http-nio-8080-exec-3] c.l.controller.BatchController - Found 1 pending batches
+2025-12-31 08:43:07 INFO  [http-nio-8080-exec-7] c.l.controller.BatchController - Found 0 batches
+2025-12-31 08:43:07 INFO  [http-nio-8080-exec-1] c.l.controller.BatchController - Received request to get pending batches
+2025-12-31 08:43:07 INFO  [http-nio-8080-exec-1] c.l.service.impl.BatchServiceImpl - Fetching unpackaged batches
+2025-12-31 08:43:07 INFO  [http-nio-8080-exec-9] c.l.controller.BatchController - Received request to get all batches
+2025-12-31 08:43:07 INFO  [http-nio-8080-exec-1] c.l.service.impl.BatchServiceImpl - Found 1 unpackaged batches
+2025-12-31 08:43:07 INFO  [http-nio-8080-exec-1] c.l.controller.BatchController - Found 1 pending batches
+2025-12-31 08:43:07 INFO  [http-nio-8080-exec-4] c.l.controller.BatchController - Found 3 batches
+2025-12-31 08:43:07 INFO  [http-nio-8080-exec-9] c.l.controller.BatchController - Found 0 batches
+2025-12-31 08:43:07 INFO  [http-nio-8080-exec-10] c.l.controller.BatchController - Received request to get all batches
+2025-12-31 08:43:07 INFO  [http-nio-8080-exec-10] c.l.controller.BatchController - Found 3 batches
+2025-12-31 08:43:08 INFO  [http-nio-8080-exec-6] c.l.controller.EmployeeController - Received request to get all employees
+2025-12-31 08:43:08 INFO  [http-nio-8080-exec-6] c.l.controller.EmployeeController - Employees retrieved successfully
+2025-12-31 08:43:08 INFO  [http-nio-8080-exec-5] c.l.controller.EmployeeController - Received request to get all employees
+2025-12-31 08:43:08 INFO  [http-nio-8080-exec-5] c.l.controller.EmployeeController - Employees retrieved successfully
+2025-12-31 08:43:09 INFO  [http-nio-8080-exec-3] c.l.service.impl.JobworkServiceImpl - Fetched 1 jobworks
+2025-12-31 08:43:09 INFO  [http-nio-8080-exec-2] c.l.service.impl.JobworkServiceImpl - Fetched 1 jobworks
+2025-12-31 08:43:12 INFO  [http-nio-8080-exec-1] c.l.controller.BatchController - Received request to get pending batches
+2025-12-31 08:43:12 INFO  [http-nio-8080-exec-1] c.l.service.impl.BatchServiceImpl - Fetching unpackaged batches
+2025-12-31 08:43:12 INFO  [http-nio-8080-exec-7] c.l.controller.BatchController - Received request to get all batches
+2025-12-31 08:43:12 INFO  [http-nio-8080-exec-4] c.l.controller.BatchController - Received request to get all batches
+2025-12-31 08:43:12 INFO  [http-nio-8080-exec-1] c.l.service.impl.BatchServiceImpl - Found 1 unpackaged batches
+2025-12-31 08:43:12 INFO  [http-nio-8080-exec-1] c.l.controller.BatchController - Found 1 pending batches
+2025-12-31 08:43:12 INFO  [http-nio-8080-exec-7] c.l.controller.BatchController - Found 0 batches
+2025-12-31 08:43:12 INFO  [http-nio-8080-exec-9] c.l.controller.BatchController - Received request to get pending batches
+2025-12-31 08:43:12 INFO  [http-nio-8080-exec-9] c.l.service.impl.BatchServiceImpl - Fetching unpackaged batches
+2025-12-31 08:43:12 INFO  [http-nio-8080-exec-6] c.l.controller.BatchController - Received request to get all batches
+2025-12-31 08:43:12 INFO  [http-nio-8080-exec-9] c.l.service.impl.BatchServiceImpl - Found 1 unpackaged batches
+2025-12-31 08:43:12 INFO  [http-nio-8080-exec-9] c.l.controller.BatchController - Found 1 pending batches
+2025-12-31 08:43:12 INFO  [http-nio-8080-exec-4] c.l.controller.BatchController - Found 3 batches
+2025-12-31 08:43:12 INFO  [http-nio-8080-exec-5] c.l.controller.BatchController - Received request to get all batches
+2025-12-31 08:43:12 INFO  [http-nio-8080-exec-6] c.l.controller.BatchController - Found 0 batches
+2025-12-31 08:43:12 INFO  [http-nio-8080-exec-5] c.l.controller.BatchController - Found 3 batches
+2025-12-31 08:43:13 INFO  [http-nio-8080-exec-3] c.l.controller.EmployeeController - Received request to get all employees
+2025-12-31 08:43:13 INFO  [http-nio-8080-exec-3] c.l.controller.EmployeeController - Employees retrieved successfully
+2025-12-31 08:43:13 INFO  [http-nio-8080-exec-2] c.l.controller.EmployeeController - Received request to get all employees
+2025-12-31 08:43:13 INFO  [http-nio-8080-exec-2] c.l.controller.EmployeeController - Employees retrieved successfully
+2025-12-31 08:43:21 INFO  [http-nio-8080-exec-8] c.l.controller.ItemController - Received request to get all items
+2025-12-31 08:43:21 INFO  [http-nio-8080-exec-8] c.l.controller.ItemController - Items retrieved successfully
+2025-12-31 08:43:21 INFO  [http-nio-8080-exec-7] c.l.controller.ItemController - Received request to get all items
+2025-12-31 08:43:21 INFO  [http-nio-8080-exec-7] c.l.controller.ItemController - Items retrieved successfully
+2025-12-31 08:43:51 INFO  [http-nio-8080-exec-9] c.l.controller.ItemController - Received request to get all items
+2025-12-31 08:43:51 INFO  [http-nio-8080-exec-9] c.l.controller.ItemController - Items retrieved successfully
+2025-12-31 08:47:33 INFO  [http-nio-8080-exec-3] c.l.controller.EmployeeController - Received request to get all employees
+2025-12-31 08:47:33 INFO  [http-nio-8080-exec-3] c.l.controller.EmployeeController - Employees retrieved successfully
+2025-12-31 08:47:37 INFO  [http-nio-8080-exec-1] c.l.controller.ItemController - Received request to get all items
+2025-12-31 08:47:37 INFO  [http-nio-8080-exec-1] c.l.controller.ItemController - Items retrieved successfully
+2025-12-31 08:47:37 INFO  [http-nio-8080-exec-8] c.l.controller.ItemController - Received request to get all items
+2025-12-31 08:47:37 INFO  [http-nio-8080-exec-8] c.l.controller.ItemController - Items retrieved successfully
+2025-12-31 08:48:15 INFO  [http-nio-8080-exec-7] c.l.controller.EmployeeController - Received request to get all employees
+2025-12-31 08:48:15 INFO  [http-nio-8080-exec-7] c.l.controller.EmployeeController - Employees retrieved successfully
+2025-12-31 08:48:19 INFO  [http-nio-8080-exec-4] c.l.controller.ItemController - Received request to get all items
+2025-12-31 08:48:19 INFO  [http-nio-8080-exec-4] c.l.controller.ItemController - Items retrieved successfully
+2025-12-31 08:48:19 INFO  [http-nio-8080-exec-10] c.l.controller.ItemController - Received request to get all items
+2025-12-31 08:48:19 INFO  [http-nio-8080-exec-10] c.l.controller.ItemController - Items retrieved successfully
+2025-12-31 08:55:15 INFO  [http-nio-8080-exec-5] c.l.controller.ItemController - Received request to get all items
+2025-12-31 08:55:15 INFO  [http-nio-8080-exec-5] c.l.controller.ItemController - Items retrieved successfully
+2025-12-31 08:55:15 INFO  [http-nio-8080-exec-3] c.l.controller.ItemController - Received request to get all items
+2025-12-31 08:55:15 INFO  [http-nio-8080-exec-3] c.l.controller.ItemController - Items retrieved successfully
+2025-12-31 08:55:18 INFO  [http-nio-8080-exec-2] c.l.controller.EmployeeController - Received request to get all employees
+2025-12-31 08:55:18 INFO  [http-nio-8080-exec-2] c.l.controller.EmployeeController - Employees retrieved successfully
+2025-12-31 08:55:18 INFO  [http-nio-8080-exec-1] c.l.controller.EmployeeController - Received request to get all employees
+2025-12-31 08:55:18 INFO  [http-nio-8080-exec-1] c.l.controller.EmployeeController - Employees retrieved successfully
+2025-12-31 08:55:19 INFO  [http-nio-8080-exec-8] c.l.controller.BatchController - Received request to get all batches
+2025-12-31 08:55:19 INFO  [http-nio-8080-exec-7] c.l.controller.BatchController - Received request to get pending batches
+2025-12-31 08:55:19 INFO  [http-nio-8080-exec-7] c.l.service.impl.BatchServiceImpl - Fetching unpackaged batches
+2025-12-31 08:55:19 INFO  [http-nio-8080-exec-8] c.l.controller.BatchController - Found 0 batches
+2025-12-31 08:55:19 INFO  [http-nio-8080-exec-7] c.l.service.impl.BatchServiceImpl - Found 1 unpackaged batches
+2025-12-31 08:55:19 INFO  [http-nio-8080-exec-7] c.l.controller.BatchController - Found 1 pending batches
+2025-12-31 08:55:19 INFO  [http-nio-8080-exec-4] c.l.controller.BatchController - Received request to get all batches
+2025-12-31 08:55:19 INFO  [http-nio-8080-exec-10] c.l.controller.BatchController - Received request to get all batches
+2025-12-31 08:55:19 INFO  [http-nio-8080-exec-6] c.l.controller.BatchController - Received request to get pending batches
+2025-12-31 08:55:19 INFO  [http-nio-8080-exec-6] c.l.service.impl.BatchServiceImpl - Fetching unpackaged batches
+2025-12-31 08:55:19 INFO  [http-nio-8080-exec-10] c.l.controller.BatchController - Found 0 batches
+2025-12-31 08:55:19 INFO  [http-nio-8080-exec-6] c.l.service.impl.BatchServiceImpl - Found 1 unpackaged batches
+2025-12-31 08:55:19 INFO  [http-nio-8080-exec-6] c.l.controller.BatchController - Found 1 pending batches
+2025-12-31 08:55:19 INFO  [http-nio-8080-exec-4] c.l.controller.BatchController - Found 3 batches
+2025-12-31 08:55:19 INFO  [http-nio-8080-exec-3] c.l.controller.BatchController - Received request to get all batches
+2025-12-31 08:55:19 INFO  [http-nio-8080-exec-3] c.l.controller.BatchController - Found 3 batches
+2025-12-31 08:55:20 INFO  [http-nio-8080-exec-2] c.l.controller.EmployeeController - Received request to get all employees
+2025-12-31 08:55:20 INFO  [http-nio-8080-exec-2] c.l.controller.EmployeeController - Employees retrieved successfully
+2025-12-31 08:55:20 INFO  [http-nio-8080-exec-1] c.l.controller.EmployeeController - Received request to get all employees
+2025-12-31 08:55:20 INFO  [http-nio-8080-exec-1] c.l.controller.EmployeeController - Employees retrieved successfully
+2025-12-31 08:55:25 INFO  [http-nio-8080-exec-7] c.l.controller.ItemController - Received request to get all items
+2025-12-31 08:55:25 INFO  [http-nio-8080-exec-7] c.l.controller.ItemController - Items retrieved successfully
+2025-12-31 08:55:25 INFO  [http-nio-8080-exec-9] c.l.controller.ItemController - Received request to get all items
+2025-12-31 08:55:25 INFO  [http-nio-8080-exec-9] c.l.controller.ItemController - Items retrieved successfully
+2025-12-31 10:31:14 INFO  [http-nio-8080-exec-3] c.l.service.impl.JobworkServiceImpl - Fetched 1 jobworks
+2025-12-31 10:31:14 INFO  [http-nio-8080-exec-2] c.l.service.impl.JobworkServiceImpl - Fetched 1 jobworks
+2025-12-31 10:31:16 INFO  [http-nio-8080-exec-1] c.l.controller.EmployeeController - Received request to get all employees
+2025-12-31 10:31:16 INFO  [http-nio-8080-exec-1] c.l.controller.EmployeeController - Employees retrieved successfully
+2025-12-31 10:31:16 INFO  [http-nio-8080-exec-8] c.l.controller.EmployeeController - Received request to get all employees
+2025-12-31 10:31:16 INFO  [http-nio-8080-exec-8] c.l.controller.EmployeeController - Employees retrieved successfully
+2025-12-31 10:31:16 INFO  [http-nio-8080-exec-7] c.l.controller.BatchController - Received request to get all batches
+2025-12-31 10:31:16 INFO  [http-nio-8080-exec-9] c.l.controller.BatchController - Received request to get pending batches
+2025-12-31 10:31:16 INFO  [http-nio-8080-exec-9] c.l.service.impl.BatchServiceImpl - Fetching unpackaged batches
+2025-12-31 10:31:16 INFO  [http-nio-8080-exec-7] c.l.controller.BatchController - Found 0 batches
+2025-12-31 10:31:16 INFO  [http-nio-8080-exec-9] c.l.service.impl.BatchServiceImpl - Found 1 unpackaged batches
+2025-12-31 10:31:16 INFO  [http-nio-8080-exec-9] c.l.controller.BatchController - Found 1 pending batches
+2025-12-31 10:31:16 INFO  [http-nio-8080-exec-6] c.l.controller.BatchController - Received request to get all batches
+2025-12-31 10:31:16 INFO  [http-nio-8080-exec-5] c.l.controller.BatchController - Received request to get all batches
+2025-12-31 10:31:16 INFO  [http-nio-8080-exec-5] c.l.controller.BatchController - Found 0 batches
+2025-12-31 10:31:16 INFO  [http-nio-8080-exec-4] c.l.controller.BatchController - Received request to get pending batches
+2025-12-31 10:31:16 INFO  [http-nio-8080-exec-4] c.l.service.impl.BatchServiceImpl - Fetching unpackaged batches
+2025-12-31 10:31:16 INFO  [http-nio-8080-exec-6] c.l.controller.BatchController - Found 3 batches
+2025-12-31 10:31:16 INFO  [http-nio-8080-exec-4] c.l.service.impl.BatchServiceImpl - Found 1 unpackaged batches
+2025-12-31 10:31:16 INFO  [http-nio-8080-exec-4] c.l.controller.BatchController - Found 1 pending batches
+2025-12-31 10:31:16 INFO  [http-nio-8080-exec-2] c.l.controller.BatchController - Received request to get all batches
+2025-12-31 10:31:16 INFO  [http-nio-8080-exec-2] c.l.controller.BatchController - Found 3 batches
+2025-12-31 10:31:20 INFO  [http-nio-8080-exec-1] c.l.controller.EmployeeController - Received request to get all employees
+2025-12-31 10:31:20 INFO  [http-nio-8080-exec-1] c.l.controller.EmployeeController - Employees retrieved successfully
+2025-12-31 10:31:20 INFO  [http-nio-8080-exec-8] c.l.controller.EmployeeController - Received request to get all employees
+2025-12-31 10:31:20 INFO  [http-nio-8080-exec-8] c.l.controller.EmployeeController - Employees retrieved successfully
+2025-12-31 10:31:41 INFO  [http-nio-8080-exec-9] c.l.controller.ItemController - Received request to get all items
+2025-12-31 10:31:41 INFO  [http-nio-8080-exec-9] c.l.controller.ItemController - Items retrieved successfully
+2025-12-31 10:31:41 INFO  [http-nio-8080-exec-10] c.l.controller.ItemController - Received request to get all items
+2025-12-31 10:31:41 INFO  [http-nio-8080-exec-10] c.l.controller.ItemController - Items retrieved successfully
+2025-12-31 10:34:42 INFO  [http-nio-8080-exec-3] c.l.controller.EmployeeController - Received request to get all employees
+2025-12-31 10:34:42 INFO  [http-nio-8080-exec-3] c.l.controller.EmployeeController - Employees retrieved successfully
+2025-12-31 10:34:43 INFO  [http-nio-8080-exec-2] c.l.controller.EmployeeController - Received request to get all employees
+2025-12-31 10:34:43 INFO  [http-nio-8080-exec-2] c.l.controller.EmployeeController - Employees retrieved successfully
+2025-12-31 10:35:40 INFO  [http-nio-8080-exec-8] c.l.controller.ItemController - Received request to get all items
+2025-12-31 10:35:40 INFO  [http-nio-8080-exec-8] c.l.controller.ItemController - Items retrieved successfully
+2025-12-31 10:35:40 INFO  [http-nio-8080-exec-7] c.l.controller.ItemController - Received request to get all items
+2025-12-31 10:35:40 INFO  [http-nio-8080-exec-7] c.l.controller.ItemController - Items retrieved successfully
+2025-12-31 10:36:40 INFO  [http-nio-8080-exec-9] c.l.controller.EmployeeController - Received request to get all employees
+2025-12-31 10:36:40 INFO  [http-nio-8080-exec-9] c.l.controller.EmployeeController - Employees retrieved successfully
+2025-12-31 10:36:41 INFO  [http-nio-8080-exec-10] c.l.controller.EmployeeController - Received request to get all employees
+2025-12-31 10:36:41 INFO  [http-nio-8080-exec-10] c.l.controller.EmployeeController - Employees retrieved successfully
+2025-12-31 10:39:45 INFO  [http-nio-8080-exec-4] c.l.controller.ItemController - Received request to get all items
+2025-12-31 10:39:45 INFO  [http-nio-8080-exec-4] c.l.controller.ItemController - Items retrieved successfully
+2025-12-31 10:39:45 INFO  [http-nio-8080-exec-3] c.l.controller.ItemController - Received request to get all items
+2025-12-31 10:39:45 INFO  [http-nio-8080-exec-3] c.l.controller.ItemController - Items retrieved successfully
+2025-12-31 10:42:20 INFO  [http-nio-8080-exec-1] c.l.controller.ItemController - Received request to get all items
+2025-12-31 10:42:20 INFO  [http-nio-8080-exec-1] c.l.controller.ItemController - Items retrieved successfully
+2025-12-31 14:27:44 INFO  [http-nio-8080-exec-7] c.l.controller.EmployeeController - Received request to get all employees
+2025-12-31 14:27:44 INFO  [http-nio-8080-exec-7] c.l.controller.EmployeeController - Employees retrieved successfully
+2025-12-31 14:27:45 INFO  [http-nio-8080-exec-9] c.l.controller.EmployeeController - Received request to get all employees
+2025-12-31 14:27:45 INFO  [http-nio-8080-exec-9] c.l.controller.EmployeeController - Employees retrieved successfully
+2025-12-31 14:28:46 INFO  [http-nio-8080-exec-5] c.l.controller.ItemController - Received request to get all items
+2025-12-31 14:28:46 INFO  [http-nio-8080-exec-5] c.l.controller.ItemController - Items retrieved successfully
+2025-12-31 14:28:46 INFO  [http-nio-8080-exec-4] c.l.controller.ItemController - Received request to get all items
+2025-12-31 14:28:46 INFO  [http-nio-8080-exec-4] c.l.controller.ItemController - Items retrieved successfully
+2025-12-31 14:32:08 INFO  [http-nio-8080-exec-2] c.l.controller.EmployeeController - Received request to get all employees
+2025-12-31 14:32:08 INFO  [http-nio-8080-exec-2] c.l.controller.EmployeeController - Employees retrieved successfully
+2025-12-31 14:32:09 INFO  [http-nio-8080-exec-1] c.l.controller.EmployeeController - Received request to get all employees
+2025-12-31 14:32:09 INFO  [http-nio-8080-exec-1] c.l.controller.EmployeeController - Employees retrieved successfully

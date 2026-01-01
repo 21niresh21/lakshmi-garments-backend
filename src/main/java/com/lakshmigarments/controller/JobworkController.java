@@ -18,9 +18,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.lakshmigarments.dto.EmployeeRequestDTO;
 import com.lakshmigarments.dto.JobworkDetailDTO;
 import com.lakshmigarments.dto.JobworkRequestDTO;
 import com.lakshmigarments.dto.JobworkResponseDTO;
+import com.lakshmigarments.model.Employee;
+import com.lakshmigarments.model.Jobwork;
 import com.lakshmigarments.service.JobworkService;
 
 import lombok.RequiredArgsConstructor;
@@ -44,13 +47,16 @@ public class JobworkController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> createJobwork(@RequestBody JobworkRequestDTO jobworkRequestDTO) {
+    public ResponseEntity<Jobwork> createJobwork(@RequestBody JobworkRequestDTO jobworkRequestDTO) {
         LOGGER.info("Received jobwork request for batch: {} and employee: {}", jobworkRequestDTO.getBatchSerialCode(),
                 jobworkRequestDTO.getEmployeeId());
-        jobworkService.createJobwork(jobworkRequestDTO);
+        Jobwork createdJobwork = jobworkService.createJobwork(jobworkRequestDTO);
         LOGGER.info("Jobwork created successfully for batch: {} and employee: {}", jobworkRequestDTO.getBatchSerialCode(),
                 jobworkRequestDTO.getEmployeeId());
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        if (createdJobwork == null) {
+            return new ResponseEntity<>(createdJobwork, HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(createdJobwork, HttpStatus.CREATED);
     }
 
     @GetMapping("/jobwork-numbers")
@@ -67,5 +73,19 @@ public class JobworkController {
     public ResponseEntity<String> getNextJobworkNumber() {
         return new ResponseEntity<>(jobworkService.getNextJobworkNumber(), HttpStatus.OK);
     }
+    
+    @PostMapping("/reassign/{jobworkNumber}")
+    public ResponseEntity<Jobwork> reAssignJobwork(@PathVariable String jobworkNumber, 
+    		@RequestBody Long employeeId) {
+        return new ResponseEntity<>(jobworkService.reAssignJobwork(jobworkNumber, 
+        		employeeId), HttpStatus.OK);
+    }
+    
+//    @GetMapping("/unfinished")
+//    public ResponseEntity<List<String>> getUnfinishedJobworks(@RequestParam String employeeName, 
+//    		@RequestParam String jobworkNumber) {
+//        return new ResponseEntity<>(jobworkService.getUnfinishedJobworks(jobworkNumber,
+//        		 employeeName), HttpStatus.OK);
+//    }
 
 }

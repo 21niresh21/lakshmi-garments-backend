@@ -1,6 +1,8 @@
 package com.lakshmigarments.model;
 
-public enum JobworkStatus {		
+public enum JobworkStatus {
 	IN_PROGRESS,
-	COMPLETED
+	COMPLETED,
+	PENDING_RETURN,
+	REASSIGNED
 }

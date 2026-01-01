@@ -24,7 +24,11 @@ import com.lakshmigarments.model.Bale;
 import com.lakshmigarments.model.Category;
 import com.lakshmigarments.model.Inventory;
 import com.lakshmigarments.model.Invoice;
+import com.lakshmigarments.model.LedgerDirection;
 import com.lakshmigarments.model.LorryReceipt;
+import com.lakshmigarments.model.MaterialInventoryLedger;
+import com.lakshmigarments.model.MovementType;
+import com.lakshmigarments.model.ReferenceType;
 import com.lakshmigarments.model.SubCategory;
 import com.lakshmigarments.model.Supplier;
 import com.lakshmigarments.model.Transport;
@@ -34,15 +38,18 @@ import com.lakshmigarments.repository.CategoryRepository;
 import com.lakshmigarments.repository.InventoryRepository;
 import com.lakshmigarments.repository.InvoiceRepository;
 import com.lakshmigarments.repository.LorryReceiptRepository;
+import com.lakshmigarments.repository.MaterialLedgerRepository;
 import com.lakshmigarments.repository.SubCategoryRepository;
 import com.lakshmigarments.repository.SupplierRepository;
 import com.lakshmigarments.repository.TransportRepository;
 import com.lakshmigarments.repository.UserRepository;
-
+import com.lakshmigarments.service.impl.InventoryServiceImpl;
 import jakarta.transaction.Transactional;
 
 @Service
 public class StockService {
+
+    private final InventoryServiceImpl inventoryServiceImpl;
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(StockService.class);
 	private final CategoryRepository categoryRepository;
@@ -54,12 +61,15 @@ public class StockService {
 	private BaleRepository baleRepository;
 	private LorryReceiptRepository lorryReceiptRepository;
 	private InventoryRepository inventoryRepository;
+	private MaterialLedgerRepository ledgerRepository;
 	private UserRepository userRepository;
 
 	public StockService(CategoryRepository categoryRepository, TransportRepository transportRepository,
 			SupplierRepository supplierRepository, SubCategoryRepository subCategoryRepository,
 			ModelMapper modelMapper, InvoiceRepository invoiceRepository, BaleRepository baleRepository, 
-			LorryReceiptRepository lorryReceiptRepository, InventoryRepository inventoryRepository, UserRepository userRepository) {
+			LorryReceiptRepository lorryReceiptRepository, InventoryRepository inventoryRepository, 
+			UserRepository userRepository, InventoryServiceImpl inventoryServiceImpl, 
+			MaterialLedgerRepository ledgerRepository) {
 		this.categoryRepository = categoryRepository;
 		this.transportRepository = transportRepository;
 		this.supplierRepository = supplierRepository;
@@ -70,11 +80,12 @@ public class StockService {
 		this.lorryReceiptRepository = lorryReceiptRepository;
 		this.inventoryRepository = inventoryRepository;
 		this.userRepository = userRepository;
+		this.inventoryServiceImpl = inventoryServiceImpl;
+		this.ledgerRepository = ledgerRepository;
 	}
 
 	@Transactional
 	public StockDTO createStock(CreateStockDTO createStockDTO) {
-		System.out.println(createStockDTO);
 		Long supplierID = createStockDTO.getSupplierID();
 		Long transportID = createStockDTO.getTransportID();
 		List<CreateLorryReceiptDTO> lorryReceiptDTOs = createStockDTO.getLorryReceipts();
@@ -139,7 +150,6 @@ public class StockService {
 					return new CategoryNotFoundException("Category not found with ID " + categoryID);
 				});
 
-				System.out.println(category);
 				Bale bale = new Bale(baleNumber, quantity, length, price, quality, subCategory, category, lorryReceipt);
 				bales.add(bale);
 			}
@@ -160,16 +170,24 @@ public class StockService {
 		        bale.setLorryReceipt(createdLorryReceipt);
 		        baleRepository.save(bale);
 		        // store in inventory
-		        Inventory inventory = inventoryRepository.findByCategoryIdAndSubCategoryId(bale.getCategory().getId(), bale.getSubCategory().getId()).orElse(null);
-		        if (inventory != null) {
-					inventory.setCount(inventory.getCount() + bale.getQuantity());
-				} else {
-					inventory = new Inventory();
-					inventory.setCount(bale.getQuantity());
+//		        Long categoryid = bale.getCategory().getId();
+//		        Long subCategoryId = bale.getSubCategory().getId();
+//		        
+		        
+		        
+		        MaterialInventoryLedger inventory;
+					inventory = new MaterialInventoryLedger();
+					inventory.setDirection(LedgerDirection.IN);
+		        	inventory.setMovementType(MovementType.PURCHASE);
+		        	inventory.setReferenceType(ReferenceType.INVOICE);
+		        	inventory.setReference_id(createdInvoice.getId());
+		        	inventory.setUnit("piece(s)");
+					inventory.setQuantity(bale.getQuantity());
 					inventory.setSubCategory(bale.getSubCategory());
 					inventory.setCategory(bale.getCategory());
-				}
-		        inventoryRepository.save(inventory);
+					inventory.setCreatedBy(user);
+				
+		        ledgerRepository.save(inventory);
 
 		    }
 		}

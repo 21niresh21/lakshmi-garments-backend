@@ -19,9 +19,10 @@ import com.lakshmigarments.repository.specification.CategorySpecification;
 import com.lakshmigarments.service.CategoryService;
 
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class CategoryServiceImpl implements CategoryService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CategoryServiceImpl.class);

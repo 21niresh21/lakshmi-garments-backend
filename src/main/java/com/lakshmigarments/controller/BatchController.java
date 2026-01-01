@@ -58,13 +58,13 @@ public class BatchController {
 		return new ResponseEntity<>(batchResponseDTOs, HttpStatus.OK);
 	}
 
-	@GetMapping("/count/{batchId}")
-	public ResponseEntity<Long> getBatchCount(@PathVariable Long batchId) {
-		LOGGER.info("Received request to get batch count for batch id: {}", batchId);
-		Long batchCount = batchService.getBatchCount(batchId);
-		LOGGER.info("Found {} batch count for batch id: {}", batchCount, batchId);
-		return new ResponseEntity<>(batchCount, HttpStatus.OK);
-	}
+//	@GetMapping("/count/{batchId}")
+//	public ResponseEntity<Long> getBatchCount(@PathVariable Long batchId) {
+//		LOGGER.info("Received request to get batch count for batch id: {}", batchId);
+//		Long batchCount = batchService.getBatchCount(batchId);
+//		LOGGER.info("Found {} batch count for batch id: {}", batchCount, batchId);
+//		return new ResponseEntity<>(batchCount, HttpStatus.OK);
+//	}
 
 	// called to for getting the list of batches to assign
 	@GetMapping("/pending")
@@ -83,14 +83,14 @@ public class BatchController {
 		return new ResponseEntity<>(allowedJobworkTypes, HttpStatus.OK);
 	}
 
-	@GetMapping("/timeline/{batchId}")
-	public ResponseEntity<List<BatchTimelineDTO>> getBatchTimeline(@PathVariable Long batchId) {
-		LOGGER.info("Received request to get batch timeline for batch id: {}", batchId);
-		List<BatchTimelineDTO> batchTimelineDTOs = batchService.getBatchTimeline(batchId);
-		LOGGER.info("Found {} batch timeline for batch id: {}",
-				batchTimelineDTOs == null ? 0 : batchTimelineDTOs.size(), batchId);
-		return new ResponseEntity<>(batchTimelineDTOs, HttpStatus.OK);
-	}
+//	@GetMapping("/timeline/{batchId}")
+//	public ResponseEntity<List<BatchTimelineDTO>> getBatchTimeline(@PathVariable Long batchId) {
+//		LOGGER.info("Received request to get batch timeline for batch id: {}", batchId);
+//		List<BatchTimelineDTO> batchTimelineDTOs = batchService.getBatchTimeline(batchId);
+//		LOGGER.info("Found {} batch timeline for batch id: {}",
+//				batchTimelineDTOs == null ? 0 : batchTimelineDTOs.size(), batchId);
+//		return new ResponseEntity<>(batchTimelineDTOs, HttpStatus.OK);
+//	}
 	
 	@PostMapping("/recycle/{batchId}")
 	public ResponseEntity<Void> recycleBatch(@PathVariable Long batchId) {

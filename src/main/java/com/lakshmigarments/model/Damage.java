@@ -17,9 +17,14 @@ public class Damage {
     private Long id;
 
     @ManyToOne
-    private Jobwork jobWork;
+    private JobworkItem jobworkItem;
+    
+    @ManyToOne
+    private Item item;
 
-    private Integer quantity;
+    private Long quantity;
+    
+    private Integer completedQuantity;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "damage_type", nullable = false)

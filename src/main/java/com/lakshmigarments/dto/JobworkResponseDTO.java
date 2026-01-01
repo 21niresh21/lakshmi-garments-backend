@@ -12,14 +12,18 @@ import lombok.Setter;
 @Setter
 public class JobworkResponseDTO {
 
-    private String employeeName;
+	private Long id;
+    private String assignedTo;
     private String batchSerial;
-    private List<String> itemNames;
-    private List<Long> quantities;
-    private JobworkType jobworktype;
+    private List<String> receivedItemNames;
+    private List<Long> receivedQuantities;
+    private List<String> issuedItemNames;
+    private List<Long> issuedQuantities;
+    private String jobworkType;
     private String jobworkNumber;
     private LocalDateTime startedAt;
-    private LocalDateTime completedAt;
+    private List<LocalDateTime> completedAt;
     private String status;
+    private Long totalQuantitesIssued;
 
 }

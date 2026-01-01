@@ -40,6 +40,8 @@ public class BatchResponseDTO {
 	
 	private String createdBy;
 	
+	private Long availableQuantity;
+	
 	private List<BatchSubCategoryResponseDTO> subCategories;
 
 }

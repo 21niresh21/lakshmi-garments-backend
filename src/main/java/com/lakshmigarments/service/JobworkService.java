@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.lakshmigarments.dto.JobworkDetailDTO;
 import com.lakshmigarments.dto.JobworkRequestDTO;
 import com.lakshmigarments.dto.JobworkResponseDTO;
+import com.lakshmigarments.model.Jobwork;
 
 @Service
 public interface JobworkService {
@@ -19,8 +20,12 @@ public interface JobworkService {
 
     String getNextJobworkNumber();
 
-    void createJobwork(JobworkRequestDTO jobworkRequestDTO);
+    Jobwork createJobwork(JobworkRequestDTO jobworkRequestDTO);
 
     Page<JobworkResponseDTO> getAllJobworks(Pageable pageable, String search);
+    
+    Jobwork reAssignJobwork(String jobworkNumber, Long employeeId);
+    
+//    List<String> getUnfinishedJobworks(String employeeName, String jobworkNumber);
 
 }

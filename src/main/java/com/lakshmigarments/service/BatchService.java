@@ -20,9 +20,9 @@ public interface BatchService {
 
     List<BatchSerialDTO> getUnpackagedBatches();
 
-    List<BatchTimelineDTO> getBatchTimeline(Long batchId);
+//    List<BatchTimelineDTO> getBatchTimeline(Long batchId);
 
-    Long getBatchCount(Long batchId);
+//    Long getBatchCount(Long batchId);
 
     Page<BatchResponseDTO> getAllBatches(Integer pageNo, Integer pageSize, String sortBy, String sortOrder,
             String search, List<String> batchStatusNames, 

@@ -3,6 +3,8 @@ package com.lakshmigarments.dto;
 import java.sql.Date;
 import java.util.List;
 
+import org.hibernate.annotations.CreationTimestamp;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import jakarta.validation.constraints.NotBlank;
@@ -42,6 +44,9 @@ public class CreateStockDTO {
 	private Boolean isTransportPaid;
 	
 	private Long createdById;
+	
+	@CreationTimestamp
+	private Long createdAt;
 	
 	@NotNull
 	private List<CreateLorryReceiptDTO> lorryReceipts;

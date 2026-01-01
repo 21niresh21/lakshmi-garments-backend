@@ -2,10 +2,10 @@ package com.lakshmigarments.model;
 
 public enum BatchStatus {
 	CREATED("Created"),
-	WIP("Work In Progress"),
-	PACKAGED("Packaged"),
+	ASSIGNED("Assigned"),
+	COMPLETED("Completed"),
 	DISCARDED("Discarded"),
-	PARTIAL_PACKED("Partial Packed");
+	CLOSED("Closed");
 	
 	private final String value;
 	

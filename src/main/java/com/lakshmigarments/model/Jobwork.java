@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "jobworks")
@@ -25,29 +26,32 @@ public class Jobwork {
     @ManyToOne
     private Batch batch;
 
-    @ManyToOne
-    private Item item;
-
     @Enumerated(EnumType.STRING)
     @Column(name = "jobwork_type", nullable = false)
     private JobworkType jobworkType;
-
-    private Long quantity;
 
     private String jobworkNumber;
     
     @Enumerated(EnumType.STRING)
     @Column(name = "jobwork_origin", nullable = false)
     private JobworkOrigin jobworkOrigin;
-
-    @CreationTimestamp
-    private LocalDateTime startedAt;
+    
+    @Enumerated(EnumType.STRING)
+    @Column(name = "jobwork_status", nullable = false, length = 50)
+    private JobworkStatus jobworkStatus;
     
     @ManyToOne
     private User assignedBy;
-
-    @Column(nullable = true)
-    private LocalDateTime endedAt;
+    
+    @ManyToOne
+    private Jobwork reworkJobwork;
+    
+    @CreationTimestamp
+    private LocalDateTime startedAt;
 
     private String remarks;
+    
+    @OneToMany(mappedBy = "jobwork", fetch = FetchType.LAZY)
+    private List<JobworkItem> jobworkItems;
+
 }

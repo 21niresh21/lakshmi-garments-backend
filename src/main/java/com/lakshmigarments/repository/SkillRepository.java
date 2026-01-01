@@ -11,5 +11,7 @@ public interface SkillRepository extends JpaRepository<Skill, Long>,
 	JpaSpecificationExecutor<Skill>	{
 	
 	boolean existsByNameIgnoreCase(String name);
+	
+	boolean existsByNameIgnoreCaseAndIdNot(String name, Long id);
 
 }

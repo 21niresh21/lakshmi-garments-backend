@@ -64,24 +64,27 @@ public class SkillServiceImpl implements SkillService {
 
 	@Override
 	public SkillResponseDTO updateSkill(Long id, SkillRequestDTO skillRequestDTO) {
-		
-		String skillName = skillRequestDTO.getName().trim();
-		
-		Skill skill = skillRepository.findById(id).orElseThrow(() -> {
-			LOGGER.error("Skill with ID {} not found", id);
-			return new SkillNotFoundException("Skill not found with ID " + id);
-		});
 
-		if (skillRepository.existsByNameIgnoreCase(skillName)) {
-			LOGGER.error("Skill already exists with name {}", skillName);
-			throw new DuplicateSkillException("Skill already exists with name " + skillName);
-		}
+	    String skillName = skillRequestDTO.getName().trim();
 
-		skill.setName(skillName);
+	    Skill skill = skillRepository.findById(id).orElseThrow(() -> {
+	        LOGGER.error("Skill with ID {} not found", id);
+	        return new SkillNotFoundException("Skill not found with ID " + id);
+	    });
 
-		Skill updatedSkill = skillRepository.save(skill);
-		LOGGER.debug("Skill updated with name {}", updatedSkill.getName());
-		return modelMapper.map(updatedSkill, SkillResponseDTO.class);
+	    // Allow same name for same ID, block duplicates for others
+	    if (skillRepository.existsByNameIgnoreCaseAndIdNot(skillName, id)) {
+	        LOGGER.error("Skill already exists with name {}", skillName);
+	        throw new DuplicateSkillException("Skill already exists with name " + skillName);
+	    }
+
+	    skill.setName(skillName);
+
+	    Skill updatedSkill = skillRepository.save(skill);
+	    LOGGER.debug("Skill updated with name {}", updatedSkill.getName());
+
+	    return modelMapper.map(updatedSkill, SkillResponseDTO.class);
 	}
+
 
 }

@@ -11,6 +11,7 @@ import com.lakshmigarments.dto.BatchResponseDTO.BatchSubCategoryResponseDTO;
 import com.lakshmigarments.dto.SupplierRequestDTO;
 import com.lakshmigarments.dto.InvoiceDTO;
 import com.lakshmigarments.dto.ItemResponseDTO;
+import com.lakshmigarments.dto.JobworkItemDTO;
 import com.lakshmigarments.dto.JobworkResponseDTO;
 import com.lakshmigarments.dto.LorryReceiptDTO;
 import com.lakshmigarments.model.Bale;
@@ -19,6 +20,7 @@ import com.lakshmigarments.model.BatchItem;
 import com.lakshmigarments.model.BatchSubCategory;
 import com.lakshmigarments.model.Invoice;
 import com.lakshmigarments.model.Jobwork;
+import com.lakshmigarments.model.JobworkItem;
 import com.lakshmigarments.model.LorryReceipt;
 
 @Configuration
@@ -33,6 +35,8 @@ public class ModelMapperConfig {
 			mapper.map(src -> src.getSupplier().getName(), InvoiceDTO::setSupplierName);
 			mapper.map(src -> src.getTransport().getName(), InvoiceDTO::setTransportName);
 			mapper.map(src -> src.getIsPaid(), InvoiceDTO::setIsTransportPaid);
+			mapper.map(src -> src.getCreatedBy().getName(), InvoiceDTO::setCreatedBy);
+			
 		});
 
 		modelMapper.typeMap(Bale.class, BaleDTO.class).addMappings(mapper -> {
@@ -55,18 +59,23 @@ public class ModelMapperConfig {
 		});
 
 		modelMapper.typeMap(Jobwork.class, JobworkResponseDTO.class).addMappings(mapper -> {
-			mapper.map(src -> src.getEmployee().getName(), JobworkResponseDTO::setEmployeeName);
+//			mapper.map(src -> src.getEmployee().getName(), JobworkResponseDTO::setEmployeeName);
 			mapper.map(src -> src.getBatch().getSerialCode(), JobworkResponseDTO::setBatchSerial);
 //			mapper.map(src -> src.getJobworkType().getName(), JobworkResponseDTO::setJobworktype);
-			mapper.map(src -> src.getStartedAt(), JobworkResponseDTO::setStartedAt);
-			mapper.map(src -> src.getEndedAt() != null ? src.getEndedAt() : null, JobworkResponseDTO::setCompletedAt);
-			mapper.map(src -> src.getEndedAt() != null ? "Completed" : "In Progress", JobworkResponseDTO::setStatus);
+//			mapper.map(src -> src.getStartedAt(), JobworkResponseDTO::setStartedAt);
+//			mapper.map(src -> src.getEndedAt() != null ? src.getEndedAt() : null, JobworkResponseDTO::setCompletedAt);
+//			mapper.map(src -> src.getEndedAt() != null ? "Completed" : "In Progress", JobworkResponseDTO::setStatus);
 		});
 
 		modelMapper.typeMap(Batch.class, BatchResponseDTO.class).addMappings(mapper -> {
 			mapper.map(src -> src.getCategory().getName(), BatchResponseDTO::setCategoryName);
 //			mapper.map(src -> src.getBatchStatus().getName(), BatchResponseDTO::setBatchStatus);
 		});
+		
+//		modelMapper.typeMap(JobworkItem.class, JobworkItemDTO.class)
+//        .addMapping(src -> src.getItem() != null ? src.getItem().getName() : "", JobworkItemDTO::setItemName)
+//        .addMapping(src -> src.getJobwork().getJobworkNumber(), JobworkItemDTO::setJobworkNumber)
+//        .addMapping(src -> src.getJobworkStatus().name(), JobworkItemDTO::setStatus);
 
 		return modelMapper;
 

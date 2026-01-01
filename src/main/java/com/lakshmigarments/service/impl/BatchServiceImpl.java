@@ -32,6 +32,10 @@ import com.lakshmigarments.model.Damage;
 import com.lakshmigarments.model.Inventory;
 import com.lakshmigarments.model.Jobwork;
 import com.lakshmigarments.model.JobworkType;
+import com.lakshmigarments.model.LedgerDirection;
+import com.lakshmigarments.model.MaterialInventoryLedger;
+import com.lakshmigarments.model.MovementType;
+import com.lakshmigarments.model.ReferenceType;
 import com.lakshmigarments.model.SubCategory;
 import com.lakshmigarments.model.User;
 import com.lakshmigarments.exception.BatchNotFoundException;
@@ -47,6 +51,7 @@ import com.lakshmigarments.repository.BatchSubCategoryRepository;
 import com.lakshmigarments.repository.DamageRepository;
 import com.lakshmigarments.repository.InventoryRepository;
 import com.lakshmigarments.repository.JobworkRepository;
+import com.lakshmigarments.repository.MaterialLedgerRepository;
 import com.lakshmigarments.repository.SubCategoryRepository;
 import com.lakshmigarments.repository.UserRepository;
 import com.lakshmigarments.repository.specification.BatchSpecification;
@@ -59,7 +64,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class BatchServiceImpl implements BatchService {
 
-	private final EmployeeService employeeService;
+//	private final EmployeeService employeeService;
 
 	private final Logger LOGGER = LoggerFactory.getLogger(BatchServiceImpl.class);
 	private final BatchRepository batchRepository;
@@ -71,6 +76,7 @@ public class BatchServiceImpl implements BatchService {
 	private final InventoryRepository inventoryRepository;
 	private final UserRepository userRepository;
 	private final ModelMapper modelMapper;
+	private final MaterialLedgerRepository ledgerRepository;
 
 	// BatchServiceImpl(EmployeeService employeeService) {
 	// this.employeeService = employeeService;
@@ -101,22 +107,37 @@ public class BatchServiceImpl implements BatchService {
 		batch.setSerialCode(batchRequestDTO.getSerialCode());
 		batch.setIsUrgent(batchRequestDTO.getIsUrgent());
 		batch.setRemarks(batchRequestDTO.getRemarks());
+		batch.setAvailableQuantity(batchRequestDTO.getTotalQuantity());
 		batch.setCreatedBy(user);
 
-		batchRepository.save(batch);
+		Batch createdBatch = batchRepository.save(batch);
 
 		for (BatchSubCategory batchSubCategory : batchSubCategories) {
 			batchSubCategory.setBatch(batch);
+			batchSubCategory.setAvailableQuantity(batchSubCategory.getQuantity());
 			batchSubCategoryRepository.save(batchSubCategory);
 
 			// detect the quantities from inventory
-			Inventory inventory = inventoryRepository.findBySubCategoryNameAndCategoryName(
-					batchSubCategory.getSubCategory().getName(), category.getName()).orElse(null);
-			if (inventory.getCount() < batchSubCategory.getQuantity()) {
+			Long availableQuantity = ledgerRepository.getAvailableQuantityByCategoryAndSubCategory(
+					category.getId(), batchSubCategory.getSubCategory().getId());
+			if (availableQuantity < batchSubCategory.getQuantity()) {
 				throw new InsufficientInventoryException("Stock not available");
 			} else {
-				inventory.setCount(inventory.getCount() - batchSubCategory.getQuantity());
-				inventoryRepository.save(inventory);
+				MaterialInventoryLedger inventory;
+				inventory = new MaterialInventoryLedger();
+				inventory.setDirection(LedgerDirection.OUT);
+	        	inventory.setMovementType(MovementType.BATCH_CREATION);
+	        	inventory.setReferenceType(ReferenceType.BATCH);
+	        	inventory.setReference_id(createdBatch.getId());
+	        	inventory.setUnit("piece(s)");
+				inventory.setQuantity(batchSubCategory.getQuantity());
+				inventory.setSubCategory(batchSubCategory.getSubCategory());
+				inventory.setCategory(batch.getCategory());
+				inventory.setCreatedBy(user);
+			
+				ledgerRepository.save(inventory);
+//				inventory.setCount(inventory.getCount() - batchSubCategory.getQuantity());
+//				inventoryRepository.save(inventory);
 			}
 		}
 
@@ -170,64 +191,64 @@ public class BatchServiceImpl implements BatchService {
 		return batchSerialDTOs;
 	}
 
-	@Override
-	public List<BatchTimelineDTO> getBatchTimeline(Long batchId) {
+//	@Override
+//	public List<BatchTimelineDTO> getBatchTimeline(Long batchId) {
+//
+//		List<Jobwork> jobworks = jobworkRepository.findByBatchId(batchId);
+//		List<BatchTimelineDTO> batchTimelineDTOs = new ArrayList<>();
+//
+//		if (jobworks.isEmpty()) {
+//			LOGGER.info("No jobworks found for batch id: {}", batchId);
+//			return new ArrayList<>();	
+//		}
+//
+//		for (Jobwork jobwork : jobworks) {
+//			BatchTimelineDTO batchTimelineDTO = new BatchTimelineDTO();
+//			batchTimelineDTO.setDateTime(jobwork.getStartedAt());
+//			batchTimelineDTO.setJobworkType(jobwork.getJobworkType());
+//			if (jobwork.getJobworkType() == JobworkType.CUTTING) {
+//				String description = "Assigned " + jobwork.getQuantity() + " pieces to "
+//						+ jobwork.getEmployee().getName();
+//				batchTimelineDTO.setDescription(description);
+//			} else {
+//				String description = "Assigned " + jobwork.getQuantity() + " of item " + jobwork.getItem().getName()
+//						+ " to " + jobwork.getEmployee().getName();
+//				batchTimelineDTO.setDescription(description);
+//			}
+//			batchTimelineDTO.setJobworkNumber(jobwork.getJobworkNumber());
+//			batchTimelineDTOs.add(batchTimelineDTO);
+//
+//			if (jobwork.getEndedAt() != null) {
+//				BatchTimelineDTO batchTimelineDTOForEnd = new BatchTimelineDTO();
+//				batchTimelineDTO.setDateTime(jobwork.getEndedAt());
+//				batchTimelineDTO.setJobworkType(jobwork.getJobworkType());
+//				String description = "";
+//				if (jobwork.getJobworkType() == JobworkType.CUTTING) {
+//					description = "Completed cutting " + jobwork.getQuantity() + " pieces by "
+//							+ jobwork.getEmployee().getName();
+//				} else {
+//					description = "Completed " + jobwork.getQuantity() + " of item " + jobwork.getItem().getName()
+//							+ " by " + jobwork.getEmployee().getName();
+//				}
+//				batchTimelineDTOForEnd.setDescription(description);
+//				batchTimelineDTOForEnd.setJobworkNumber(jobwork.getJobworkNumber());
+//				batchTimelineDTOs.add(batchTimelineDTOForEnd);
+//			}
+//
+//		}
+//
+//		return batchTimelineDTOs;
+//	}
 
-		List<Jobwork> jobworks = jobworkRepository.findByBatchId(batchId);
-		List<BatchTimelineDTO> batchTimelineDTOs = new ArrayList<>();
-
-		if (jobworks.isEmpty()) {
-			LOGGER.info("No jobworks found for batch id: {}", batchId);
-			return new ArrayList<>();
-		}
-
-		for (Jobwork jobwork : jobworks) {
-			BatchTimelineDTO batchTimelineDTO = new BatchTimelineDTO();
-			batchTimelineDTO.setDateTime(jobwork.getStartedAt());
-			batchTimelineDTO.setJobworkType(jobwork.getJobworkType());
-			if (jobwork.getJobworkType() == JobworkType.CUTTING) {
-				String description = "Assigned " + jobwork.getQuantity() + " pieces to "
-						+ jobwork.getEmployee().getName();
-				batchTimelineDTO.setDescription(description);
-			} else {
-				String description = "Assigned " + jobwork.getQuantity() + " of item " + jobwork.getItem().getName()
-						+ " to " + jobwork.getEmployee().getName();
-				batchTimelineDTO.setDescription(description);
-			}
-			batchTimelineDTO.setJobworkNumber(jobwork.getJobworkNumber());
-			batchTimelineDTOs.add(batchTimelineDTO);
-
-			if (jobwork.getEndedAt() != null) {
-				BatchTimelineDTO batchTimelineDTOForEnd = new BatchTimelineDTO();
-				batchTimelineDTO.setDateTime(jobwork.getEndedAt());
-				batchTimelineDTO.setJobworkType(jobwork.getJobworkType());
-				String description = "";
-				if (jobwork.getJobworkType() == JobworkType.CUTTING) {
-					description = "Completed cutting " + jobwork.getQuantity() + " pieces by "
-							+ jobwork.getEmployee().getName();
-				} else {
-					description = "Completed " + jobwork.getQuantity() + " of item " + jobwork.getItem().getName()
-							+ " by " + jobwork.getEmployee().getName();
-				}
-				batchTimelineDTOForEnd.setDescription(description);
-				batchTimelineDTOForEnd.setJobworkNumber(jobwork.getJobworkNumber());
-				batchTimelineDTOs.add(batchTimelineDTOForEnd);
-			}
-
-		}
-
-		return batchTimelineDTOs;
-	}
-
-	@Override
-	public Long getBatchCount(Long batchId) {
-		List<BatchSubCategory> batchSubCategories = batchSubCategoryRepository.findByBatchId(batchId);
-		System.out.println(batchSubCategories.size());
-
-		List<Damage> damages = damageRepository.findAllByBatchId(batchId);
-		return batchSubCategories.stream().mapToLong(BatchSubCategory::getQuantity).sum()
-				- damages.stream().mapToLong(Damage::getQuantity).sum();
-	}
+//	@Override
+//	public Long getBatchCount(Long batchId) {
+//		List<BatchSubCategory> batchSubCategories = batchSubCategoryRepository.findByBatchId(batchId);
+//		System.out.println(batchSubCategories.size());
+//
+//		List<Damage> damages = damageRepository.findAllByBatchId(batchId);
+//		return batchSubCategories.stream().mapToLong(BatchSubCategory::getQuantity).sum()
+//				- damages.stream().mapToLong(Damage::getQuantity).sum();
+//	}
 
 	private List<BatchSubCategory> validateBatchSubCategories(List<BatchSubCategoryRequestDTO> batchSubCategories) {
 		List<BatchSubCategory> validatedBatchSubCategories = new ArrayList<>();
@@ -317,10 +338,11 @@ public class BatchServiceImpl implements BatchService {
 			return new BatchNotFoundException("Batch not found with serial code " + batchSerialCode);
 		});
 
-//		Long totalQuantity = batchRepository.findQuantityBySerialCode(batchSerialCode);
-		// cutting
+		Long remainingUnits = batchSubCategoryRepository.findRemainingUnitsInBatch(batch.getId());
+//		result.add(JobworkType.CUTTING);
 
 		result.add(JobworkType.CUTTING);
+		result.add(JobworkType.STITCHING);
 		return result;
 	}
 
@@ -343,24 +365,39 @@ public class BatchServiceImpl implements BatchService {
 
 		List<Inventory> validInventories = new ArrayList<>();
 		for (BatchSubCategory batchSubCategory : batchSubCategories) {
-			boolean isInventoryValid = inventoryRepository.existsByCategoryIdAndSubCategoryId(categoryId,
-					batchSubCategory.getSubCategory().getId());
-			if (isInventoryValid) {
-				Inventory inventory = inventoryRepository
-						.findByCategoryIdAndSubCategoryId(categoryId, batchSubCategory.getSubCategory().getId())
-						.orElseThrow(() -> {
-							LOGGER.error("Inventory not found with category ID {}", categoryId);
-							return new InventoryNotFoundException("Inventory not found with category id " + categoryId);
-						});
-				long countAfterRecycle = inventory.getCount() + batchSubCategory.getQuantity();
-				inventory.setCount(countAfterRecycle);
-				validInventories.add(inventory);
-			}
+			batchSubCategory.setAvailableQuantity(0L);
+//			boolean isInventoryValid = inventoryRepository.existsByCategoryIdAndSubCategoryId(categoryId,
+//					batchSubCategory.getSubCategory().getId());
+//			if (isInventoryValid) {
+//				Inventory inventory = inventoryRepository
+//						.findByCategoryIdAndSubCategoryId(categoryId, batchSubCategory.getSubCategory().getId())
+//						.orElseThrow(() -> {
+//							LOGGER.error("Inventory not found with category ID {}", categoryId);
+//							return new InventoryNotFoundException("Inventory not found with category id " + categoryId);
+//						});
+//				long countAfterRecycle = inventory.getCount() + batchSubCategory.getQuantity();
+//				inventory.setCount(countAfterRecycle);
+//				validInventories.add(inventory);
+//			}
+			MaterialInventoryLedger inventory;
+			inventory = new MaterialInventoryLedger();
+			inventory.setDirection(LedgerDirection.IN);
+        	inventory.setMovementType(MovementType.BATCH_RECYLE);
+        	inventory.setReferenceType(ReferenceType.BATCH);
+        	inventory.setReference_id(batch.getId());
+        	inventory.setUnit("piece(s)");
+			inventory.setQuantity(batchSubCategory.getQuantity());
+			inventory.setSubCategory(batchSubCategory.getSubCategory());
+			inventory.setCategory(batch.getCategory());
+//			inventory.setCreatedBy(user);
+		
+			ledgerRepository.save(inventory);
 		}		
 		for (Inventory inventory : validInventories) {
 			inventoryRepository.save(inventory);
 		}
 		batch.setBatchStatus(BatchStatus.DISCARDED);
+		batch.setAvailableQuantity(0L);
 		batchRepository.save(batch);
 	}
 

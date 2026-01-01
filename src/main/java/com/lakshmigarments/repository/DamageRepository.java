@@ -10,7 +10,7 @@ import com.lakshmigarments.model.Damage;
 
 public interface DamageRepository extends JpaRepository<Damage, Long> {
 
-    @Query("SELECT d FROM Damage d WHERE d.jobWork.batch.id = :batchId")
-    List<Damage> findAllByBatchId(@Param("batchId") Long batchId);
+//    @Query("SELECT d FROM Damage d WHERE d.jobwork.batch.id = :batchId")
+//    List<Damage> findAllByBatchId(@Param("batchId") Long batchId);
 
 }

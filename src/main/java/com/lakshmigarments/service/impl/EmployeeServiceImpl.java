@@ -105,6 +105,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 		// Remove all existing skills for this employee
 		LOGGER.debug("Removing all skills associated with employee ID: {}", id);
 		employeeSkillRepository.deleteByEmployee(employee);
+		employeeSkillRepository.flush();
 
 		// Add new skills
 		List<Skill> skills = validateSkillIDs(employeeRequestDTO.getSkills());
