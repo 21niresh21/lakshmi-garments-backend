@@ -173,7 +173,16 @@ public class StockService {
 //		        Long categoryid = bale.getCategory().getId();
 //		        Long subCategoryId = bale.getSubCategory().getId();
 //		        
-		        
+		        Inventory cacheInventory = inventoryRepository.findByCategoryIdAndSubCategoryId(bale.getCategory().getId(), bale.getSubCategory().getId()).orElse(null);
+		        if (cacheInventory != null) {
+		        	cacheInventory.setCount(cacheInventory.getCount() + bale.getQuantity());
+				} else {
+					cacheInventory = new Inventory();
+					cacheInventory.setCount(bale.getQuantity());
+					cacheInventory.setSubCategory(bale.getSubCategory());
+					cacheInventory.setCategory(bale.getCategory());
+				}
+		        inventoryRepository.save(cacheInventory);
 		        
 		        MaterialInventoryLedger inventory;
 					inventory = new MaterialInventoryLedger();

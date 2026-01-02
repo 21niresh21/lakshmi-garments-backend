@@ -1,5 +1,6 @@
 package com.lakshmigarments.dto;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -7,6 +8,7 @@ import lombok.Setter;
 @Setter
 public class LorryReceiptUpdateDTO {
     
-    private String lrNumer;
+	@NotBlank
+    private String lrNumber;
 
 }

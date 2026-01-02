@@ -1,6 +1,8 @@
 package com.lakshmigarments.repository.specification;
 
+import com.lakshmigarments.model.Bale;
 import com.lakshmigarments.model.Invoice;
+import com.lakshmigarments.model.LorryReceipt;
 import com.lakshmigarments.model.Supplier;
 import com.lakshmigarments.model.Transport;
 
@@ -79,6 +81,23 @@ public class InvoiceSpecification {
                 return criteriaBuilder.between(root.get("receivedDate"), startDate, endDate);
             }
             return criteriaBuilder.conjunction(); // No filter applied if dates are null
+        };
+    }
+    
+    public static Specification<Invoice> filterByBaleNumber(String baleNumber) {
+        return (root, query, cb) -> {
+            if (baleNumber == null || baleNumber.isEmpty()) return null;
+
+            // Join invoice -> lorryReceipts
+            Join<Invoice, LorryReceipt> lrJoin = root.join("lorryReceipts", JoinType.LEFT);
+
+            // Join lorryReceipt -> bales
+            Join<LorryReceipt, Bale> baleJoin = lrJoin.join("bales", JoinType.LEFT);
+
+            // Make query distinct to avoid duplicates
+            query.distinct(true);
+
+            return cb.like(cb.lower(baleJoin.get("baleNumber")), "%" + baleNumber.toLowerCase() + "%");
         };
     }
 

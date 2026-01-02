@@ -16,20 +16,19 @@ import com.lakshmigarments.service.LorryReceiptService;
 @RequiredArgsConstructor
 public class LorryReceiptServiceImpl implements LorryReceiptService {
 
-    private final Logger LOGGER = LoggerFactory.getLogger(LorryReceiptServiceImpl.class);
-    private final LorryReceiptRepository lorryReceiptRepository;
+	private final Logger LOGGER = LoggerFactory.getLogger(LorryReceiptServiceImpl.class);
+	private final LorryReceiptRepository lorryReceiptRepository;
 
-    @Override
-    public void updateLorryReceipt(Long id, LorryReceiptUpdateDTO lorryReceiptUpdateDTO) {
-        LorryReceipt lorryReceipt = lorryReceiptRepository.findById(id)
-                .orElseThrow(() -> {
-                    LOGGER.error("Lorry Receipt not found with id: {}", id);
-                    return new LorryReceiptNotFoundException("Lorry Receipt not found with id: " + id);
-                });
+	@Override
+	public void updateLorryReceipt(Long id, LorryReceiptUpdateDTO lorryReceiptUpdateDTO) {
+		LorryReceipt lorryReceipt = lorryReceiptRepository.findById(id).orElseThrow(() -> {
+			LOGGER.error("Lorry Receipt not found with id: {}", id);
+			return new LorryReceiptNotFoundException("Lorry Receipt not found with id: " + id);
+		});
 
-        if (lorryReceiptUpdateDTO.getLrNumer() != null) {
-            lorryReceipt.setLRNumber(lorryReceiptUpdateDTO.getLrNumer());
-        }
-        lorryReceiptRepository.save(lorryReceipt);
-    }
+		if (lorryReceiptUpdateDTO.getLrNumber() != null) {
+			lorryReceipt.setLRNumber(lorryReceiptUpdateDTO.getLrNumber());
+		}
+		lorryReceiptRepository.save(lorryReceipt);
+	}
 }

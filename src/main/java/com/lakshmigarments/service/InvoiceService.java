@@ -90,6 +90,7 @@ public class InvoiceService {
 		if (search != null && !search.isEmpty()) {
 			Specification<Invoice> searchSpecification = Specification.where(null);
 			searchSpecification = searchSpecification.or(InvoiceSpecification.filterByInvoiceNumber(search));
+			searchSpecification = searchSpecification.or(InvoiceSpecification.filterByBaleNumber(search));
 			specification = specification.and(searchSpecification);
 		}
 
