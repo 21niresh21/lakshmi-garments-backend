@@ -22,4 +22,6 @@ public class BaleDTO {
 	private String category;
 	
 	private String subCategory;
+	
+	private Long updatedById;
 }

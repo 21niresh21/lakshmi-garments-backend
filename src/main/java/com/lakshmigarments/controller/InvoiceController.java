@@ -39,7 +39,7 @@ public class InvoiceController {
     public Page<InvoiceDTO> getInvoices(@RequestParam(required = false) Integer pageNo,
                                         @RequestParam(required = false) Integer pageSize,
                                         @RequestParam(required = false, defaultValue = "invoiceDate") String sortBy,
-                                        @RequestParam(required = false, defaultValue = "asc") String sortDir,
+                                        @RequestParam(required = false, defaultValue = "desc") String sortDir,
                                         @RequestParam(required = false) String invoiceNumber,
                                         @RequestParam(required = false) List<String> supplierNames,
                                         @RequestParam(required = false) List<String> transportNames,

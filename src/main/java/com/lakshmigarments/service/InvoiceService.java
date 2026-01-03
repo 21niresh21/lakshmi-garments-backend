@@ -15,10 +15,13 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import com.lakshmigarments.context.UserContext;
+import com.lakshmigarments.context.UserInfo;
 import com.lakshmigarments.dto.BaleDTO;
 import com.lakshmigarments.dto.CompleteInvoiceDTO;
 import com.lakshmigarments.dto.InvoiceDTO;
 import com.lakshmigarments.dto.LorryReceiptDTO;
+import com.lakshmigarments.exception.DuplicateInvoiceException;
 import com.lakshmigarments.exception.InvoiceNotFoundException;
 import com.lakshmigarments.exception.SupplierNotFoundException;
 import com.lakshmigarments.exception.TransportNotFoundException;
@@ -32,10 +35,13 @@ import com.lakshmigarments.repository.LorryReceiptRepository;
 import com.lakshmigarments.repository.SupplierRepository;
 import com.lakshmigarments.repository.TransportRepository;
 import com.lakshmigarments.repository.specification.InvoiceSpecification;
+import com.lakshmigarments.service.policy.EditWindowPolicy;
 
 import jakarta.persistence.Tuple;
+import lombok.RequiredArgsConstructor;
 
 @Service
+@RequiredArgsConstructor
 public class InvoiceService {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(InvoiceService.class);
@@ -44,16 +50,8 @@ public class InvoiceService {
 	private final ModelMapper modelMapper;
 	private final SupplierRepository supplierRepository;
 	private final TransportRepository transportRepository;
+	private final EditWindowPolicy editWindowPolicy;
 
-	public InvoiceService(InvoiceRepository invoiceRepository, ModelMapper modelMapper,
-			LorryReceiptRepository lorryReceiptRepository, SupplierRepository supplierRepository,
-			TransportRepository transportRepository) {
-		this.invoiceRepository = invoiceRepository;
-		this.modelMapper = modelMapper;
-		this.lorryReceiptRepository = lorryReceiptRepository;
-		this.supplierRepository = supplierRepository;
-		this.transportRepository = transportRepository;
-	}
 
 	public Page<InvoiceDTO> getInvoices(Integer pageNo, Integer pageSize, String sortBy, String sortDir,
 			String invoiceNumber, List<String> supplierNames, List<String> transportNames, List<Boolean> isPaid,
@@ -112,11 +110,15 @@ public class InvoiceService {
 	}
 
 	public CompleteInvoiceDTO getCompleteInvoice(Long id) {
+		
+		UserInfo user = UserContext.get();
 
 		Invoice invoice = invoiceRepository.findById(id).orElseThrow(() -> {
 			LOGGER.error("Invoice with ID {} not found", id);
 			return new InvoiceNotFoundException("");
 		});
+		System.out.println(user.getRole());
+		boolean canEdit = editWindowPolicy.canEdit(invoice.getCreatedAt(), user.getRole());
 
 		CompleteInvoiceDTO completeInvoiceDTO = new CompleteInvoiceDTO();
 		completeInvoiceDTO.setId(invoice.getId());
@@ -127,6 +129,7 @@ public class InvoiceService {
 		completeInvoiceDTO.setTransportName(invoice.getTransport().getName());
 		completeInvoiceDTO.setIsTransportPaid(invoice.getIsPaid());
 		completeInvoiceDTO.setTransportCost(invoice.getTransportCost());
+		completeInvoiceDTO.setCanEdit(canEdit);
 
 		completeInvoiceDTO.setNoOfLorryReceipts(invoiceRepository.findCountOfLorryReceiptsByInvoiceID(id));
 		completeInvoiceDTO.setNoOfBales(invoiceRepository.findCountOfBalesByInvoiceID(id));
@@ -168,6 +171,14 @@ public class InvoiceService {
 			LOGGER.error("Invoice with ID {} not found", id);
 			return new InvoiceNotFoundException("");
 		});
+		
+		boolean isDuplicate = invoiceRepository.existsByInvoiceNumberAndSupplierName(
+				invoiceDTO.getInvoiceNumber(), invoiceDTO.getSupplierName());
+		if (isDuplicate) {
+			LOGGER.error("Duplicate Invoice");
+			throw new DuplicateInvoiceException("Invoice already exists with same "
+					+ "invoice number and supplier");
+		}
 
 		if (invoiceDTO.getInvoiceNumber() != null) {
 			invoice.setInvoiceNumber(invoiceDTO.getInvoiceNumber());

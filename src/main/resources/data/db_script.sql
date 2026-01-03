@@ -3,7 +3,7 @@ INSERT INTO roles (name) VALUES ('Accounts Admin');
 INSERT INTO roles (name) VALUES ('Production Admin');
 
 INSERT INTO users (is_active, name, password, role_id) VALUES (true, 'admin', 'admin', 1);
-INSERT INTO users (is_active, name, password, role_id) VALUES (true, 'bala', 'bala', 1);
+INSERT INTO users (is_active, name, password, role_id) VALUES (true, 'bala', 'bala', 2);
 
 INSERT INTO transports (name) VALUES ('A1');
 
@@ -15,6 +15,12 @@ INSERT INTO categories (code, name) VALUES ('P', 'Premium');
 
 INSERT INTO sub_categories (name) VALUES ('sleeve');
 INSERT INTO sub_categories (name) VALUES ('half-sleeve');
+
+INSERT INTO items (name) VALUES ('premium piping');
+
+INSERT INTO employees (name) VALUES ('niresh');
+
+INSERT INTO employee_skills (employee_id, skill_id) VALUES (1,1);
 
 -- INSERT INTO batch_statuses (name) VALUES ('Created');
 -- INSERT INTO batch_statuses (name) VALUES ('Work In Progress');

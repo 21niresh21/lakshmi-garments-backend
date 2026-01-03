@@ -17,6 +17,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import com.lakshmigarments.context.UserContext;
+import com.lakshmigarments.context.UserInfo;
 import com.lakshmigarments.dto.BatchRequestDTO;
 import com.lakshmigarments.dto.BatchUpdateDTO;
 import com.lakshmigarments.dto.BatchSubCategoryRequestDTO;
@@ -116,13 +118,20 @@ public class BatchServiceImpl implements BatchService {
 			batchSubCategory.setBatch(batch);
 			batchSubCategory.setAvailableQuantity(batchSubCategory.getQuantity());
 			batchSubCategoryRepository.save(batchSubCategory);
-
+			
 			// detect the quantities from inventory
-			Long availableQuantity = ledgerRepository.getAvailableQuantityByCategoryAndSubCategory(
-					category.getId(), batchSubCategory.getSubCategory().getId());
-			if (availableQuantity < batchSubCategory.getQuantity()) {
-				throw new InsufficientInventoryException("Stock not available");
-			} else {
+            Inventory cachedInventory = inventoryRepository
+                    .findBySubCategoryNameAndCategoryName(batchSubCategory.getSubCategory().getName(),
+                            category.getName())
+                    .orElse(null);
+            if (cachedInventory.getCount() < batchSubCategory.getQuantity()) {
+                throw new InsufficientInventoryException("Stock not available");
+            } else {
+            	cachedInventory.setCount(cachedInventory.getCount() - batchSubCategory.getQuantity());
+                inventoryRepository.save(cachedInventory);
+            }
+
+
 				MaterialInventoryLedger inventory;
 				inventory = new MaterialInventoryLedger();
 				inventory.setDirection(LedgerDirection.OUT);
@@ -138,7 +147,7 @@ public class BatchServiceImpl implements BatchService {
 				ledgerRepository.save(inventory);
 //				inventory.setCount(inventory.getCount() - batchSubCategory.getQuantity());
 //				inventoryRepository.save(inventory);
-			}
+			
 		}
 
 		return;
@@ -349,6 +358,14 @@ public class BatchServiceImpl implements BatchService {
 	// mark the batch as discarded in batch status and refill inventory
 	@Override
 	public void recycleBatch(Long batchId) {
+		
+		UserInfo userInfo = UserContext.get();
+		
+		User user = userRepository.findById(Long.valueOf(userInfo.getUserId())).orElseThrow(() -> {
+			LOGGER.error("User with ID {} not found", userInfo.getUserId());
+			return new UserNotFoundException("User not found with ID " + userInfo.getUserId());
+		});
+		
 		Batch batch = batchRepository.findById(batchId).orElseThrow(() -> {
 			LOGGER.error("Batch not found with id {}", batchId);
 			return new BatchNotFoundException("Batch not found with id " + batchId);
@@ -366,19 +383,20 @@ public class BatchServiceImpl implements BatchService {
 		List<Inventory> validInventories = new ArrayList<>();
 		for (BatchSubCategory batchSubCategory : batchSubCategories) {
 			batchSubCategory.setAvailableQuantity(0L);
-//			boolean isInventoryValid = inventoryRepository.existsByCategoryIdAndSubCategoryId(categoryId,
-//					batchSubCategory.getSubCategory().getId());
-//			if (isInventoryValid) {
-//				Inventory inventory = inventoryRepository
-//						.findByCategoryIdAndSubCategoryId(categoryId, batchSubCategory.getSubCategory().getId())
-//						.orElseThrow(() -> {
-//							LOGGER.error("Inventory not found with category ID {}", categoryId);
-//							return new InventoryNotFoundException("Inventory not found with category id " + categoryId);
-//						});
-//				long countAfterRecycle = inventory.getCount() + batchSubCategory.getQuantity();
-//				inventory.setCount(countAfterRecycle);
-//				validInventories.add(inventory);
-//			}
+			boolean isInventoryValid = inventoryRepository.existsByCategoryIdAndSubCategoryId(categoryId,
+					batchSubCategory.getSubCategory().getId());
+			if (isInventoryValid) {
+				Inventory inventory = inventoryRepository
+						.findByCategoryIdAndSubCategoryId(categoryId, batchSubCategory.getSubCategory().getId())
+						.orElseThrow(() -> {
+							LOGGER.error("Inventory not found with category ID {}", categoryId);
+							return new InventoryNotFoundException("Inventory not found with category id " + categoryId);
+						});
+				long countAfterRecycle = inventory.getCount() + batchSubCategory.getQuantity();
+				inventory.setCount(countAfterRecycle);
+				validInventories.add(inventory);
+			}
+			
 			MaterialInventoryLedger inventory;
 			inventory = new MaterialInventoryLedger();
 			inventory.setDirection(LedgerDirection.IN);
@@ -389,7 +407,7 @@ public class BatchServiceImpl implements BatchService {
 			inventory.setQuantity(batchSubCategory.getQuantity());
 			inventory.setSubCategory(batchSubCategory.getSubCategory());
 			inventory.setCategory(batch.getCategory());
-//			inventory.setCreatedBy(user);
+			inventory.setCreatedBy(user);
 		
 			ledgerRepository.save(inventory);
 		}		

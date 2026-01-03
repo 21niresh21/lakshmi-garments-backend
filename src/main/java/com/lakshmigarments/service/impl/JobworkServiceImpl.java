@@ -131,6 +131,7 @@ public class JobworkServiceImpl implements JobworkService {
 			jobwork.setJobworkType(jobworkRequestDTO.getJobworkType());
 			jobwork.setJobworkNumber(jobworkRequestDTO.getJobworkNumber());
 			jobwork.setJobworkOrigin(JobworkOrigin.ORIGINAL);
+			jobwork.setJobworkStatus(JobworkStatus.IN_PROGRESS);
 			jobwork.setRemarks(jobworkRequestDTO.getRemarks());
 			Jobwork createdJobwork = jobworkRepository.save(jobwork);
 

@@ -23,6 +23,7 @@ import com.lakshmigarments.model.JobworkItem;
 import com.lakshmigarments.model.JobworkItemStatus;
 import com.lakshmigarments.model.JobworkReceipt;
 import com.lakshmigarments.model.JobworkReceiptItem;
+import com.lakshmigarments.model.JobworkStatus;
 import com.lakshmigarments.model.User;
 import com.lakshmigarments.repository.*;
 import com.lakshmigarments.service.JobworkReceiptService;
@@ -103,7 +104,7 @@ public class JobworkReceiptServiceImpl implements JobworkReceiptService {
 				damageRepository.save(damage);
 				
 				if (DamageType.fromString(damageDTO.getType()) == DamageType.REPAIRABLE) {
-					itemCount += damageDTO.getQuantity();
+					itemCount += damageDTO.getQuantity() == null ? 0 : damageDTO.getQuantity();
 				}
 				
 				totalDamagedQuantity += damageDTO.getQuantity();
@@ -112,7 +113,13 @@ public class JobworkReceiptServiceImpl implements JobworkReceiptService {
 			long totalQuantityForItem = jobworkReceiptItemDTO.getPurchasedQuantity() + 
 					jobworkReceiptItemDTO.getReturnedQuantity() + totalDamagedQuantity ;
 			if (jobworkItem.getQuantity() == totalQuantityForItem) {
+				Batch batch = jobwork.getBatch();
+				batch.setAvailableQuantity(itemCount);
 				jobworkItem.setJobworkStatus(JobworkItemStatus.COMPLETED);
+				batch.setBatchStatus(BatchStatus.COMPLETED);
+				jobwork.setJobworkStatus(JobworkStatus.COMPLETED);
+				batchRepository.save(batch);
+				jobworkRepository.save(jobwork);
 			}
 			
 			jobworkReceiptItem.setDamagedQuantity(totalDamagedQuantity);
@@ -121,12 +128,7 @@ public class JobworkReceiptServiceImpl implements JobworkReceiptService {
 		}
 
 		// increase quantity for batch
-		Batch batch = jobwork.getBatch();
-		batch.setAvailableQuantity(itemCount);
-		if (jobworkReceiptItemDTOs.size() == jobwork.getJobworkItems().size()) {
-			batch.setBatchStatus(BatchStatus.COMPLETED);
-		}
-		batchRepository.save(batch);
+		
 		
 		// TODO to make the batch CLOSED if all jobworks quantity are done for this batch
 

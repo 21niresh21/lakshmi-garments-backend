@@ -14,6 +14,8 @@ public class CompleteInvoiceDTO {
 
 private Long id;
 	
+	private boolean canEdit;
+
 	private String invoiceNumber;
 	
 	private Date invoiceDate;
