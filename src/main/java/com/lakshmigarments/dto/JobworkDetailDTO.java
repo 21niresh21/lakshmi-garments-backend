@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.lakshmigarments.model.JobworkItem;
 import com.lakshmigarments.model.JobworkItemStatus;
+import com.lakshmigarments.model.JobworkReceiptItem;
 import com.lakshmigarments.model.JobworkType;
 
 import lombok.Getter;
@@ -33,6 +34,8 @@ public class JobworkDetailDTO {
     private String jobworkStatus;
     
     private List<JobworkItemDTO> jobworkItems;
+    
+    private List<JobworkReceiptItemDTO> jobworkReceiptItems;
 
 
 }

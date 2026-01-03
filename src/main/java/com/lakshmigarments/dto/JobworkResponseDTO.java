@@ -25,5 +25,6 @@ public class JobworkResponseDTO {
     private List<LocalDateTime> completedAt;
     private String status;
     private Long totalQuantitesIssued;
+    private Long pendingQuantity;
 
 }

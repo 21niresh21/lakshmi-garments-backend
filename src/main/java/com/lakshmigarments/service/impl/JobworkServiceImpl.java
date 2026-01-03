@@ -3,6 +3,7 @@ package com.lakshmigarments.service.impl;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -18,8 +19,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import com.lakshmigarments.controller.JobworkController;
 import com.lakshmigarments.controller.LoginController;
+import com.lakshmigarments.dto.DamageDTO;
 import com.lakshmigarments.dto.JobworkDetailDTO;
 import com.lakshmigarments.dto.JobworkItemDTO;
+import com.lakshmigarments.dto.JobworkReceiptItemDTO;
 import com.lakshmigarments.dto.JobworkRequestDTO;
 import com.lakshmigarments.dto.JobworkResponseDTO;
 import com.lakshmigarments.model.Batch;
@@ -30,6 +33,7 @@ import com.lakshmigarments.model.Jobwork;
 import com.lakshmigarments.model.JobworkItem;
 import com.lakshmigarments.model.JobworkOrigin;
 import com.lakshmigarments.model.JobworkReceipt;
+import com.lakshmigarments.model.JobworkReceiptItem;
 import com.lakshmigarments.model.JobworkStatus;
 import com.lakshmigarments.model.JobworkItemStatus;
 import com.lakshmigarments.model.JobworkType;
@@ -185,6 +189,20 @@ public class JobworkServiceImpl implements JobworkService {
 
 		// ✅ Convert entities → DTOs using ModelMapper
 		List<JobworkItemDTO> jobworkItemDTOs = jobworkItems.stream().map(this::jwTojwDTO).toList();
+		
+		List<JobworkReceipt> receipts = jobworkReceiptRepository.findByJobworkJobworkNumberIn(Arrays.asList(jobworkNumber));
+		List<JobworkReceiptItem> receiptItems = new ArrayList<>();
+		
+		System.out.println(receipts.size());
+		
+		long returnedQuantity = 0;
+		for (JobworkReceipt jobworkReceipt : receipts) {
+			List<JobworkReceiptItem> itemReceiptItems = jobworkReceipt.getJobworkReceiptItems();
+			for (JobworkReceiptItem jobworkReceiptItem : itemReceiptItems) {
+				receiptItems.add(jobworkReceiptItem);
+			}
+					
+		}
 
 		JobworkDetailDTO dto = new JobworkDetailDTO();
 		dto.setStartedAt(jobwork.getStartedAt());
@@ -196,10 +214,30 @@ public class JobworkServiceImpl implements JobworkService {
 		dto.setJobworkType(jobwork.getJobworkType().name());
 		dto.setRemarks(jobwork.getRemarks());
 		dto.setJobworkItems(jobworkItemDTOs);
+		
+		List<JobworkReceiptItemDTO> receiptItemDTOs = receipts.stream()
+			    .flatMap(r -> r.getJobworkReceiptItems().stream())
+			    .map(this::toReceiptItemDTO)
+			    .toList();
+		
+		dto.setJobworkReceiptItems(receiptItemDTOs);
 		dto.setJobworkStatus(jobwork.getJobworkStatus().toString());
 
 		return dto;
 	}
+	
+	private JobworkReceiptItemDTO toReceiptItemDTO(JobworkReceiptItem item) {
+	    JobworkReceiptItemDTO dto = new JobworkReceiptItemDTO();
+
+	    dto.setItemName(item.getItem().getName());
+	    dto.setReturnedQuantity(item.getReceivedQuantity());
+	    dto.setPurchasedQuantity(item.getPurchaseQuantity());
+	    dto.setPurchaseCost(item.getPurchaseRate());
+	    dto.setWage(item.getWagePerItem());
+	    dto.setDamagedQuantity(item.getDamagedQuantity());
+	    return dto;
+	}
+
 
 	public String getNextJobworkNumber() {
 
@@ -278,6 +316,17 @@ public class JobworkServiceImpl implements JobworkService {
 				completedCount += 1;
 			}
 		}
+		
+		// deduct the submitted quantities for the jobwork
+		long returnedQuantity = 0;
+		for (JobworkReceipt jobworkReceipt : receipts) {
+			List<JobworkReceiptItem> receiptItems = jobworkReceipt.getJobworkReceiptItems();
+			for (JobworkReceiptItem jobworkReceiptItem : receiptItems) {
+				returnedQuantity += jobworkReceiptItem.getDamagedQuantity() + 
+						jobworkReceiptItem.getPurchaseQuantity() + jobworkReceiptItem.getReceivedQuantity();
+			}
+					
+		}
 
 		// evaluate jobwork status
 		if (completedCount == jobworkItems.size()) {
@@ -290,6 +339,7 @@ public class JobworkServiceImpl implements JobworkService {
 
 		jobworkResponseDTO.setTotalQuantitesIssued(totalIssuedQty);
 		jobworkResponseDTO.setStatus(jobwork.getJobworkStatus().toString());
+		jobworkResponseDTO.setPendingQuantity(totalIssuedQty - returnedQuantity);
 
 		return jobworkResponseDTO;
 	}

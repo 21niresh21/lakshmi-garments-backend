@@ -20,6 +20,8 @@ INSERT INTO items (name) VALUES ('premium piping');
 
 INSERT INTO employees (name) VALUES ('niresh');
 
+INSERT INTO skills (name) VALUES ('cutting');
+
 INSERT INTO employee_skills (employee_id, skill_id) VALUES (1,1);
 
 -- INSERT INTO batch_statuses (name) VALUES ('Created');

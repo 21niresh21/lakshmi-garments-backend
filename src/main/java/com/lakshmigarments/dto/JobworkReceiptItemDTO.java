@@ -15,5 +15,6 @@ public class JobworkReceiptItemDTO {
 	private Long purchasedQuantity;
 	private Double purchaseCost;
 	private Double wage;
+	private Long damagedQuantity;
 	
 }

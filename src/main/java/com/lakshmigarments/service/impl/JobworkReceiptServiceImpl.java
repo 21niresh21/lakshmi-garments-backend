@@ -93,6 +93,7 @@ public class JobworkReceiptServiceImpl implements JobworkReceiptService {
 			jobworkReceiptItem.setPurchaseQuantity(jobworkReceiptItemDTO.getPurchasedQuantity());
 			jobworkReceiptItem.setPurchaseRate(jobworkReceiptItemDTO.getPurchaseCost());
 			jobworkReceiptItem.setJobworkReceipt(createdJobworkReceipt);
+			jobworkReceiptItem.setReceivedQuantity(jobworkReceiptItemDTO.getReturnedQuantity());
 			jobworkReceiptItem.setWagePerItem(jobworkReceiptItemDTO.getWage());
 
 			long totalDamagedQuantity = 0;
