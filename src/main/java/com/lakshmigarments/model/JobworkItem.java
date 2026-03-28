@@ -32,6 +32,9 @@ public class JobworkItem {
 	private Item item;
 	
 	@ManyToOne
+	private SubCategory subCategory;
+	
+	@ManyToOne
 	private Jobwork jobwork;
 	
 	private Long quantity;

@@ -2,7 +2,7 @@ package com.lakshmigarments.service.impl;
 
 import com.lakshmigarments.dto.response.DashboardResponse;
 import com.lakshmigarments.repository.InvoiceRepository;
-import com.lakshmigarments.repository.InventoryRepository;
+
 import com.lakshmigarments.repository.MaterialLedgerRepository;
 import com.lakshmigarments.service.DashboardService;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 public class DashboardServiceImpl implements DashboardService {
 
     private final InvoiceRepository invoiceRepository;
-    private final InventoryRepository inventoryRepository;
+    
     private final MaterialLedgerRepository materialLedgerRepository;
 
     @Override

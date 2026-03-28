@@ -14,8 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import com.lakshmigarments.dto.BatchRequestDTO;
 import com.lakshmigarments.dto.BatchSerialDTO;
-import com.lakshmigarments.dto.BatchTimeline;
-import com.lakshmigarments.dto.BatchTimelineDTO;
+import com.lakshmigarments.dto.BatchTimelineResponse;
 import com.lakshmigarments.model.JobworkType;
 import com.lakshmigarments.dto.BatchResponseDTO;
 import com.lakshmigarments.service.BatchService;
@@ -85,12 +84,11 @@ public class BatchController {
 	}
 
 	@GetMapping("/timeline/{batchId}")
-	public ResponseEntity<BatchTimeline> getBatchTimeline(@PathVariable Long batchId) {
+	public ResponseEntity<BatchTimelineResponse> getBatchTimeline(@PathVariable Long batchId) {
 		LOGGER.info("Received request to get batch timeline for batch id: {}", batchId);
-		BatchTimeline batchTimeline = batchService.getBatchTimeline(batchId);
-		LOGGER.info("Found {} batch timeline for batch id: {}",
-				batchTimeline == null ? 0 : 1, batchId);
-		return new ResponseEntity<>(batchTimeline, HttpStatus.OK);
+		BatchTimelineResponse batchTimeline = batchService.getBatchTimeline(batchId);
+		LOGGER.info("Returning batch timeline for batch id: {}", batchId);
+		return ResponseEntity.ok(batchTimeline);
 	}
 	
 	@PostMapping("/recycle/{batchId}")
@@ -115,6 +113,14 @@ public class BatchController {
 	    return ResponseEntity.ok(availableQuantity);
 	}
 
+	@GetMapping("/{serialCode}/cutting/{subCategoryName}/available-quantity")
+	public ResponseEntity<Long> getAvailableQuantityBySubCategory(@PathVariable String serialCode,
+			@PathVariable String subCategoryName) {
+		LOGGER.info("Received request for available quantities for sub-category {} for cutting work for batch {}", subCategoryName, serialCode);
+		Long availableQuantity = batchService.getAvailableQuantitiesBySubCategory(serialCode, subCategoryName);
+		return ResponseEntity.ok(availableQuantity);
+	}
+
 	// to get the available batches for assigning jobwork
 	@GetMapping("/available-for-jobwork")
 	public ResponseEntity<List<String>> getBatchesAvailableForJobwork() {
@@ -128,6 +134,14 @@ public class BatchController {
 		LOGGER.info("Received request to get all the batch serial code");
 	    List<String> batchSerialCodes = batchService.getAllBatchSerialCode();
 	    return ResponseEntity.ok(batchSerialCodes);
+	}
+
+	@GetMapping("/serial-code/{serialCode}/sub-categories")
+	public ResponseEntity<List<String>> getSubCategoriesBySerialCode(@PathVariable String serialCode) {
+		LOGGER.info("Received request to get sub-categories for serial code: {}", serialCode);
+		List<String> subCategories = batchService.getSubCategoriesBySerialCode(serialCode);
+		LOGGER.info("Returning sub-categories for serial code: {}", serialCode);
+		return ResponseEntity.ok(subCategories);
 	}
 	
 }

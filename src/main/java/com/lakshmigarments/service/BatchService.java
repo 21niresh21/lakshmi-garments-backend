@@ -4,8 +4,7 @@ import java.util.List;
 import java.util.Date;
 
 import com.lakshmigarments.dto.BatchSerialDTO;
-import com.lakshmigarments.dto.BatchTimeline;
-import com.lakshmigarments.dto.BatchTimelineDTO;
+import com.lakshmigarments.dto.BatchTimelineResponse;
 import com.lakshmigarments.dto.BatchDetailDTO;
 import com.lakshmigarments.dto.BatchRequestDTO;
 import com.lakshmigarments.dto.BatchResponseDTO;
@@ -23,7 +22,7 @@ public interface BatchService {
 
     List<BatchSerialDTO> getUnpackagedBatches();
 
-    BatchTimeline getBatchTimeline(Long batchId);
+    BatchTimelineResponse getBatchTimeline(Long batchId);
 
 //    Long getBatchCount(Long batchId);
 
@@ -42,11 +41,15 @@ public interface BatchService {
     Long getAvailableQuantities(String serialCode, String jobworkType);
     
     Long getAvailableQuantitiesForCutting(String serialCode);
+
+    Long getAvailableQuantitiesBySubCategory(String serialCode, String subCategoryName);
     
     List<String> getBatchSerialCodesForJobwork();
     
     void recalculateBatchStatus(Batch batch);
     
     List<String> getAllBatchSerialCode();
+
+    List<String> getSubCategoriesBySerialCode(String serialCode);
     
 }

@@ -1,6 +1,8 @@
 package com.lakshmigarments.dto;
 
-import com.lakshmigarments.dto.request.CreateDamageRequest;
+import java.util.List;
+
+import com.lakshmigarments.dto.response.JobworkDetailDTO;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -9,9 +11,7 @@ import lombok.Setter;
 @Setter
 public class JobworkTimelineDTO {
 	
-	private JobworkResponseDTO jobworkDetail;
-	private CreateDamageRequest damages;
-	private Long salesQuantity;
-	private Long salesCost;
+	private JobworkDetailDTO jobworkDetail;
+	private List<BatchTimelineDetail> timelineDetail;
 
 }

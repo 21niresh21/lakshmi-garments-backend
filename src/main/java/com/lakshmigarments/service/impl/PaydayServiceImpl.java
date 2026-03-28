@@ -87,7 +87,7 @@ public class PaydayServiceImpl implements PaydayService {
 
 		// Group receipts by employee name
 		Map<String, List<JobworkReceipt>> receiptsByEmployee = receipts.stream()
-				.collect(Collectors.groupingBy(r -> r.getJobwork().getAssignedTo().getName()));
+				.collect(Collectors.groupingBy(r -> r.getJobwork().getAssignedTo() != null ? r.getJobwork().getAssignedTo().getName() : "Unassigned"));
 
 		LOGGER.debug("Grouped receipts into {} employees with receipts", receiptsByEmployee.size());
 
@@ -98,7 +98,7 @@ public class PaydayServiceImpl implements PaydayService {
 			String empName = employee.getName();
 			List<JobworkReceipt> empReceipts = receiptsByEmployee.getOrDefault(empName, new ArrayList<>());
 
-			PaydayDTO payday = calculateEmployeePayday(empName, empReceipts, fromDate, toDate);
+			PaydayDTO payday = calculateEmployeePayday(empName, empReceipts);
 			paydayList.add(payday);
 
 			LOGGER.debug("Employee: {}, Completed Jobworks: {}, Pending Jobworks: {}, Net Wage: {}",
@@ -122,15 +122,14 @@ public class PaydayServiceImpl implements PaydayService {
 		return new PageImpl<>(pageContent, pageable, paydayList.size());
 	}
 
-	private PaydayDTO calculateEmployeePayday(String employeeName, List<JobworkReceipt> receipts, LocalDateTime fromDate, LocalDateTime toDate) {
+	private PaydayDTO calculateEmployeePayday(String employeeName, List<JobworkReceipt> receipts) {
 		PaydayDTO payday = new PaydayDTO();
 		payday.setEmployeeName(employeeName);
 		payday.setCompletedJobworkCount((long) receipts.size());
 
-		// Get pending jobwork list and count within date range
-		List<String> pendingJobworkNumbers = jobworkRepository.findPendingJobworkNumbersByEmployeeNameAndDateRange(employeeName, fromDate, toDate);
-		payday.setPendingJobworks(pendingJobworkNumbers);
-		payday.setPendingJobworkCount((long) pendingJobworkNumbers.size());
+		// Get pending jobwork count (not CLOSED or REASSIGNED)
+		Long pendingCount = jobworkRepository.countPendingJobworksByEmployeeName(employeeName);
+		payday.setPendingJobworkCount(pendingCount != null ? pendingCount : 0L);
 
 		// Initialize counters
 		long totalAcceptedQuantity = 0;

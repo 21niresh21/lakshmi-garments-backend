@@ -1,5 +1,7 @@
 package com.lakshmigarments.controller;
 
+import com.lakshmigarments.dto.JobworkTimelineResponse;
+
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -155,4 +157,12 @@ public class JobworkController {
 		EmployeeJobworkReportResponse report = jobworkService.getDetailedJobworksByEmployee(employeeName, startDate, endDate);
 		return new ResponseEntity<>(report, HttpStatus.OK);
 	}
+
+	@GetMapping("/timeline/{jobworkNumber}")
+	public ResponseEntity<JobworkTimelineResponse> getJobworkTimeline(@PathVariable String jobworkNumber) {
+		LOGGER.info("Received request for jobwork timeline of {}", jobworkNumber);
+		JobworkTimelineResponse timeline = jobworkService.getJobworkTimeline(jobworkNumber);
+		return ResponseEntity.ok(timeline);
+	}
+
 }

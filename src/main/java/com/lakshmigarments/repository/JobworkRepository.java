@@ -54,7 +54,13 @@ public interface JobworkRepository extends JpaRepository<Jobwork, Long>, JpaSpec
 			+ " WHERE jw.id = jwi.jobwork_id AND jw.batch_id = b.id AND b.serial_code = :serialCode and jw.jobwork_type = :jobworkType and jwi.item_id = i.id and i.name = :itemName AND jw.jobwork_status <> 'REASSIGNED'", nativeQuery = true)
 	Long getAssignedQuantities(String serialCode, String jobworkType, String itemName);
 
+	@Query(value = "SELECT COALESCE(SUM(jwi.quantity), 0) FROM jobworks jw, jobwork_items jwi, batches b, sub_categories sc "
+			+ " WHERE jw.id = jwi.jobwork_id AND jw.batch_id = b.id AND b.serial_code = :serialCode and jw.jobwork_type = :jobworkType and jwi.sub_category_id = sc.id and sc.name = :subCategoryName AND jw.jobwork_status <> 'REASSIGNED'", nativeQuery = true)
+	Long getAssignedQuantitiesBySubCategory(String serialCode, String jobworkType, String subCategoryName);
+
 	List<Jobwork> findByBatch(Batch batch);
+
+	// List<Jobwork> findByParentJobwork(Jobwork parentJobwork);
 
 	// Find all jobworks assigned to a specific employee by name
 	List<Jobwork> findByAssignedToNameOrderByCreatedAtDesc(String employeeName);

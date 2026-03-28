@@ -5,12 +5,10 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
@@ -23,25 +21,20 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import com.lakshmigarments.context.UserContext;
-import com.lakshmigarments.context.UserInfo;
-import com.lakshmigarments.controller.AuthController;
-import com.lakshmigarments.controller.JobworkController;
-import com.lakshmigarments.controller.WorkflowRequestController;
 import com.lakshmigarments.dto.JobworkItemDTO;
-import com.lakshmigarments.dto.JobworkRequestDTO;
 import com.lakshmigarments.dto.JobworkResponseDTO;
 import com.lakshmigarments.dto.request.CreateCuttingJobworkRequest;
 import com.lakshmigarments.dto.request.CreateJobworkRequest;
-import com.lakshmigarments.dto.request.CreateDamageRequest;
 import com.lakshmigarments.dto.request.CreateItemBasedJobworkRequest;
-import com.lakshmigarments.dto.request.CreateJobworkReceiptItemRequest;
 import com.lakshmigarments.dto.response.EmployeeJobworkResponse;
 import com.lakshmigarments.dto.response.ItemResponse;
 import com.lakshmigarments.dto.response.DetailedEmployeeJobworkResponse;
 import com.lakshmigarments.dto.response.EmployeeJobworkReportResponse;
 import com.lakshmigarments.dto.response.JobworkDetailDTO;
 import com.lakshmigarments.dto.response.JobworkItemResponse;
+import com.lakshmigarments.dto.JobworkTimelineResponse;
+import com.lakshmigarments.dto.TimelineEventType;
+import com.lakshmigarments.dto.TimelineItemDetail;
 import com.lakshmigarments.dto.response.JobworkResponse;
 import com.lakshmigarments.model.Batch;
 import com.lakshmigarments.model.BatchItem;
@@ -58,14 +51,14 @@ import com.lakshmigarments.model.JobworkReceiptItem;
 import com.lakshmigarments.model.JobworkStatus;
 import com.lakshmigarments.model.JobworkItemStatus;
 import com.lakshmigarments.model.JobworkType;
-import com.lakshmigarments.model.User;
+import com.lakshmigarments.model.SubCategory;
 import com.lakshmigarments.exception.BatchItemNotFoundException;
 import com.lakshmigarments.exception.BatchNotFoundException;
 import com.lakshmigarments.exception.EmployeeNotFoundException;
 import com.lakshmigarments.exception.ItemNotFoundException;
 import com.lakshmigarments.exception.JobworkNotFoundException;
 import com.lakshmigarments.exception.JobworkTypeNotFoundException;
-import com.lakshmigarments.exception.UserNotFoundException;
+import com.lakshmigarments.exception.InsufficientBatchQuantityException;
 import com.lakshmigarments.repository.BatchItemRepository;
 import com.lakshmigarments.repository.BatchRepository;
 import com.lakshmigarments.repository.DamageRepository;
@@ -74,7 +67,6 @@ import com.lakshmigarments.repository.ItemRepository;
 import com.lakshmigarments.repository.JobworkItemRepository;
 import com.lakshmigarments.repository.JobworkReceiptRepository;
 import com.lakshmigarments.repository.JobworkRepository;
-import com.lakshmigarments.repository.UserRepository;
 import com.lakshmigarments.repository.specification.JobworkSpecification;
 import com.lakshmigarments.service.BatchService;
 import com.lakshmigarments.service.JobworkService;
@@ -93,7 +85,6 @@ public class JobworkServiceImpl implements JobworkService<CreateJobworkRequest> 
 	private final ItemRepository itemRepository;
 	private final ModelMapper modelMapper;
 	private final BatchRepository batchRepository;
-	private final UserRepository userRepository;
 	private final JobworkItemRepository jobworkItemRepository;
 	private final JobworkReceiptRepository jobworkReceiptRepository;
 	private final BatchItemRepository batchItemRepository;
@@ -160,115 +151,90 @@ public class JobworkServiceImpl implements JobworkService<CreateJobworkRequest> 
 		return new PageImpl<>(jobworkResponseDTOs, pageable, jobworks.getTotalElements());
 	}
 
-//	@Override
-//	@Transactional
-//	public Jobwork createJobwork(JobworkRequestDTO jobworkRequestDTO) {
-//		
-////		UserInfo userInfo = UserContext.get();
-////		Long userId = Long.valueOf(userInfo.getUserId());
-////		
-////		User user = userRepository.findById(userId).orElseThrow(() -> {
-////			LOGGER.error("User with ID {} not found", userId);
-////			return new UserNotFoundException("User not found with ID " + userId);
-////		});
-//
-//		Employee employee = employeeRepository.findById(jobworkRequestDTO.getEmployeeId()).orElseThrow(() -> {
-//			LOGGER.error("Employee with ID {} not found", jobworkRequestDTO.getEmployeeId());
-//			return new EmployeeNotFoundException("Employee not found with ID " + jobworkRequestDTO.getEmployeeId());
-//		});
-//
-////		User user = userRepository.findById(jobworkRequestDTO.getAssignedBy()).orElseThrow(() -> {
-////			LOGGER.error("User with ID {} not found", jobworkRequestDTO.getAssignedBy());
-////			return new UserNotFoundException("User not found with ID " + jobworkRequestDTO.getAssignedBy());
-////		});
-//
-//		Batch batch = batchRepository.findBySerialCode(jobworkRequestDTO.getBatchSerialCode()).orElseThrow(() -> {
-//			LOGGER.error("Batch with serial code {} not found", jobworkRequestDTO.getBatchSerialCode());
-//			return new BatchNotFoundException(
-//					"Batch not found with serial code " + jobworkRequestDTO.getBatchSerialCode());
-//		});
-//
-//		// CUTTING
-//		if (jobworkRequestDTO.getJobworkType() == JobworkType.CUTTING) {
-//
-//			// TODO to return correct object
-//			if (jobworkRequestDTO.getQuantities().size() <= 0) {
-//				return null;
-//			}
-//			Long quantity = jobworkRequestDTO.getQuantities().get(0);
-//
-//			batch.setAvailableQuantity(batch.getAvailableQuantity() - quantity);
-//			batch.setBatchStatus(BatchStatus.ASSIGNED);
-//
-//			Jobwork jobwork = new Jobwork();
-////			jobwork.setAssignedBy(user);
-//			jobwork.setAssignedTo(employee);
-//			jobwork.setBatch(batch);
-//			jobwork.setJobworkType(jobworkRequestDTO.getJobworkType());
-//			jobwork.setJobworkNumber(jobworkRequestDTO.getJobworkNumber());
-//			jobwork.setJobworkOrigin(JobworkOrigin.ORIGINAL);
-//			jobwork.setJobworkStatus(JobworkStatus.IN_PROGRESS);
-//			jobwork.setRemarks(jobworkRequestDTO.getRemarks());
-//			jobwork.setAssignedTo(employee);
-//			Jobwork createdJobwork = jobworkRepository.save(jobwork);
-//
-//			JobworkItem jobworkItem = new JobworkItem();
-//			jobworkItem.setJobwork(createdJobwork);
-//			jobworkItem.setQuantity(quantity);
-//			jobworkItem.setJobworkStatus(JobworkItemStatus.IN_PROGRESS);
-//			jobworkItemRepository.save(jobworkItem);
-//
-//			return createdJobwork;
-//		}
-//
-////        Item item = null;
-////        if (jobworkRequestDTO.getItemId() != null) {
-////            item = itemRepository.findById(jobworkRequestDTO.getItemId()).orElseThrow(() -> {
-////                LOGGER.error("Item with ID {} not found", jobworkRequestDTO.getItemId());
-////                return new ItemNotFoundException("Item not found with ID " + jobworkRequestDTO.getItemId());
-////            });
-////        }
-//		
-//		Jobwork jobwork = new Jobwork();
-////		jobwork.setAssignedBy(user);
-//		jobwork.setAssignedTo(employee);
-//		jobwork.setBatch(batch);
-//		jobwork.setJobworkType(jobworkRequestDTO.getJobworkType());
-//		jobwork.setJobworkNumber(jobworkRequestDTO.getJobworkNumber());
-//		jobwork.setJobworkOrigin(JobworkOrigin.ORIGINAL);
-//		jobwork.setJobworkStatus(JobworkStatus.IN_PROGRESS);
-//		jobwork.setRemarks(jobworkRequestDTO.getRemarks());
-//		Jobwork createdJobwork = jobworkRepository.save(jobwork);
-//		
-//		Long totalQuantity = 0L;
-//		for (Long quantity : jobworkRequestDTO.getQuantities()) {
-//			totalQuantity += quantity;
-//		}
-//		
-//		batch.setAvailableQuantity(batch.getAvailableQuantity() - totalQuantity);
-//		batch.setBatchStatus(BatchStatus.ASSIGNED);
-//		
-//		int i = 0; 
-//		for (String itemName : jobworkRequestDTO.getItemNames()) {
-//			
-//			Item existingItem = itemRepository.findByName(itemName).orElseThrow(() -> {
-//				LOGGER.error("Item not found with name {}", itemName);
-//				return new ItemNotFoundException("Item not found with name " + itemName);
-//			});
-//			
-//			JobworkItem jobworkItem = new JobworkItem();
-//			jobworkItem.setJobwork(createdJobwork);
-//			jobworkItem.setItem(existingItem);
-//			jobworkItem.setQuantity(jobworkRequestDTO.getQuantities().get(i));
-//			jobworkItem.setJobworkStatus(JobworkItemStatus.IN_PROGRESS);
-//			jobworkItemRepository.save(jobworkItem);
-//						
-//			i += 1;
-//		}
-//
-//	
-//		return createdJobwork;
-//	}
+	@Override
+	@Transactional
+	public JobworkResponse createJobwork(CreateJobworkRequest request) {
+		LOGGER.debug("Creating a new jobwork");
+
+		Employee employee = getEmployeeOrThrow(request.getAssignedTo());
+		Batch batch = getBatchOrThrow(request.getBatchSerialCode());
+
+		if (request instanceof CreateCuttingJobworkRequest cuttingRequest) {
+
+			LOGGER.debug("Cutting jobwork creation request received for batch {}", cuttingRequest.getBatchSerialCode());
+
+			// Validate batch has enough available quantity
+			Long availableQuantity = batch.getAvailableQuantity();
+			Long requestedQuantity = cuttingRequest.getQuantity();
+			
+			if (availableQuantity < requestedQuantity) {
+				LOGGER.error("Insufficient batch quantity. Available: {}, Requested: {}", availableQuantity, requestedQuantity);
+				throw new InsufficientBatchQuantityException(
+					"Insufficient quantity in batch. Available: " + availableQuantity + ", Requested: " + requestedQuantity);
+			}
+
+			LOGGER.debug("Validated cutting jobwork - Batch has sufficient quantity");
+			return this.createCuttingJobwork(cuttingRequest, employee, batch);
+
+		} else if (request instanceof CreateItemBasedJobworkRequest itemJobworkRequest) {
+
+			LOGGER.debug("{} jobwork creation request received", itemJobworkRequest.getJobworkType());
+
+			for (int i = 0; i < itemJobworkRequest.getItemNames().size(); i++) {
+
+				String itemName = itemJobworkRequest.getItemNames().get(i);
+				Long requestedQuantity = itemJobworkRequest.getQuantities().get(i);
+
+				BatchItem batchItem = this.getBatchItemOrThrow(itemJobworkRequest.getBatchSerialCode(), itemName);
+
+				Long batchItemQuantity = batchItem.getQuantity();
+
+				Long assignedQuantity = jobworkRepository.getAssignedQuantities(itemJobworkRequest.getBatchSerialCode(),
+						itemJobworkRequest.getJobworkType().name(), itemName);
+
+				Long repairableDamages = damageRepository.getDamagedQuantity(itemJobworkRequest.getBatchSerialCode(),
+						DamageType.REPAIRABLE.name(), itemJobworkRequest.getJobworkType().name(), itemName);
+
+				jobworkCreationValidator.validateItemQuantityAvailability(batchItemQuantity, assignedQuantity,
+						repairableDamages, requestedQuantity, itemName, itemJobworkRequest.getJobworkType());
+
+				LOGGER.debug("Validated item {} successfully", itemName);
+			}
+
+			return this.createItemBasedJobwork(itemJobworkRequest, employee, batch);
+		}
+
+		LOGGER.error("Unsupported jobwork type {}", request.getJobworkType());
+		throw new JobworkTypeNotFoundException("Unsupported Jobwork Type");
+	}
+
+	private Employee getEmployeeOrThrow(String employeeName) {
+		return employeeRepository.findByName(employeeName).orElseThrow(() -> {
+			LOGGER.error("Employee with name {} not found", employeeName);
+			return new EmployeeNotFoundException("Employee not found with name " + employeeName);
+		});
+	}
+
+	private Batch getBatchOrThrow(String serialCode) {
+		return batchRepository.findBySerialCode(serialCode).orElseThrow(() -> {
+			LOGGER.error("Batch with serial code {} not found", serialCode);
+			return new BatchNotFoundException("Batch not found with serial code " + serialCode);
+		});
+	}
+
+	private Item getItemOrThrow(String itemName) {
+		return itemRepository.findByName(itemName).orElseThrow(() -> {
+			LOGGER.error("Item with name {} not found", itemName);
+			return new ItemNotFoundException("Item not found with name " + itemName);
+		});
+	}
+
+	private BatchItem getBatchItemOrThrow(String batchSerialCode, String itemName) {
+		return batchItemRepository.findByBatchSerialCodeAndItemName(batchSerialCode, itemName).orElseThrow(() -> {
+			LOGGER.error("Batch item not found for batch {} and item {}", batchSerialCode, itemName);
+			return new BatchItemNotFoundException("Batch item not found for batch " + batchSerialCode + " and item " + itemName);
+		});
+	}
 
 	@Override
 	public List<String> getJobworkNumbers(String search) {
@@ -296,7 +262,7 @@ public class JobworkServiceImpl implements JobworkService<CreateJobworkRequest> 
 				.findByJobworkJobworkNumberIn(Arrays.asList(jobworkNumber));
 		List<JobworkReceiptItem> receiptItems = new ArrayList<>();
 
-		System.out.println(receipts.size());
+
 
 		long returnedQuantity = 0;
 		for (JobworkReceipt jobworkReceipt : receipts) {
@@ -310,7 +276,7 @@ public class JobworkServiceImpl implements JobworkService<CreateJobworkRequest> 
 		JobworkDetailDTO dto = new JobworkDetailDTO();
 		dto.setStartedAt(jobwork.getCreatedAt());
 		dto.setAssignedBy(jobwork.getCreatedBy());
-		dto.setAssignedTo(jobwork.getAssignedTo().getName());
+		dto.setAssignedTo(jobwork.getAssignedTo() != null ? jobwork.getAssignedTo().getName() : "Unassigned");
 		dto.setBatchSerialCode(jobwork.getBatch().getSerialCode());
 		dto.setJobworkNumber(jobworkNumber);
 		dto.setJobworkOrigin(jobwork.getJobworkOrigin().name());
@@ -330,7 +296,7 @@ public class JobworkServiceImpl implements JobworkService<CreateJobworkRequest> 
 	private JobworkItemResponse toReceiptItemDTO(JobworkReceiptItem item) {
 		JobworkItemResponse jobworkItemResponse = new JobworkItemResponse();
 
-		jobworkItemResponse.setItemName(item.getItem().getName());
+		jobworkItemResponse.setItemName(item.getItem() != null ? item.getItem().getName() : "Unknown");
 		jobworkItemResponse.setAcceptedQuantity(item.getAcceptedQuantity());
 		jobworkItemResponse.setSalesQuantity(item.getSalesQuantity());
 		jobworkItemResponse.setSalesPrice(item.getSalesPrice());
@@ -362,32 +328,7 @@ public class JobworkServiceImpl implements JobworkService<CreateJobworkRequest> 
 		return "JW-" + today + "-" + String.format("%03d", nextSequence);
 	}
 
-////    private JobworkDetailDTO convertToJobworkDetailDTO(List<Jobwork> jobworks) {
-////
-////        List<String> items = new ArrayList<>();
-////        List<Long> quantity = new ArrayList<>();
-////
-////        for (Jobwork jobwork : jobworks) {
-////            if (jobwork.getItem() != null) {
-////                items.add(jobwork.getItem().getName());
-////            }
-////            if (jobwork.getQuantity() != null) {
-////                quantity.add(jobwork.getQuantity());
-////            }
-////        }
-////
-////        JobworkDetailDTO jobworkDetailDTO = new JobworkDetailDTO();
-////        jobworkDetailDTO.setJobworkNumber(jobworks.get(0).getJobworkNumber());
-////        jobworkDetailDTO.setStartedAt(jobworks.get(0).getStartedAt());
-////        jobworkDetailDTO.setJobworkType(jobworks.get(0).getJobworkType());
-////        jobworkDetailDTO.setBatchSerialCode(jobworks.get(0).getBatch().getSerialCode());
-////        jobworkDetailDTO.setAssignedTo(jobworks.get(0).getEmployee().getName());
-////        jobworkDetailDTO.setItems(items);
-////        jobworkDetailDTO.setQuantity(quantity);
-////        return jobworkDetailDTO;
-////
-////    }
-//
+
 	private List<JobworkResponseDTO> convertToJobworkResponseDTO(List<Jobwork> jobworks,
 			Map<String, List<JobworkReceipt>> receiptsByJobworkNumber) {
 
@@ -398,7 +339,7 @@ public class JobworkServiceImpl implements JobworkService<CreateJobworkRequest> 
 	private JobworkResponseDTO mapToDTO(Jobwork jobwork, List<JobworkReceipt> receipts) {
 		JobworkResponseDTO jobworkResponseDTO = new JobworkResponseDTO();
 		jobworkResponseDTO.setId(jobwork.getId());
-		jobworkResponseDTO.setAssignedTo(jobwork.getAssignedTo().getName());
+		jobworkResponseDTO.setAssignedTo(jobwork.getAssignedTo() != null ? jobwork.getAssignedTo().getName() : "Unassigned");
 		jobworkResponseDTO.setBatchSerial(jobwork.getBatch().getSerialCode());
 		jobworkResponseDTO.setJobworkType(jobwork.getJobworkType().toString());
 		jobworkResponseDTO.setJobworkNumber(jobwork.getJobworkNumber());
@@ -451,8 +392,12 @@ public class JobworkServiceImpl implements JobworkService<CreateJobworkRequest> 
 		dto.setQuantity(item.getQuantity());
 		dto.setStatus(item.getJobworkItemStatus().name());
 
+		// For CUTTING jobwork, item will be null and subCategory will be set
+		// For STITCHING/PACKAGING jobwork, item will be set and subCategory will be null
 		if (item.getItem() != null) {
 			dto.setItemName(item.getItem().getName());
+		} else if (item.getSubCategory() != null) {
+			dto.setItemName(item.getSubCategory().getName());
 		}
 
 		if (item.getJobwork() != null) {
@@ -483,6 +428,7 @@ public class JobworkServiceImpl implements JobworkService<CreateJobworkRequest> 
 		List<JobworkItem> clonedItems = oldJobwork.getJobworkItems().stream().map(oldItem -> {
 			JobworkItem item = new JobworkItem();
 			item.setItem(oldItem.getItem());
+			item.setSubCategory(oldItem.getSubCategory());
 			item.setQuantity(oldItem.getQuantity());
 			item.setJobworkItemStatus(oldItem.getJobworkItemStatus());
 			item.setJobwork(newJobwork); // parent set
@@ -501,66 +447,6 @@ public class JobworkServiceImpl implements JobworkService<CreateJobworkRequest> 
 		return savedJobwork;
 	}
 
-	// to create a jobwork
-	@Override
-	@Transactional
-	public JobworkResponse createJobwork(CreateJobworkRequest request) {
-		LOGGER.debug("Creating a new jobwork");
-
-		Employee employee = getEmployeeOrThrow(request.getAssignedTo());
-		Batch batch = getBatchOrThrow(request.getBatchSerialCode());
-
-		if (request instanceof CreateCuttingJobworkRequest cuttingRequest) {
-
-			Long assignedJobworksQuantity = jobworkRepository.getAssignedQuantities(request.getBatchSerialCode(),
-					JobworkType.CUTTING.name());
-
-			Long damagedQuantity = damageRepository.getDamagedQuantity(request.getBatchSerialCode(),
-					DamageType.REPAIRABLE.name(), JobworkType.CUTTING.name());
-
-			Long batchQuantity = batchRepository.findQuantityBySerialCode(batch.getSerialCode());
-
-			LOGGER.debug("Cutting jobwork creation request received");
-
-			jobworkCreationValidator.validateCuttingQuantityAvailability(batchQuantity, cuttingRequest,
-					assignedJobworksQuantity, damagedQuantity);
-
-			LOGGER.debug("Quantities for batch {} validated", cuttingRequest.getBatchSerialCode());
-
-			return this.createCuttingJobwork(cuttingRequest, employee, batch);
-
-		} else if (request instanceof CreateItemBasedJobworkRequest itemJobworkRequest) {
-
-			LOGGER.debug("{} jobwork creation request received", itemJobworkRequest.getJobworkType());
-
-			for (int i = 0; i < itemJobworkRequest.getItemNames().size(); i++) {
-
-				String itemName = itemJobworkRequest.getItemNames().get(i);
-				Long requestedQuantity = itemJobworkRequest.getQuantities().get(i);
-
-				BatchItem batchItem = this.getBatchItemOrThrow(itemJobworkRequest.getBatchSerialCode(), itemName);
-
-				Long batchItemQuantity = batchItem.getQuantity();
-
-				Long assignedQuantity = jobworkRepository.getAssignedQuantities(itemJobworkRequest.getBatchSerialCode(),
-						itemJobworkRequest.getJobworkType().name(), itemName);
-
-				Long repairableDamages = damageRepository.getDamagedQuantity(itemJobworkRequest.getBatchSerialCode(),
-						DamageType.REPAIRABLE.name(), itemJobworkRequest.getJobworkType().name(), itemName);
-
-				jobworkCreationValidator.validateItemQuantityAvailability(batchItemQuantity, assignedQuantity,
-						repairableDamages, requestedQuantity, itemName, itemJobworkRequest.getJobworkType());
-
-				LOGGER.debug("Validated item {} successfully", itemName);
-			}
-
-			return this.createItemBasedJobwork(itemJobworkRequest, employee, batch);
-		}
-
-		LOGGER.error("Unsupported jobwork type {}", request.getJobworkType());
-		throw new JobworkTypeNotFoundException("Unsupported Jobwork Type");
-	}
-
 	private JobworkResponse createCuttingJobwork(CreateCuttingJobworkRequest request, Employee employee, Batch batch) {
 
 		Jobwork jobwork = new Jobwork();
@@ -574,19 +460,22 @@ public class JobworkServiceImpl implements JobworkService<CreateJobworkRequest> 
 		Jobwork createdJobwork = jobworkRepository.save(jobwork);
 		LOGGER.debug("Created new jobwork {}", createdJobwork.getJobworkNumber());
 
+		// Create a single jobwork item with the quantity (no subcategory for simplified cutting)
 		JobworkItem jobworkItem = new JobworkItem();
 		jobworkItem.setJobwork(createdJobwork);
 		jobworkItem.setQuantity(request.getQuantity());
 		jobworkItem.setJobworkItemStatus(JobworkItemStatus.IN_PROGRESS);
 		jobworkItemRepository.save(jobworkItem);
-		LOGGER.debug("Created new jobwork item for cutting");
+		LOGGER.debug("Created new jobwork item for cutting - Qty: {}", request.getQuantity());
 
+		// Update batch available quantity
+		batch.setAvailableQuantity(batch.getAvailableQuantity() - request.getQuantity());
 		batch.setBatchStatus(BatchStatus.ASSIGNED);
 		batchRepository.save(batch);
-		LOGGER.debug("Batch {} status changed to ASSIGNED", batch.getSerialCode());
+		LOGGER.debug("Batch {} status changed to ASSIGNED, available quantity reduced by {}", batch.getSerialCode(), request.getQuantity());
 
 		JobworkResponse mappedResponse = modelMapper.map(createdJobwork, JobworkResponse.class);
-		mappedResponse.setAssignedTo(createdJobwork.getAssignedTo().getName());
+		mappedResponse.setAssignedTo(createdJobwork.getAssignedTo() != null ? createdJobwork.getAssignedTo().getName() : "Unassigned");
 		mappedResponse.setBatchSerialCode(createdJobwork.getBatch().getSerialCode());
 		return mappedResponse;
 	}
@@ -625,7 +514,7 @@ public class JobworkServiceImpl implements JobworkService<CreateJobworkRequest> 
 		LOGGER.debug("Batch {} status changed to ASSIGNED", batch.getSerialCode());
 
 		JobworkResponse mappedResponse = modelMapper.map(createdJobwork, JobworkResponse.class);
-		mappedResponse.setAssignedTo(createdJobwork.getAssignedTo().getName());
+		mappedResponse.setAssignedTo(createdJobwork.getAssignedTo() != null ? createdJobwork.getAssignedTo().getName() : "Unassigned");
 		mappedResponse.setBatchSerialCode(createdJobwork.getBatch().getSerialCode());
 		return mappedResponse;
 	}
@@ -645,7 +534,7 @@ public class JobworkServiceImpl implements JobworkService<CreateJobworkRequest> 
 
 		JobworkResponse mappedJobworkResponse = modelMapper.map(savedJobwork, JobworkResponse.class);
 		mappedJobworkResponse.setBatchSerialCode(savedJobwork.getBatch().getSerialCode());
-		mappedJobworkResponse.setAssignedTo(savedJobwork.getAssignedTo().getName());
+		mappedJobworkResponse.setAssignedTo(savedJobwork.getAssignedTo() != null ? savedJobwork.getAssignedTo().getName() : "Unassigned");
 		return mappedJobworkResponse;
 
 	}
@@ -666,7 +555,7 @@ public class JobworkServiceImpl implements JobworkService<CreateJobworkRequest> 
 
 		JobworkResponse mappedJobworkResponse = modelMapper.map(savedJobwork, JobworkResponse.class);
 		mappedJobworkResponse.setBatchSerialCode(savedJobwork.getBatch().getSerialCode());
-		mappedJobworkResponse.setAssignedTo(savedJobwork.getAssignedTo().getName());
+		mappedJobworkResponse.setAssignedTo(savedJobwork.getAssignedTo() != null ? savedJobwork.getAssignedTo().getName() : "Unassigned");
 		return mappedJobworkResponse;
 
 	}
@@ -683,47 +572,13 @@ public class JobworkServiceImpl implements JobworkService<CreateJobworkRequest> 
 		for (JobworkItem jobworkItem : jobworkItems) {
 			ItemResponse itemResponse = new ItemResponse();
 			itemResponse.setId(i);
-			itemResponse.setName(jobworkItem.getItem().getName());
+			// For CUTTING jobwork, item will be null - use subCategory name instead
+			itemResponse.setName(getJobworkItemName(jobworkItem));
 			i += 1;
 			itemResponses.add(itemResponse);
 		}
 
 		return itemResponses;
-	}
-
-	private Jobwork getJobworkOrThrow(String jobworkNumber) {
-		return jobworkRepository.findByJobworkNumber(jobworkNumber).orElseThrow(() -> {
-			LOGGER.error("Jobwork not found: {}", jobworkNumber);
-			return new JobworkNotFoundException("Jobwork not found: " + jobworkNumber);
-		});
-	}
-
-	private Employee getEmployeeOrThrow(String name) {
-		return employeeRepository.findByName(name).orElseThrow(() -> {
-			LOGGER.error("Employee not found: {}", name);
-			return new EmployeeNotFoundException("Employee not found: " + name);
-		});
-	}
-
-	private Batch getBatchOrThrow(String serialCode) {
-		return batchRepository.findBySerialCode(serialCode).orElseThrow(() -> {
-			LOGGER.error("Batch not found: {}", serialCode);
-			return new BatchNotFoundException("Batch not found: " + serialCode);
-		});
-	}
-
-	private Item getItemOrThrow(String itemName) {
-		return itemRepository.findByName(itemName).orElseThrow(() -> {
-			LOGGER.error("Item not found: {}", itemName);
-			return new ItemNotFoundException("Item not found: " + itemName);
-		});
-	}
-
-	private BatchItem getBatchItemOrThrow(String serialCode, String itemName) {
-		return batchItemRepository.findByBatchSerialCodeAndItemName(serialCode, itemName).orElseThrow(() -> {
-			LOGGER.error("Batch item not found: {} {}", serialCode, itemName);
-			return new BatchItemNotFoundException("Batch item not found: " + serialCode + " " + itemName);
-		});
 	}
 
 	@Override
@@ -780,7 +635,7 @@ public class JobworkServiceImpl implements JobworkService<CreateJobworkRequest> 
 			List<DetailedEmployeeJobworkResponse.ItemDetail> itemDetails = new ArrayList<>();
 			
 			for (JobworkItem jwi : jw.getJobworkItems()) {
-				String itemName = jwi.getItem() != null ? jwi.getItem().getName() : jw.getJobworkType().name();
+				String itemName = getJobworkItemName(jwi);
 				List<JobworkReceiptItem> itemReceipts = riByItem.getOrDefault(itemName, List.of());
 				
 				long issued = jwi.getQuantity();
@@ -875,7 +730,7 @@ public class JobworkServiceImpl implements JobworkService<CreateJobworkRequest> 
 
 			for (JobworkItem jobworkItem : jobworkItems) {
 				EmployeeJobworkResponse.JobworkItemDetail itemDetail = new EmployeeJobworkResponse.JobworkItemDetail();
-				itemDetail.setItemName(jobworkItem.getItem() != null ? jobworkItem.getItem().getName() : null);
+				itemDetail.setItemName(getJobworkItemName(jobworkItem));
 				itemDetail.setQuantity(jobworkItem.getQuantity());
 				itemDetails.add(itemDetail);
 			}
@@ -889,4 +744,229 @@ public class JobworkServiceImpl implements JobworkService<CreateJobworkRequest> 
 		LOGGER.info("Successfully fetched {} jobworks for employee: {}", responses.size(), employeeName);
 		return responses;
 	}
+	@Override
+	public JobworkTimelineResponse getJobworkTimeline(String jobworkNumber) {
+		LOGGER.info("Fetching timeline for jobwork number: {}", jobworkNumber);
+		Jobwork jobwork = getJobworkOrThrow(jobworkNumber);
+
+		List<JobworkItem> jobworkItems = jobworkItemRepository.findAllByJobwork(jobwork);
+		List<JobworkReceipt> receipts = jobworkReceiptRepository.findByJobworkJobworkNumberIn(Arrays.asList(jobworkNumber));
+		receipts.sort(Comparator.comparing(JobworkReceipt::getCreatedAt));
+
+		// ─── Build Item Summary (Cumulative Progress) ─────────
+		Map<String, JobworkTimelineResponse.JobworkItemSummary> itemProgress = new HashMap<>();
+		
+		// Initialize with issued quantities
+		for (JobworkItem ji : jobworkItems) {
+			String name = getJobworkItemName(ji);
+			itemProgress.put(name, JobworkTimelineResponse.JobworkItemSummary.builder()
+				.itemName(name)
+				.issuedQuantity(ji.getQuantity())
+				.acceptedQuantity(0L)
+				.damagedQuantity(0L)
+				.salesQuantity(0L)
+				.pendingQuantity(ji.getQuantity())
+				.status(ji.getJobworkItemStatus().toString())
+				.build());
+		}
+
+		// Update with receipt data
+		long totalAccepted = 0, totalDamaged = 0, totalSales = 0;
+		double totalWages = 0.0, totalSalesAmt = 0.0;
+		List<JobworkTimelineResponse.ReceiptDetail> receiptDetails = new ArrayList<>();
+		List<JobworkTimelineResponse.TimelineEvent> timelineEvents = new ArrayList<>();
+
+		// 1. Initial Assignment Event
+		long totalAssignedQty = jobworkItems.stream().mapToLong(ji -> ji.getQuantity() != null ? ji.getQuantity() : 0L).sum();
+		String currentMsg;
+		if (jobwork.getJobworkOrigin() == JobworkOrigin.REASSIGNED && jobwork.getParentJobwork() != null) {
+			String parentEmployee = jobwork.getParentJobwork().getAssignedTo() != null ? jobwork.getParentJobwork().getAssignedTo().getName() : "Unknown";
+			currentMsg = String.format("Jobwork reassigned from %s to %s for %s with %d items", 
+				parentEmployee, jobwork.getAssignedTo().getName(), jobwork.getJobworkType(), totalAssignedQty);
+		} else {
+			currentMsg = String.format("Jobwork assigned for %s to %s with %d items", 
+				jobwork.getJobworkType(), jobwork.getAssignedTo().getName(), totalAssignedQty);
+		}
+
+		timelineEvents.add(JobworkTimelineResponse.TimelineEvent.builder()
+			.eventType(TimelineEventType.JOBWORK_ASSIGNED)
+			.message(currentMsg)
+			.performedAt(jobwork.getCreatedAt())
+			.performedBy(jobwork.getCreatedBy())
+			.stage(jobwork.getJobworkStatus().toString())
+			.timeTakenFromPrevious("N/A")
+			.quantityAffected(totalAssignedQty)
+			.items(jobworkItems.stream().map(ji -> {
+				TimelineItemDetail tid = new TimelineItemDetail();
+				tid.setItemName(getJobworkItemName(ji));
+				tid.setQuantity(ji.getQuantity());
+				return tid;
+			}).collect(Collectors.toList()))
+			.build());
+
+		// 2. Process Receipts
+		for (JobworkReceipt receipt : receipts) {
+			long rAccepted = 0, rDamaged = 0, rSales = 0;
+			double rWages = 0.0;
+			List<JobworkTimelineResponse.ReceiptItemDetail> rItems = new ArrayList<>();
+
+			for (JobworkReceiptItem jwri : receipt.getJobworkReceiptItems()) {
+				String name = jwri.getItem() != null ? jwri.getItem().getName() : "Unknown";
+				long acc = jwri.getAcceptedQuantity() != null ? jwri.getAcceptedQuantity() : 0L;
+				long dmg = jwri.getDamagedQuantity() != null ? jwri.getDamagedQuantity() : 0L;
+				long sal = jwri.getSalesQuantity() != null ? jwri.getSalesQuantity() : 0L;
+				
+				rAccepted += acc; rDamaged += dmg; rSales += sal;
+				if (jwri.getWagePerItem() != null) rWages += (jwri.getWagePerItem() * acc);
+				if (jwri.getSalesPrice() != null) totalSalesAmt += (jwri.getSalesPrice() * sal);
+
+				// Deduct for unrepairable damages
+				double itemDeduction = 0.0;
+				if (jwri.getSalesPrice() != null && jwri.getDamages() != null) {
+					for (Damage d : jwri.getDamages()) {
+						if (d.getDamageType() == DamageType.UNREPAIRABLE) {
+							itemDeduction += d.getQuantity() * jwri.getSalesPrice();
+						}
+					}
+				}
+				rWages -= itemDeduction;
+
+				// Update cumulative progress
+				if (itemProgress.containsKey(name)) {
+					JobworkTimelineResponse.JobworkItemSummary summary = itemProgress.get(name);
+					summary.setAcceptedQuantity(summary.getAcceptedQuantity() + acc);
+					summary.setDamagedQuantity(summary.getDamagedQuantity() + dmg);
+					summary.setSalesQuantity(summary.getSalesQuantity() + sal);
+					summary.setPendingQuantity(summary.getPendingQuantity() - (acc + dmg + sal));
+				}
+
+				// Build damage details
+				List<JobworkTimelineResponse.DamageDetail> dDetails = jwri.getDamages().stream().map(d -> 
+					JobworkTimelineResponse.DamageDetail.builder()
+						.quantity(d.getQuantity())
+						.damageType(d.getDamageType().toString())
+						.reworkJobworkNumber(d.getReworkJobWork() != null ? d.getReworkJobWork().getJobworkNumber() : null)
+						.build()
+				).collect(Collectors.toList());
+
+				rItems.add(JobworkTimelineResponse.ReceiptItemDetail.builder()
+					.itemName(name)
+					.acceptedQuantity(acc).damagedQuantity(dmg).salesQuantity(sal)
+					.wagePerItem(jwri.getWagePerItem()).salesPrice(jwri.getSalesPrice())
+					.damages(dDetails)
+					.build());
+			}
+
+			totalAccepted += rAccepted; totalDamaged += rDamaged; totalSales += rSales; totalWages += rWages;
+
+			receiptDetails.add(JobworkTimelineResponse.ReceiptDetail.builder()
+				.receiptId(receipt.getId())
+				.receivedAt(receipt.getCreatedAt())
+				.recordedBy(receipt.getCreatedBy())
+				.receiptItems(rItems)
+				.totalAccepted(rAccepted).totalDamaged(rDamaged).totalSales(rSales).receiptWages(rWages)
+				.build());
+
+			timelineEvents.add(JobworkTimelineResponse.TimelineEvent.builder()
+				.eventType(TimelineEventType.JOBWORK_RECEIPT)
+				.message(String.format("Submission received: Accepted %d, Damaged %d, Sales %d (Recorded by %s)", 
+					rAccepted, rDamaged, rSales, receipt.getCreatedBy()))
+				.performedAt(receipt.getCreatedAt())
+				.performedBy(receipt.getCreatedBy())
+				.stage("SUBMITTED")
+				.quantityAffected(rAccepted + rDamaged + rSales)
+				.timeTakenFromPrevious(com.lakshmigarments.utility.TimeDifferenceUtil.formatDuration(
+					timelineEvents.get(timelineEvents.size() - 1).getPerformedAt(), receipt.getCreatedAt()))
+				.items(rItems.stream().map(ri -> {
+					TimelineItemDetail tid = new TimelineItemDetail();
+					tid.setItemName(ri.getItemName());
+					tid.setAcceptedQuantity(ri.getAcceptedQuantity());
+					tid.setDamagedQuantity(ri.getDamagedQuantity());
+					tid.setSalesQuantity(ri.getSalesQuantity());
+					return tid;
+				}).collect(Collectors.toList()))
+				.build());
+		}
+
+		// 3. Final Status Change Event
+		if (!jobwork.getJobworkStatus().equals(JobworkStatus.IN_PROGRESS)) {
+			String action;
+			JobworkStatus currentStat = jobwork.getJobworkStatus();
+			if (currentStat == JobworkStatus.CLOSED) action = "CLOSED";
+			else if (currentStat == JobworkStatus.REASSIGNED) action = "REASSIGNED";
+			else if (currentStat == JobworkStatus.AWAITING_CLOSE) action = "PENDING APPROVAL";
+			else action = currentStat.toString();
+
+			timelineEvents.add(JobworkTimelineResponse.TimelineEvent.builder()
+				.eventType(TimelineEventType.JOBWORK_COMPLETED)
+				.message(String.format("Jobwork %s by %s", action.toLowerCase(), jobwork.getLastModifiedBy()))
+				.performedAt(jobwork.getLastModifiedAt())
+				.performedBy(jobwork.getLastModifiedBy())
+				.stage(currentStat.toString())
+				.timeTakenFromPrevious(com.lakshmigarments.utility.TimeDifferenceUtil.formatDuration(
+					timelineEvents.get(timelineEvents.size() - 1).getPerformedAt(), jobwork.getLastModifiedAt()))
+				.build());
+		}
+
+		// Sort timeline chronologically
+		timelineEvents.sort(Comparator.comparing(JobworkTimelineResponse.TimelineEvent::getPerformedAt));
+
+		// ─── Metrics ──────────────────────────────────────────
+		long totalReturned = totalAccepted + totalDamaged + totalSales;
+		String completion = totalAssignedQty > 0 ? (Math.round((double)totalReturned / totalAssignedQty * 100)) + "%" : "0%";
+
+		JobworkTimelineResponse.JobworkMetrics metrics = JobworkTimelineResponse.JobworkMetrics.builder()
+			.totalIssued(totalAssignedQty)
+			.totalAccepted(totalAccepted)
+			.totalDamaged(totalDamaged)
+			.totalSales(totalSales)
+			.totalPending(totalAssignedQty - totalReturned)
+			.totalWagesEarned(totalWages)
+			.totalSalesDeduction(totalSalesAmt)
+			.completionPercentage(completion)
+			.build();
+
+		return JobworkTimelineResponse.builder()
+			.id(jobwork.getId())
+			.jobworkNumber(jobworkNumber)
+			.jobworkType(jobwork.getJobworkType().toString())
+			.jobworkStatus(jobwork.getJobworkStatus().toString())
+			.jobworkOrigin(jobwork.getJobworkOrigin().toString())
+			.batchSerialCode(jobwork.getBatch().getSerialCode())
+			.assignedTo(jobwork.getAssignedTo() != null ? jobwork.getAssignedTo().getName() : "Unassigned")
+			.remarks(jobwork.getRemarks())
+			.createdBy(jobwork.getCreatedBy())
+			.createdAt(jobwork.getCreatedAt())
+			.lastModifiedBy(jobwork.getLastModifiedBy())
+			.lastModifiedAt(jobwork.getLastModifiedAt())
+			.parentJobworkNumber(jobwork.getParentJobwork() != null ? jobwork.getParentJobwork().getJobworkNumber() : null)
+			// .childJobworkNumbers(jobworkRepository.findByParentJobwork(jobwork).stream().map(Jobwork::getJobworkNumber).collect(Collectors.toList()))
+			.items(new ArrayList<>(itemProgress.values()))
+			.metrics(metrics)
+			.receipts(receiptDetails)
+			.timeline(timelineEvents)
+			.build();
+	}
+
+	/**
+	 * Helper method to get the name of a JobworkItem.
+	 * For CUTTING jobwork, the item will be null and subCategory will be set.
+	 * For STITCHING/PACKAGING jobwork, the item will be set and subCategory will be null.
+	 */
+	private String getJobworkItemName(JobworkItem ji) {
+		if (ji.getItem() != null) {
+			return ji.getItem().getName();
+		} else if (ji.getSubCategory() != null) {
+			return ji.getSubCategory().getName();
+		}
+		return "Unknown";
+	}
+
+	private Jobwork getJobworkOrThrow(String jobworkNumber) {
+		return jobworkRepository.findByJobworkNumber(jobworkNumber).orElseThrow(() -> {
+			LOGGER.error("Jobwork not found: {}", jobworkNumber);
+			return new JobworkNotFoundException("Jobwork not found: " + jobworkNumber);
+		});
+	}
+
 }

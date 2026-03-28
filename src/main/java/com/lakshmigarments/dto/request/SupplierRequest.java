@@ -5,6 +5,10 @@ import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * Data Transfer Object for creating or updating supplier information.
+ * Contains validation constraints to ensure data integrity.
+ */
 @Getter
 @Setter
 public class SupplierRequest {
@@ -14,7 +18,7 @@ public class SupplierRequest {
     private String name;
 
     @NotBlank(message = "Supplier location is mandatory")
-    @Size(max = 200, message = "Supplier location must be less than 200 characters")
+    @Size(max = 400, message = "Supplier location must be less than 400 characters")
     private String location;
 
 }

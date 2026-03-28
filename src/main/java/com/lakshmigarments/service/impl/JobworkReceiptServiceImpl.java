@@ -134,10 +134,11 @@ public class JobworkReceiptServiceImpl implements JobworkReceiptService {
 			receiptItemRepository.save(jobworkReceiptItem);
 			LOGGER.debug("Created jobwork receipt item {}", receiptItemRequest.getItemName());
 			
-			JobworkItem jobworkItem = jobworkItemRepository
-					.findByItemNameAndJobworkJobworkNumber(receiptItemRequest.getItemName(), 
-							jobworkReceiptRequest.getJobworkNumber()).orElse(null);
 			if (jobwork.getJobworkType() != JobworkType.CUTTING) {
+				JobworkItem jobworkItem = jobworkItemRepository
+						.findByItemNameAndJobworkJobworkNumber(receiptItemRequest.getItemName(), 
+								jobworkReceiptRequest.getJobworkNumber()).orElse(null);
+
 				LOGGER.debug("Computing current status of jobwork item {}", receiptItemRequest.getItemName());
 				
 				// Calculate total quantities submitted so far for this item across all receipts
@@ -152,12 +153,15 @@ public class JobworkReceiptServiceImpl implements JobworkReceiptService {
 					jobworkItem.setJobworkItemStatus(JobworkItemStatus.CLOSED);
 					LOGGER.debug("Marked the status of jobwork item {} to CLOSED", receiptItemRequest.getItemName());
 				}
+				jobworkItemRepository.save(jobworkItem);
 			} else {
-				jobworkItem = jobwork.getJobworkItems().get(0);
-				jobworkItem.setJobworkItemStatus(JobworkItemStatus.AWAITING_CLOSE);
-				LOGGER.debug("Marked the status of jobwork item 'CUTTING' to AWAITING_CLOSE");
+				// For CUTTING, we mark all input sub-categories as AWAITING_CLOSE when a receipt is submitted
+				for (JobworkItem jwi : jobwork.getJobworkItems()) {
+					jwi.setJobworkItemStatus(JobworkItemStatus.AWAITING_CLOSE);
+					jobworkItemRepository.save(jwi);
+				}
+				LOGGER.debug("Marked all sub-category jobwork items for 'CUTTING' to AWAITING_CLOSE");
 			}
-			jobworkItemRepository.save(jobworkItem);
 			
 			// create batch items or update if CUTTING
 			if (jobwork.getJobworkType() == JobworkType.CUTTING) {

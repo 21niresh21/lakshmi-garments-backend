@@ -1,5 +1,6 @@
 package com.lakshmigarments.dto.request;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.lakshmigarments.model.JobworkType;
@@ -22,6 +23,7 @@ import lombok.Setter;
 	    @JsonSubTypes.Type(value = CreateItemBasedJobworkRequest.class, name = "STITCHING"),
 	    @JsonSubTypes.Type(value = CreateItemBasedJobworkRequest.class, name = "PACKAGING")
 	})
+@JsonIgnoreProperties(ignoreUnknown = true)
 public abstract class CreateJobworkRequest {
 	
 	@NotNull

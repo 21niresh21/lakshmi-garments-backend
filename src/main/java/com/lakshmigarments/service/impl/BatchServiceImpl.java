@@ -1,11 +1,12 @@
 package com.lakshmigarments.service.impl;
 
 import java.time.Duration;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
-import java.util.Iterator;
+
 import java.util.List;
 import java.util.Objects;
 import java.util.Date;
@@ -24,16 +25,16 @@ import org.springframework.stereotype.Service;
 
 import com.lakshmigarments.context.UserContext;
 import com.lakshmigarments.context.UserInfo;
-import com.lakshmigarments.controller.BatchController;
+
 import com.lakshmigarments.dto.BatchDetailDTO;
 import com.lakshmigarments.dto.BatchRequestDTO;
 import com.lakshmigarments.dto.BatchUpdateDTO;
 import com.lakshmigarments.dto.BatchSubCategoryRequestDTO;
-import com.lakshmigarments.dto.BatchTimeline;
+import com.lakshmigarments.dto.BatchTimelineResponse;
 import com.lakshmigarments.dto.BatchResponseDTO;
 import com.lakshmigarments.dto.BatchSerialDTO;
-import com.lakshmigarments.dto.BatchTimelineDTO;
-import com.lakshmigarments.dto.BatchTimelineDetail;
+import com.lakshmigarments.dto.TimelineEventType;
+import com.lakshmigarments.dto.TimelineItemDetail;
 import com.lakshmigarments.dto.BatchResponseDTO.BatchSubCategoryResponseDTO;
 import com.lakshmigarments.interceptor.UserContextInterceptor;
 import com.lakshmigarments.model.Batch;
@@ -44,7 +45,6 @@ import com.lakshmigarments.model.Category;
 import com.lakshmigarments.model.Damage;
 import com.lakshmigarments.model.DamageType;
 import com.lakshmigarments.model.Employee;
-import com.lakshmigarments.model.Inventory;
 import com.lakshmigarments.model.Jobwork;
 import com.lakshmigarments.model.JobworkItem;
 import com.lakshmigarments.model.JobworkReceipt;
@@ -69,7 +69,6 @@ import com.lakshmigarments.repository.BatchRepository;
 import com.lakshmigarments.repository.CategoryRepository;
 import com.lakshmigarments.repository.BatchSubCategoryRepository;
 import com.lakshmigarments.repository.DamageRepository;
-import com.lakshmigarments.repository.InventoryRepository;
 import com.lakshmigarments.repository.JobworkReceiptRepository;
 import com.lakshmigarments.repository.JobworkRepository;
 import com.lakshmigarments.repository.MaterialLedgerRepository;
@@ -78,7 +77,7 @@ import com.lakshmigarments.repository.BatchItemRepository;
 import com.lakshmigarments.repository.UserRepository;
 import com.lakshmigarments.repository.specification.BatchSpecification;
 import com.lakshmigarments.service.BatchService;
-import com.lakshmigarments.service.EmployeeService;
+
 import com.lakshmigarments.service.PdfGenerator;
 import com.lakshmigarments.utility.DateUtil;
 import com.lakshmigarments.utility.TimeDifferenceUtil;
@@ -92,8 +91,6 @@ public class BatchServiceImpl implements BatchService {
 
 	private final PdfGenerator pdfGenerator;
 
-//	private final EmployeeService employeeService;
-
 	private final Logger LOGGER = LoggerFactory.getLogger(BatchServiceImpl.class);
 	private final BatchRepository batchRepository;
 	private final JobworkRepository jobworkRepository;
@@ -102,7 +99,6 @@ public class BatchServiceImpl implements BatchService {
 	private final DamageRepository damageRepository;
 	private final CategoryRepository categoryRepository;
 	private final SubCategoryRepository subCategoryRepository;
-	private final InventoryRepository inventoryRepository;
 	private final UserRepository userRepository;
 	private final ModelMapper modelMapper;
 	private final MaterialLedgerRepository ledgerRepository;
@@ -119,10 +115,7 @@ public class BatchServiceImpl implements BatchService {
 			return new CategoryNotFoundException("Category not found with name " + batchRequestDTO.getCategoryName());
 		});
 
-//		User user = userRepository.findById(batchRequestDTO.getCreatedByID()).orElseThrow(() -> {
-//			LOGGER.error("User with ID {} not found", batchRequestDTO.getCreatedByID());
-//			return new UserNotFoundException("User not found with ID " + batchRequestDTO.getCreatedByID());
-//		});
+
 
 		BatchStatus batchStatus = batchRequestDTO.getBatchStatus() != null ? batchRequestDTO.getBatchStatus()
 				: BatchStatus.CREATED;
@@ -145,14 +138,14 @@ public class BatchServiceImpl implements BatchService {
 			batchSubCategoryRepository.save(batchSubCategory);
 
 			// detect the quantities from inventory
-			Inventory cachedInventory = inventoryRepository.findBySubCategoryNameAndCategoryName(
-					batchSubCategory.getSubCategory().getName(), category.getName()).orElse(null);
-			if (cachedInventory.getCount() < batchSubCategory.getQuantity()) {
-				throw new InsufficientInventoryException("Stock not available");
-			} else {
-				cachedInventory.setCount(cachedInventory.getCount() - batchSubCategory.getQuantity());
-				inventoryRepository.save(cachedInventory);
-			}
+//			Inventory cachedInventory = inventoryRepository.findBySubCategoryNameAndCategoryName(
+//					batchSubCategory.getSubCategory().getName(), category.getName()).orElse(null);
+//			if (cachedInventory.getCount() < batchSubCategory.getQuantity()) {
+//				throw new InsufficientInventoryException("Stock not available");
+//			} else {
+//				cachedInventory.setCount(cachedInventory.getCount() - batchSubCategory.getQuantity());
+//				inventoryRepository.save(cachedInventory);
+//			}
 
 			MaterialInventoryLedger inventory;
 			inventory = new MaterialInventoryLedger();
@@ -166,8 +159,7 @@ public class BatchServiceImpl implements BatchService {
 			inventory.setCategory(batch.getCategory());
 
 			ledgerRepository.save(inventory);
-//				inventory.setCount(inventory.getCount() - batchSubCategory.getQuantity());
-//				inventoryRepository.save(inventory);
+
 
 		}
 
@@ -185,7 +177,7 @@ public class BatchServiceImpl implements BatchService {
 		if (pageSize == null || pageSize == 0) {
 			pageSize = 10;
 		}
-		System.out.println(sortBy + " " + sortOrder);
+
 		Sort sort = sortOrder.equals("asc") ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
 
 		Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
@@ -222,129 +214,391 @@ public class BatchServiceImpl implements BatchService {
 	}
 
 	@Override
-	public BatchTimeline getBatchTimeline(Long batchId) {
-
+	public BatchTimelineResponse getBatchTimeline(Long batchId) {
 		Batch batch = batchRepository.findById(batchId).orElseThrow(() -> {
 			LOGGER.error("Batch not found with id {}", batchId);
 			return new BatchNotFoundException("Batch not found with id " + batchId);
 		});
-		BatchResponseDTO batchResponseDTO = convertToBatchResponseDTO(batch);
-		BatchTimeline batchTimeline = new BatchTimeline();
-		batchTimeline.setBatchDetails(batchResponseDTO);
 
-		List<BatchTimelineDetail> timelineDetails = new ArrayList<>();
-
-		// GET details of batch if discarded
-		if (batch.getBatchStatus() == BatchStatus.DISCARDED) {
-			BatchTimelineDetail timelineDetail = new BatchTimelineDetail();
-			timelineDetail.setPerformedAt(batch.getLastModifiedAt());
-//			timelineDetail.setPerformedBy(batch.getUpdatedBy().getName());
-			timelineDetail.setMessage("Batch discarded by " + batch.getLastModifiedBy() + " at "
-					+ batch.getLastModifiedAt().format(formatter));
-
-			String timeTaken = TimeDifferenceUtil.formatDuration(batch.getCreatedAt(), batch.getLastModifiedAt());
-			timelineDetail.setTimeTakenFromPrevious(timeTaken);
-			timelineDetail.setStage(BatchStatus.DISCARDED.toString());
-			batchTimeline.setTimelineDetail(Arrays.asList(timelineDetail));
-			return batchTimeline;
-		}
-
-		// GET the JOBWORKS and JOBWORK RECEIPTS IF ANY
+		List<BatchItem> batchItems = batchItemRepository.findByBatchId(batch.getId());
+		List<BatchSubCategory> batchSubCategories = batchSubCategoryRepository.findByBatchId(batch.getId());
 		List<Jobwork> jobworks = jobworkRepository.findByBatchSerialCode(batch.getSerialCode());
-		List<JobworkReceipt> jobworkReceipts = receiptRepository.findByJobworkBatchSerialCode(batch.getSerialCode());
+		List<JobworkReceipt> allReceipts = receiptRepository.findByJobworkBatchSerialCode(batch.getSerialCode());
 
 		jobworks.sort(Comparator.comparing(Jobwork::getCreatedAt));
-		jobworkReceipts.sort(Comparator.comparing(JobworkReceipt::getCreatedAt));
-		System.out.println(jobworks.size());
-		int i = 0, j = 0;
-		while (i < jobworks.size() && j < jobworkReceipts.size()) {
-			Jobwork jw = jobworks.get(i);
-			JobworkReceipt jwr = jobworkReceipts.get(j);
+		allReceipts.sort(Comparator.comparing(JobworkReceipt::getCreatedAt));
 
-			BatchTimelineDetail timelineDetail = new BatchTimelineDetail();
-			if (jw.getCreatedAt().isBefore(jwr.getCreatedAt())) {
-				timelineDetail = processJobworkToDetail(jw, timelineDetails, batch);
-				i++;
+		// ─── Build Batch Items ────────────────────────────────
+		List<BatchTimelineResponse.BatchItemSummary> itemSummaries = batchItems.stream().map(bi ->
+			BatchTimelineResponse.BatchItemSummary.builder()
+				.itemId(bi.getId())
+				.itemName(bi.getItem() != null ? bi.getItem().getName() : "Unknown")
+				.quantity(bi.getQuantity())
+				.build()
+		).collect(Collectors.toList());
+
+		// ─── Build Sub-Categories ─────────────────────────────
+		List<BatchTimelineResponse.SubCategorySummary> subCatSummaries = batchSubCategories.stream().map(bsc ->
+			BatchTimelineResponse.SubCategorySummary.builder()
+				.id(bsc.getId())
+				.subCategoryName(bsc.getSubCategory() != null ? bsc.getSubCategory().getName() : "Unknown")
+				.originalQuantity(bsc.getQuantity())
+				.availableQuantity(bsc.getAvailableQuantity())
+				.build()
+		).collect(Collectors.toList());
+
+		// ─── Aggregate Quantity Flow ──────────────────────────
+		long totalPreCuttingQuantity = batchSubCategories.stream().mapToLong(bsc -> bsc.getQuantity() != null ?  bsc.getQuantity() : 0L).sum();
+		long preCuttingAssigned = 0;
+		long preCuttingConsumed = 0;
+
+		long totalPostCuttingQuantity = batchItems.stream().mapToLong(bi -> bi.getQuantity() != null ? bi.getQuantity() : 0L).sum();
+		long postCuttingAssigned = 0;
+		long postCuttingAccepted = 0;
+		long postCuttingDamaged = 0;
+		long postCuttingSales = 0;
+		long postCuttingRepairable = 0, postCuttingUnrepairable = 0, postCuttingSupplierDamage = 0;
+
+		double totalWages = 0.0, totalSalesAmount = 0.0;
+		int totalReceiptCount = 0;
+
+		long cuttingCompleted = 0;
+		long stitchingCompleted = 0;
+		long packagingCompleted = 0;
+		LocalDateTime cuttingStartedAt = null;
+		LocalDateTime stitchingStartedAt = null;
+		LocalDateTime packagingStartedAt = null;
+
+		// ─── Build Jobwork Summaries + Timeline Events ────────
+		List<BatchTimelineResponse.JobworkSummary> jobworkSummaries = new ArrayList<>();
+		List<BatchTimelineResponse.TimelineEvent> timelineEvents = new ArrayList<>();
+
+		// 1. BATCH CREATED event
+		BatchTimelineResponse.TimelineEvent creationEvent = BatchTimelineResponse.TimelineEvent.builder()
+			.eventType(TimelineEventType.BATCH_CREATED)
+			.message("Batch created with serial code " + batch.getSerialCode() + " by " + batch.getCreatedBy())
+			.performedAt(batch.getCreatedAt())
+			.performedBy(batch.getCreatedBy())
+			.stage("CREATED")
+			.timeTakenFromPrevious("N/A")
+			.totalQuantity(totalPreCuttingQuantity)
+			.items(batchSubCategories.stream().map(bsc -> {
+				TimelineItemDetail tid = new TimelineItemDetail();
+				tid.setItemName(bsc.getSubCategory() != null ? bsc.getSubCategory().getName() : "Unknown");
+				tid.setQuantity(bsc.getQuantity());
+				return tid;
+			}).collect(Collectors.toList()))
+			.build();
+		timelineEvents.add(creationEvent);
+
+		// 2. BATCH DISCARDED event (if applicable)
+		if (batch.getBatchStatus() == BatchStatus.DISCARDED) {
+			BatchTimelineResponse.TimelineEvent discardEvent = BatchTimelineResponse.TimelineEvent.builder()
+				.eventType(TimelineEventType.BATCH_DISCARDED)
+				.message("Batch discarded by " + batch.getLastModifiedBy())
+				.performedAt(batch.getLastModifiedAt())
+				.performedBy(batch.getLastModifiedBy())
+				.stage(BatchStatus.DISCARDED.toString())
+				.timeTakenFromPrevious(TimeDifferenceUtil.formatDuration(batch.getCreatedAt(), batch.getLastModifiedAt()))
+				.build();
+			timelineEvents.add(discardEvent);
+		}
+		
+		LocalDateTime firstItemReceipt =null;
+
+		// 3. Process each Jobwork and its Receipts
+		for (Jobwork jw : jobworks) {
+			long jwQty = jw.getJobworkItems().stream()
+				.mapToLong(ji -> ji.getQuantity() != null ? ji.getQuantity() : 0L).sum();
+			
+			if (jw.getJobworkType() == JobworkType.CUTTING) {
+				if (cuttingStartedAt == null || jw.getCreatedAt().isBefore(cuttingStartedAt)) cuttingStartedAt = jw.getCreatedAt();
+				preCuttingAssigned += jwQty;
+				if (jw.getJobworkStatus() == JobworkStatus.CLOSED || jw.getJobworkStatus() == JobworkStatus.AWAITING_CLOSE) {
+					preCuttingConsumed += jwQty;
+				}
 			} else {
-				timelineDetail = processJobworkReceiptToDetail(jwr, timelineDetails, batch);
-				j++;
+				postCuttingAssigned += jwQty;
+				if (jw.getJobworkType() == JobworkType.STITCHING) {
+					if (stitchingStartedAt == null || jw.getCreatedAt().isBefore(stitchingStartedAt)) stitchingStartedAt = jw.getCreatedAt();
+				} else if (jw.getJobworkType() == JobworkType.PACKAGING) {
+					if (packagingStartedAt == null || jw.getCreatedAt().isBefore(packagingStartedAt)) packagingStartedAt = jw.getCreatedAt();
+				}
 			}
-			timelineDetails.add(timelineDetail);
+
+			// Build assigned items
+			List<BatchTimelineResponse.JobworkItemDetail> assignedItems = jw.getJobworkItems().stream().map(ji ->
+				BatchTimelineResponse.JobworkItemDetail.builder()
+					.itemName(ji.getItem() != null ? ji.getItem().getName() : (ji.getSubCategory() != null ? ji.getSubCategory().getName() : "Unknown"))
+					.quantity(ji.getQuantity())
+					.itemStatus(ji.getJobworkItemStatus() != null ? ji.getJobworkItemStatus().toString() : null)
+					.build()
+			).collect(Collectors.toList());
+
+			// Build assignment timeline event
+			String employeeName = jw.getAssignedTo() != null ? jw.getAssignedTo().getName() : "Unassigned";
+			BatchTimelineResponse.TimelineEvent assignEvent = BatchTimelineResponse.TimelineEvent.builder()
+				.eventType(TimelineEventType.JOBWORK_ASSIGNED)
+				.message(String.format("Batch assigned for %s to %s (Jobwork #%s) — %d items",
+					jw.getJobworkType(), employeeName, jw.getJobworkNumber(), jwQty))
+				.performedAt(jw.getCreatedAt())
+				.performedBy(jw.getCreatedBy())
+				.stage(jw.getJobworkStatus().toString())
+				.jobworkNumber(jw.getJobworkNumber())
+				.jobworkType(jw.getJobworkType() != null ? jw.getJobworkType().toString() : null)
+				.employeeName(employeeName)
+				.totalQuantity(jwQty)
+				.timeTakenFromPrevious(TimeDifferenceUtil.formatDuration(
+					timelineEvents.get(timelineEvents.size() - 1).getPerformedAt(), jw.getCreatedAt()))
+				.items(jw.getJobworkItems().stream().map(ji -> {
+					TimelineItemDetail tid = new TimelineItemDetail();
+					tid.setItemName(ji.getItem() != null ? ji.getItem().getName() : (ji.getSubCategory() != null ? ji.getSubCategory().getName() : "Unknown"));
+					tid.setQuantity(ji.getQuantity());
+					return tid;
+				}).collect(Collectors.toList()))
+				.build();
+			timelineEvents.add(assignEvent);
+
+			// Process receipts for this jobwork
+			List<JobworkReceipt> jwReceipts = allReceipts.stream()
+				.filter(r -> r.getJobwork() != null && r.getJobwork().getId().equals(jw.getId()))
+				.collect(Collectors.toList());
+
+			long jwAccepted = 0, jwDamaged = 0, jwSales = 0;
+			double jwWages = 0.0, jwSalesAmt = 0.0;
+			List<BatchTimelineResponse.ReceiptSummary> receiptSummaries = new ArrayList<>();
+
+			for (JobworkReceipt receipt : jwReceipts) {
+				totalReceiptCount++;
+				long rAccepted = 0, rDamaged = 0, rSales = 0;
+				double rWages = 0.0, rSalesAmt = 0.0;
+				List<BatchTimelineResponse.ReceiptItemDetail> receiptItemDetails = new ArrayList<>();
+
+				if (receipt.getJobworkReceiptItems() != null) {
+					for (JobworkReceiptItem jwri : receipt.getJobworkReceiptItems()) {
+						long acc = jwri.getAcceptedQuantity() != null ? jwri.getAcceptedQuantity() : 0L;
+						long dmg = jwri.getDamagedQuantity() != null ? jwri.getDamagedQuantity() : 0L;
+						long sal = jwri.getSalesQuantity() != null ? jwri.getSalesQuantity() : 0L;
+						rAccepted += acc;
+						rDamaged += dmg;
+						rSales += sal;
+
+						if (jwri.getWagePerItem() != null) {
+							rWages += jwri.getWagePerItem() * acc;
+						}
+						if (jwri.getSalesPrice() != null) {
+							rSalesAmt += jwri.getSalesPrice() * sal;
+						}
+
+						// Build damage details
+						List<BatchTimelineResponse.DamageDetail> damageDetails = new ArrayList<>();
+						double itemDeduction = 0.0;
+						if (jwri.getDamages() != null) {
+							for (Damage damage : jwri.getDamages()) {
+								if (jw.getJobworkType() != JobworkType.CUTTING) {
+									if (damage.getDamageType() == DamageType.REPAIRABLE) postCuttingRepairable += damage.getQuantity();
+									else if (damage.getDamageType() == DamageType.UNREPAIRABLE) postCuttingUnrepairable += damage.getQuantity();
+									else if (damage.getDamageType() == DamageType.SUPPLIER_DAMAGE) postCuttingSupplierDamage += damage.getQuantity();
+								}
+
+								if (damage.getDamageType() == DamageType.UNREPAIRABLE && jwri.getSalesPrice() != null) {
+									itemDeduction += damage.getQuantity() * jwri.getSalesPrice();
+								}
+
+								damageDetails.add(BatchTimelineResponse.DamageDetail.builder()
+									.quantity(damage.getQuantity())
+									.damageType(damage.getDamageType().toString())
+									.reworkJobworkNumber(damage.getReworkJobWork() != null ?
+										damage.getReworkJobWork().getJobworkNumber() : null)
+									.build());
+							}
+						}
+						rWages -= itemDeduction;
+
+						receiptItemDetails.add(BatchTimelineResponse.ReceiptItemDetail.builder()
+							.itemName(jwri.getItem() != null ? jwri.getItem().getName() : "Unknown")
+							.acceptedQuantity(acc)
+							.damagedQuantity(dmg)
+							.salesQuantity(sal)
+							.salesPrice(jwri.getSalesPrice())
+							.wagePerItem(jwri.getWagePerItem())
+							.damages(damageDetails)
+							.build());
+					}
+				}
+
+				jwAccepted += rAccepted;
+				jwDamaged += rDamaged;
+				jwSales += rSales;
+				jwWages += rWages;
+				jwSalesAmt += rSalesAmt;
+
+				receiptSummaries.add(BatchTimelineResponse.ReceiptSummary.builder()
+					.receiptId(receipt.getId())
+					.receivedAt(receipt.getCreatedAt())
+					.receivedBy(receipt.getCreatedBy())
+					.receiptItems(receiptItemDetails)
+					.totalAccepted(rAccepted)
+					.totalDamaged(rDamaged)
+					.totalSales(rSales)
+					.totalWages(rWages)
+					.totalSalesAmount(rSalesAmt)
+					.build());
+				
+				// get the first item receipt time
+				
+				firstItemReceipt = firstItemReceipt == null ? receipt.getCreatedAt() : null;
+
+				// Receipt timeline event
+				BatchTimelineResponse.TimelineEvent receiptEvent = BatchTimelineResponse.TimelineEvent.builder()
+					.eventType(TimelineEventType.JOBWORK_RECEIPT)
+					.message(String.format("Receipt from %s (Jobwork #%s): Accepted %d, Damaged %d, Sales %d",
+						employeeName, jw.getJobworkNumber(), rAccepted, rDamaged, rSales))
+					.performedAt(receipt.getCreatedAt())
+					.performedBy(receipt.getCreatedBy())
+					.stage("SUBMITTED")
+					.jobworkNumber(jw.getJobworkNumber())
+					.jobworkType(jw.getJobworkType() != null ? jw.getJobworkType().toString() : null)
+					.employeeName(employeeName)
+					.totalQuantity(rAccepted + rDamaged + rSales)
+					.acceptedQuantity(rAccepted)
+					.damagedQuantity(rDamaged)
+					.salesQuantity(rSales)
+					.timeTakenFromPrevious(TimeDifferenceUtil.formatDuration(
+						timelineEvents.get(timelineEvents.size() - 1).getPerformedAt(), receipt.getCreatedAt()))
+					.items(receiptItemDetails.stream().map(ri -> {
+						TimelineItemDetail tid = new TimelineItemDetail();
+						tid.setItemName(ri.getItemName());
+						tid.setAcceptedQuantity(ri.getAcceptedQuantity());
+						tid.setDamagedQuantity(ri.getDamagedQuantity());
+						tid.setSalesQuantity(ri.getSalesQuantity());
+						return tid;
+					}).collect(Collectors.toList()))
+					.build();
+				timelineEvents.add(receiptEvent);
+			}
+
+			if (jw.getJobworkType() != JobworkType.CUTTING) {
+				postCuttingAccepted += jwAccepted;
+				postCuttingDamaged += jwDamaged;
+				postCuttingSales += jwSales;
+				if (jw.getJobworkType() == JobworkType.STITCHING) {
+					stitchingCompleted += jwAccepted;
+				} else if (jw.getJobworkType() == JobworkType.PACKAGING) {
+					packagingCompleted += jwAccepted;
+				}
+			} else {
+				cuttingCompleted += jwAccepted;
+			}
+			totalWages += jwWages;
+			totalSalesAmount += jwSalesAmt;
+
+			jobworkSummaries.add(BatchTimelineResponse.JobworkSummary.builder()
+				.jobworkId(jw.getId())
+				.jobworkNumber(jw.getJobworkNumber())
+				.jobworkType(jw.getJobworkType() != null ? jw.getJobworkType().toString() : null)
+				.jobworkOrigin(jw.getJobworkOrigin() != null ? jw.getJobworkOrigin().toString() : null)
+				.jobworkStatus(jw.getJobworkStatus() != null ? jw.getJobworkStatus().toString() : null)
+				.assignedTo(employeeName)
+				.remarks(jw.getRemarks())
+				.assignedAt(jw.getCreatedAt())
+				.createdBy(jw.getCreatedBy())
+				.parentJobworkNumber(jw.getParentJobwork() != null ? jw.getParentJobwork().getJobworkNumber() : null)
+				.assignedItems(assignedItems)
+				.receipts(receiptSummaries)
+				.totalAssignedQuantity(jwQty)
+				.totalAcceptedQuantity(jwAccepted)
+				.totalDamagedQuantity(jwDamaged)
+				.totalSalesQuantity(jwSales)
+				.build());
 		}
 
-		batchTimeline.setTimelineDetail(timelineDetails);
+		// ─── Quantity Flow ────────────────────────────────────
+		BatchTimelineResponse.QuantityFlow quantityFlow = BatchTimelineResponse.QuantityFlow.builder()
+			.preCutting(BatchTimelineResponse.PreCuttingFlow.builder()
+				.totalQuantity(totalPreCuttingQuantity)
+				.assignedQuantity(preCuttingAssigned)
+				.consumedQuantity(preCuttingConsumed)
+				.build())
+			.postCutting(BatchTimelineResponse.PostCuttingFlow.builder()
+				.totalQuantity(totalPostCuttingQuantity)
+				.assignedQuantity(postCuttingAssigned)
+				.acceptedQuantity(postCuttingAccepted)
+				.damagedQuantity(postCuttingDamaged)
+				.salesQuantity(postCuttingSales)
+				.repairableDamage(postCuttingRepairable)
+				.unrepairableDamage(postCuttingUnrepairable)
+				.supplierDamage(postCuttingSupplierDamage)
+				.build())
+			.currentAvailableQuantity(batch.getAvailableQuantity())
+			.build();
 
-		// Process remaining items if any
-		while (i < jobworks.size()) {
-			Jobwork jw = jobworks.get(i);
-			BatchTimelineDetail timelineDetail = processJobworkToDetail(jw, timelineDetails, batch);
-			timelineDetails.add(timelineDetail);
-			i++;
-		}
-		while (j < jobworkReceipts.size()) {
-			JobworkReceipt jwr = jobworkReceipts.get(j);
-			BatchTimelineDetail timelineDetail = processJobworkReceiptToDetail(jwr, timelineDetails, batch);
-			timelineDetails.add(timelineDetail);
-			j++;
-		}
+		// ─── Sort timeline chronologically ────────────────────
+		timelineEvents.sort(Comparator.comparing(BatchTimelineResponse.TimelineEvent::getPerformedAt,
+			Comparator.nullsLast(Comparator.naturalOrder())));
 
-		return batchTimeline;
+		// ─── Stats ────────────────────────────────────────────
+		LocalDateTime firstEvent = !timelineEvents.isEmpty() ? timelineEvents.get(0).getPerformedAt() : null;
+		LocalDateTime lastEvent = !timelineEvents.isEmpty() ? timelineEvents.get(timelineEvents.size() - 1).getPerformedAt() : null;
+
+		BatchTimelineResponse.TimelineStats stats = BatchTimelineResponse.TimelineStats.builder()
+			.totalEvents(timelineEvents.size())
+			.totalJobworks(jobworks.size())
+			.totalReceipts(totalReceiptCount)
+			.totalDurationFromCreation(TimeDifferenceUtil.formatDuration(firstEvent, LocalDateTime.now()))
+			.firstEventAt(firstEvent)
+			.lastEventAt(lastEvent)
+			.totalDurationFromItemCreation(TimeDifferenceUtil.formatDuration(firstItemReceipt, LocalDateTime.now()))
+			.build();
+
+		// ─── Stage Progress ───────────────────────────────────
+		BatchTimelineResponse.StageProgress cuttingProgress = BatchTimelineResponse.StageProgress.builder()
+			.totalQuantity(totalPreCuttingQuantity)
+			.completedQuantity(preCuttingConsumed)
+			.firstStartedAt(cuttingStartedAt)
+			.progressPercentage(totalPreCuttingQuantity > 0 ? (Math.round((double) preCuttingConsumed / totalPreCuttingQuantity * 100)) + "%" : "0%")
+			.build();
+
+		BatchTimelineResponse.StageProgress stitchingProgress = BatchTimelineResponse.StageProgress.builder()
+			.totalQuantity(totalPostCuttingQuantity)
+			.completedQuantity(stitchingCompleted)
+			.firstStartedAt(stitchingStartedAt)
+			.progressPercentage(totalPostCuttingQuantity > 0 ? (Math.round((double) stitchingCompleted / totalPostCuttingQuantity * 100)) + "%" : "0%")
+			.build();
+
+		BatchTimelineResponse.StageProgress packagingProgress = BatchTimelineResponse.StageProgress.builder()
+			.totalQuantity(totalPostCuttingQuantity)
+			.completedQuantity(packagingCompleted)
+			.firstStartedAt(packagingStartedAt)
+			.progressPercentage(totalPostCuttingQuantity > 0 ? (Math.round((double) packagingCompleted / totalPostCuttingQuantity * 100)) + "%" : "0%")
+			.build();
+
+		// ─── Build Final Response ─────────────────────────────
+		return BatchTimelineResponse.builder()
+			.batchId(batch.getId())
+			.serialCode(batch.getSerialCode())
+			.categoryName(batch.getCategory() != null ? batch.getCategory().getName() : null)
+			.batchStatus(batch.getBatchStatus() != null ? batch.getBatchStatus().getValue() : null)
+			.isUrgent(batch.getIsUrgent())
+			.remarks(batch.getRemarks())
+			.createdBy(batch.getCreatedBy())
+			.createdAt(batch.getCreatedAt())
+			.lastModifiedBy(batch.getLastModifiedBy())
+			.lastModifiedAt(batch.getLastModifiedAt())
+			.items(itemSummaries)
+			.subCategories(subCatSummaries)
+			.cuttingProgress(cuttingProgress)
+			.stitchingProgress(stitchingProgress)
+			.packagingProgress(packagingProgress)
+			.quantityFlow(quantityFlow)
+			.jobworks(jobworkSummaries)
+			.timeline(timelineEvents)
+			.stats(stats)
+			.build();
 	}
 
-	protected BatchTimelineDetail processJobworkToDetail(Jobwork jw, List<BatchTimelineDetail> timelineDetails,
-			Batch batch) {
-		BatchTimelineDetail timelineDetail = new BatchTimelineDetail();
-//		timelineDetail.setAssignedBy(jw.getAssignedBy().getName());
-//        long totalQuantity = jw.getJobworkItems().stream().mapToLong(JobworkItem::getQuantity).sum();
-		String message = "Batch assigned to " + jw.getAssignedTo().getName() + " at "
-				+ jw.getCreatedAt().format(formatter) + " by " + jw.getCreatedBy();
-		timelineDetail.setMessage(message);
-		timelineDetail.setPerformedAt(jw.getCreatedAt());
-//        timelineDetail.setPerformedBy(jw.getEmployee().getName());
-		timelineDetail.setStage(jw.getJobworkStatus().toString());
 
-		String timeTaken;
-		if (timelineDetails.isEmpty()) {
-			timeTaken = TimeDifferenceUtil.formatDuration(batch.getCreatedAt(), jw.getCreatedAt());
-			timelineDetail.setTimeTakenFromPrevious(timeTaken);
-		} else {
-			BatchTimelineDetail previousTimelineDetail = timelineDetails.get(timelineDetails.size() - 1);
-			timeTaken = TimeDifferenceUtil.formatDuration(previousTimelineDetail.getPerformedAt(), jw.getCreatedAt());
-			timelineDetail.setTimeTakenFromPrevious(timeTaken);
-		}
-		timelineDetail.setTimeTakenFromPrevious(timeTaken);
-		return timelineDetail;
-	}
 
-	protected BatchTimelineDetail processJobworkReceiptToDetail(JobworkReceipt jwr,
-			List<BatchTimelineDetail> timelineDetails, Batch batch) {
-		BatchTimelineDetail timelineDetail = new BatchTimelineDetail();
-		String message = "Batch returned by " + " at " + jwr.getCreatedAt().format(formatter) + " to "
-				+ jwr.getCreatedBy();
-		timelineDetail.setMessage(message);
-		timelineDetail.setStage("SUBMITTED");
-		timelineDetail.setPerformedAt(jwr.getCreatedAt());
-		String timeTaken;
-		if (timelineDetails.isEmpty()) {
-			timeTaken = TimeDifferenceUtil.formatDuration(batch.getCreatedAt(), jwr.getCreatedAt());
-			timelineDetail.setTimeTakenFromPrevious(timeTaken);
-		} else {
-			BatchTimelineDetail previousTimelineDetail = timelineDetails.get(timelineDetails.size() - 1);
-			timeTaken = TimeDifferenceUtil.formatDuration(previousTimelineDetail.getPerformedAt(), jwr.getCreatedAt());
-			timelineDetail.setTimeTakenFromPrevious(timeTaken);
-		}
-		return timelineDetail;
-	}
-
-//	@Override
-//	public Long getBatchCount(Long batchId) {
-//		List<BatchSubCategory> batchSubCategories = batchSubCategoryRepository.findByBatchId(batchId);
-//		System.out.println(batchSubCategories.size());
-//
-//		List<Damage> damages = damageRepository.findAllByBatchId(batchId);
-//		return batchSubCategories.stream().mapToLong(BatchSubCategory::getQuantity).sum()
-//				- damages.stream().mapToLong(Damage::getQuantity).sum();
-//	}
 
 	private List<BatchSubCategory> validateBatchSubCategories(List<BatchSubCategoryRequestDTO> batchSubCategories) {
 		List<BatchSubCategory> validatedBatchSubCategories = new ArrayList<>();
@@ -498,21 +752,14 @@ public class BatchServiceImpl implements BatchService {
 	// mark the batch as discarded in batch status and refill inventory
 	@Override
 	public void recycleBatch(Long batchId) {
-
-		UserInfo userInfo = UserContext.get();
-
-//		User user = userRepository.findById(Long.valueOf(userInfo.getUserId())).orElseThrow(() -> {
-//			LOGGER.error("User with ID {} not found", userInfo.getUserId());
-//			return new UserNotFoundException("User not found with ID " + userInfo.getUserId());
-//		});
-//		
+		
 		Batch batch = batchRepository.findById(batchId).orElseThrow(() -> {
 			LOGGER.error("Batch not found with id {}", batchId);
 			return new BatchNotFoundException("Batch not found with id " + batchId);
 		});
 
 		if (batch.getBatchStatus() == BatchStatus.DISCARDED) {
-			LOGGER.info("Batch already recyles");
+			LOGGER.info("Batch already recyled");
 			return;
 		}
 
@@ -520,23 +767,22 @@ public class BatchServiceImpl implements BatchService {
 
 		long categoryId = batch.getCategory().getId();
 
-		List<Inventory> validInventories = new ArrayList<>();
 		for (BatchSubCategory batchSubCategory : batchSubCategories) {
-			batchSubCategory.setAvailableQuantity(0L);
-			boolean isInventoryValid = inventoryRepository.existsByCategoryIdAndSubCategoryId(categoryId,
-					batchSubCategory.getSubCategory().getId());
-			if (isInventoryValid) {
-				Inventory inventory = inventoryRepository
-						.findByCategoryIdAndSubCategoryId(categoryId, batchSubCategory.getSubCategory().getId())
-						.orElseThrow(() -> {
-							LOGGER.error("Inventory not found with category ID {}", categoryId);
-							return new InventoryNotFoundException("Inventory not found with category id " + categoryId);
-						});
-				long countAfterRecycle = inventory.getCount() + batchSubCategory.getQuantity();
-				inventory.setCount(countAfterRecycle);
-				validInventories.add(inventory);
-			}
-
+//			batchSubCategory.setAvailableQuantity(0L);
+//			boolean isInventoryValid = inventoryRepository.existsByCategoryIdAndSubCategoryId(categoryId,
+//					batchSubCategory.getSubCategory().getId());
+//			if (isInventoryValid) {
+//				Inventory inventory = inventoryRepository
+//						.findByCategoryIdAndSubCategoryId(categoryId, batchSubCategory.getSubCategory().getId())
+//						.orElseThrow(() -> {
+//							LOGGER.error("Inventory not found with category ID {}", categoryId);
+//							return new InventoryNotFoundException("Inventory not found with category id " + categoryId);
+//						});
+//				long countAfterRecycle = inventory.getCount() + batchSubCategory.getQuantity();
+//				inventory.setCount(countAfterRecycle);
+//				validInventories.add(inventory);
+//			}
+//
 			MaterialInventoryLedger inventory;
 			inventory = new MaterialInventoryLedger();
 			inventory.setDirection(LedgerDirection.IN);
@@ -549,9 +795,6 @@ public class BatchServiceImpl implements BatchService {
 			inventory.setCategory(batch.getCategory());
 
 			ledgerRepository.save(inventory);
-		}
-		for (Inventory inventory : validInventories) {
-			inventoryRepository.save(inventory);
 		}
 		batch.setBatchStatus(BatchStatus.DISCARDED);
 		batch.setAvailableQuantity(0L);
@@ -626,13 +869,14 @@ public class BatchServiceImpl implements BatchService {
 		Batch batch = this.getBatchOrThrow(serialCode);
 
 		Long assignedJobworksQuantity = jobworkRepository.getAssignedQuantities(serialCode, JobworkType.CUTTING.name());
-		Long damagedQuantity = damageRepository.getDamagedQuantity(serialCode, DamageType.REPAIRABLE.name(),
-				JobworkType.CUTTING.name());
+		Long repairableDamages = damageRepository.getDamagedQuantity(serialCode, DamageType.REPAIRABLE.name(), JobworkType.CUTTING.name());
+		LOGGER.debug("dog {} {}", assignedJobworksQuantity, repairableDamages);
+		
+		// For cutting, total quantity is sum of sub-categories
 		Long batchQuantity = batchRepository.findQuantityBySerialCode(batch.getSerialCode());
-		LOGGER.debug("Assigned Quantities {}, Repairable quantities {}, Total batch quantity {}",
-				assignedJobworksQuantity, damagedQuantity, batchQuantity);
-
-		Long availableQuantitiesForCutting = batchQuantity - assignedJobworksQuantity + damagedQuantity;
+		
+		Long availableQuantitiesForCutting = (batchQuantity - assignedJobworksQuantity) + repairableDamages;
+		
 		LOGGER.debug("Available quantities for cutting work for batch {} is {}", serialCode,
 				availableQuantitiesForCutting);
 		if (availableQuantitiesForCutting < 0) {
@@ -640,6 +884,18 @@ public class BatchServiceImpl implements BatchService {
 		}
 
 		return availableQuantitiesForCutting;
+	}
+
+	@Override
+	public Long getAvailableQuantitiesBySubCategory(String serialCode, String subCategoryName) {
+		LOGGER.debug("Fetching available quantity for sub-category {} in batch {}", subCategoryName, serialCode);
+		BatchSubCategory bsc = batchSubCategoryRepository.findByBatchSerialCodeAndSubCategoryName(serialCode, subCategoryName)
+				.orElseThrow(() -> new SubCategoryNotFoundException("Sub-category " + subCategoryName + " not found for batch " + serialCode));
+		
+		Long assignedQuantity = jobworkRepository.getAssignedQuantitiesBySubCategory(serialCode, JobworkType.CUTTING.name(), subCategoryName);
+		Long repairableDamages = damageRepository.getDamagedQuantity(serialCode, DamageType.REPAIRABLE.name(), JobworkType.CUTTING.name());
+		
+		return (bsc.getQuantity() - assignedQuantity) + repairableDamages;
 	}
 
 	@Override
@@ -669,12 +925,7 @@ public class BatchServiceImpl implements BatchService {
 		batchRepository.save(batch);
 	}
 
-//	private Employee getEmployeeOrThrow(String name) {
-//		return employeeRepository.findByName(name).orElseThrow(() -> {
-//			LOGGER.error("Employee not found: {}", name);
-//			return new EmployeeNotFoundException("Employee not found: " + name);
-//		});
-//	}
+
 
 	private Batch getBatchOrThrow(String serialCode) {
 		return batchRepository.findBySerialCode(serialCode).orElseThrow(() -> {
@@ -687,6 +938,13 @@ public class BatchServiceImpl implements BatchService {
 	public List<String> getAllBatchSerialCode() {
 		LOGGER.debug("Fetchging all the batch serial codes");
 		return batchRepository.getAllBatchSerialCodes();
+	}
+
+	// get the subcategories for the given serial code
+	@Override
+	public List<String> getSubCategoriesBySerialCode(String serialCode) {
+		LOGGER.debug("Fetching sub-categories for batch serial code: {}", serialCode);
+		return batchSubCategoryRepository.findSubCategoriesBySerialCode(serialCode);
 	}
 
 }

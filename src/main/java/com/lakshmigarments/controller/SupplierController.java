@@ -22,6 +22,10 @@ import com.lakshmigarments.service.SupplierService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
+/**
+ * REST Controller for managing supplier operations.
+ * Provides endpoints for creating, retrieving, and updating suppliers.
+ */
 @RestController
 @RequestMapping("/suppliers")
 @RequiredArgsConstructor
@@ -31,6 +35,12 @@ public class SupplierController {
 
 	private final SupplierService supplierService;
 
+	/**
+	 * Retrieves all suppliers, optionally filtered by name search term.
+	 *
+	 * @param search Optional search term to filter suppliers by name
+	 * @return List of supplier responses
+	 */
 	@GetMapping
 	public ResponseEntity<List<SupplierResponse>> getAllSuppliers(@RequestParam(required = false) String search) {
 		LOGGER.info("Received request to fetch all suppliers matching: {}", search);
@@ -38,6 +48,12 @@ public class SupplierController {
 		return ResponseEntity.ok(suppliers);
 	}
 
+	/**
+	 * Creates a new supplier with the provided details.
+	 *
+	 * @param request Validated supplier request containing name and location
+	 * @return Created supplier response with HttpStatus.CREATED
+	 */
 	@PostMapping
 	public ResponseEntity<SupplierResponse> createSupplier(
 			@RequestBody @Valid SupplierRequest request) {
@@ -46,6 +62,13 @@ public class SupplierController {
 		return new ResponseEntity<>(response, HttpStatus.CREATED);
 	}
 
+	/**
+	 * Updates an existing supplier identified by ID with the provided details.
+	 *
+	 * @param id Supplier ID to update
+	 * @param request Validated supplier request containing updated name and location
+	 * @return Updated supplier response
+	 */
 	@PutMapping("/{id}")
 	public ResponseEntity<SupplierResponse> updateSupplier(@PathVariable Long id,
 			@RequestBody @Valid SupplierRequest request) {

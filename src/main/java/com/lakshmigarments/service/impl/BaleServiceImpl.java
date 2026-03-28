@@ -16,7 +16,6 @@ import com.lakshmigarments.exception.SubCategoryNotFoundException;
 import com.lakshmigarments.exception.UserNotFoundException;
 import com.lakshmigarments.model.Bale;
 import com.lakshmigarments.model.Category;
-import com.lakshmigarments.model.Inventory;
 import com.lakshmigarments.model.Invoice;
 import com.lakshmigarments.model.LedgerDirection;
 import com.lakshmigarments.model.MaterialInventoryLedger;
@@ -27,7 +26,7 @@ import com.lakshmigarments.model.User;
 import com.lakshmigarments.dto.BaleDTO;
 import com.lakshmigarments.repository.BaleRepository;
 import com.lakshmigarments.repository.CategoryRepository;
-import com.lakshmigarments.repository.InventoryRepository;
+
 import com.lakshmigarments.repository.MaterialLedgerRepository;
 import com.lakshmigarments.repository.SubCategoryRepository;
 import com.lakshmigarments.repository.UserRepository;
@@ -47,7 +46,7 @@ public class BaleServiceImpl implements BaleService {
 	private final BaleRepository baleRepository;
 	private final CategoryRepository categoryRepository;
 	private final SubCategoryRepository subCategoryRepository;
-	private final InventoryRepository inventoryRepository;
+	
 	private final EditWindowPolicy editWindowPolicy;
 	private final UserRepository userRepository;
 	private final MaterialLedgerRepository ledgerRepository;
@@ -193,23 +192,23 @@ public class BaleServiceImpl implements BaleService {
 
 	private void adjustInventory(Category category, SubCategory subCategory, Long qtyChange) {
 
-		Inventory inventory = inventoryRepository
-				.findByCategoryIdAndSubCategoryId(category.getId(), subCategory.getId()).orElseGet(() -> {
-					Inventory inv = new Inventory();
-					inv.setCategory(category);
-					inv.setSubCategory(subCategory);
-					inv.setCount(0L);
-					return inv;
-				});
+//		Inventory inventory = inventoryRepository
+//				.findByCategoryIdAndSubCategoryId(category.getId(), subCategory.getId()).orElseGet(() -> {
+//					Inventory inv = new Inventory();
+//					inv.setCategory(category);
+//					inv.setSubCategory(subCategory);
+//					inv.setCount(0L);
+//					return inv;
+//				});
 
-		long newCount = inventory.getCount() + qtyChange;
+//		long newCount = inventory.getCount() + qtyChange;
 
-		if (newCount < 0) {
-			throw new IllegalStateException(
-					"Insufficient inventory for " + category.getName() + " / " + subCategory.getName());
-		}
+//		if (newCount < 0) {
+//			throw new IllegalStateException(
+//					"Insufficient inventory for " + category.getName() + " / " + subCategory.getName());
+//		}
 
-		inventory.setCount(newCount);
-		inventoryRepository.save(inventory);
+//		inventory.setCount(newCount);
+//		inventoryRepository.save(inventory);
 	}
 }

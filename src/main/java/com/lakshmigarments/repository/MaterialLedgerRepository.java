@@ -7,7 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import com.lakshmigarments.model.Inventory;
 import com.lakshmigarments.model.MaterialInventoryLedger;
 
 public interface MaterialLedgerRepository extends JpaRepository<MaterialInventoryLedger, Long> {
@@ -68,6 +67,25 @@ public interface MaterialLedgerRepository extends JpaRepository<MaterialInventor
            "WHERE i.direction = 'IN' AND i.createdAt BETWEEN :startDate AND :endDate")
     Double calculateWeeklyInventoryValue(@Param("startDate") java.time.LocalDateTime startDate, @Param("endDate") java.time.LocalDateTime endDate);
 
+    @Query("""
+    	    SELECT COALESCE(SUM(CASE WHEN m.direction = 'IN' THEN m.quantity ELSE -m.quantity END), 0)
+    	    FROM MaterialInventoryLedger m
+    	    WHERE m.category.id = :categoryId AND m.subCategory.id = :subCategoryId
+    	""")
+    	Long getStockCount(@Param("categoryId") Long categoryId, @Param("subCategoryId") Long subCategoryId);
+    
+ // For getCategorySubCategoryCounts()
+    @Query("""
+    	    SELECT 
+    	        m.category.name, 
+    	        m.category.code, 
+    	        m.subCategory.name,
+    	        SUM(CASE WHEN m.direction = 'IN' THEN m.quantity ELSE -m.quantity END)
+    	    FROM MaterialInventoryLedger m
+    	    GROUP BY m.category.id, m.category.name, m.category.code, 
+    	             m.subCategory.id, m.subCategory.name
+    	""")
+    	List<Object[]> getStockGroupedByCategory();
 }
 
 

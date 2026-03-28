@@ -6,13 +6,19 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * Entity representing a supplier in the system.
+ * Extends BaseAuditable to include audit fields (createdBy, createdAt, etc.)
+ */
 @Entity
 @Table(name = "suppliers")
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class Supplier extends BaseAuditable {
 	
 	@Id

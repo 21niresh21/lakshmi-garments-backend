@@ -16,6 +16,7 @@ import com.lakshmigarments.dto.response.EmployeeJobworkResponse;
 import com.lakshmigarments.dto.response.ItemResponse;
 import com.lakshmigarments.dto.response.JobworkDetailDTO;
 import com.lakshmigarments.dto.response.JobworkResponse;
+import com.lakshmigarments.dto.JobworkTimelineResponse;
 import com.lakshmigarments.model.Jobwork;
 import com.lakshmigarments.model.JobworkStatus;
 import com.lakshmigarments.model.JobworkType;
@@ -29,7 +30,7 @@ public interface JobworkService<T extends CreateJobworkRequest> {
 
     String getNextJobworkNumber();
 
-//    Jobwork createJobwork(JobworkRequestDTO jobworkRequestDTO);
+
 
     Page<JobworkResponseDTO> getAllJobworks(
     	    Pageable pageable,
@@ -56,6 +57,8 @@ public interface JobworkService<T extends CreateJobworkRequest> {
     
     EmployeeJobworkReportResponse getDetailedJobworksByEmployee(String employeeName, LocalDateTime startDate, LocalDateTime endDate);
 
-//    List<String> getUnfinishedJobworks(String employeeName, String jobworkNumber);
+    JobworkTimelineResponse getJobworkTimeline(String jobworkNumber);
+
+
 
 }

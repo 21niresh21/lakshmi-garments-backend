@@ -28,7 +28,7 @@ public class JobworkCreationValidator {
 		LOGGER.debug("Assigned quantities {} for batch", assignedQuantity);
 		LOGGER.debug("Repairable damages quantity {}", repairableDamages);
 
-		boolean isAvailable = (batchQuantity - assignedQuantity + repairableDamages) >= request.getQuantity() ? true
+		boolean isAvailable = (batchQuantity - assignedQuantity + repairableDamages) >= request.getQuantities().get(0) ? true
 				: false;
 		if (!isAvailable) {
 			LOGGER.error("All the quantities of the batch has been processed for CUTTING");

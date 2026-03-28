@@ -21,6 +21,10 @@ import com.lakshmigarments.service.SupplierService;
 
 import lombok.RequiredArgsConstructor;
 
+/**
+ * Implementation of SupplierService that handles business logic for supplier operations.
+ * Provides methods for creating, retrieving, and updating suppliers with proper validation and error handling.
+ */
 @Service
 @RequiredArgsConstructor
 public class SupplierServiceImpl implements SupplierService {
@@ -39,7 +43,7 @@ public class SupplierServiceImpl implements SupplierService {
 
 		LOGGER.debug("Found {} supplier(s)", suppliers.size());
 		return suppliers.stream()
-				.map(supplier -> modelMapper.map(supplier, SupplierResponse.class))
+				.map(this::mapToSupplierResponse)
 				.collect(Collectors.toList());
 	}
 
@@ -58,7 +62,7 @@ public class SupplierServiceImpl implements SupplierService {
 
 		Supplier savedSupplier = supplierRepository.save(supplier);
 		LOGGER.info("Supplier created successfully with ID: {}", savedSupplier.getId());
-		return modelMapper.map(savedSupplier, SupplierResponse.class);
+		return mapToSupplierResponse(savedSupplier);
 	}
 
 	@Override
@@ -78,7 +82,23 @@ public class SupplierServiceImpl implements SupplierService {
 
 		Supplier savedSupplier = supplierRepository.save(supplier);
 		LOGGER.info("Supplier updated successfully with ID: {}", savedSupplier.getId());
-		return modelMapper.map(savedSupplier, SupplierResponse.class);
+		return mapToSupplierResponse(savedSupplier);
+	}
+
+	/**
+	 * Maps a Supplier entity to SupplierResponse DTO, including audit information.
+	 * Manually maps audit fields since ModelMapper might not handle them properly with inheritance.
+	 */
+	private SupplierResponse mapToSupplierResponse(Supplier supplier) {
+		SupplierResponse response = modelMapper.map(supplier, SupplierResponse.class);
+		
+		// Manually map audit fields to ensure they are included in the response
+		response.setCreatedBy(supplier.getCreatedBy());
+		response.setCreatedAt(supplier.getCreatedAt());
+		response.setLastModifiedBy(supplier.getLastModifiedBy());
+		response.setLastModifiedAt(supplier.getLastModifiedAt());
+		
+		return response;
 	}
 
 	private void validateSupplierUniqueness(String name, Long id) {
