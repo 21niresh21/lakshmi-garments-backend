@@ -266,9 +266,11 @@ public class BatchServiceImpl implements BatchService {
 		int totalReceiptCount = 0;
 
 		long cuttingCompleted = 0;
+		long embroideryCompleted = 0;
 		long stitchingCompleted = 0;
 		long packagingCompleted = 0;
 		LocalDateTime cuttingStartedAt = null;
+		LocalDateTime embroideryStartedAt = null;
 		LocalDateTime stitchingStartedAt = null;
 		LocalDateTime packagingStartedAt = null;
 
@@ -322,7 +324,9 @@ public class BatchServiceImpl implements BatchService {
 				}
 			} else {
 				postCuttingAssigned += jwQty;
-				if (jw.getJobworkType() == JobworkType.STITCHING) {
+				if (jw.getJobworkType() == JobworkType.EMBROIDERY) {
+					if (embroideryStartedAt == null || jw.getCreatedAt().isBefore(embroideryStartedAt)) embroideryStartedAt = jw.getCreatedAt();
+				} else if (jw.getJobworkType() == JobworkType.STITCHING) {
 					if (stitchingStartedAt == null || jw.getCreatedAt().isBefore(stitchingStartedAt)) stitchingStartedAt = jw.getCreatedAt();
 				} else if (jw.getJobworkType() == JobworkType.PACKAGING) {
 					if (packagingStartedAt == null || jw.getCreatedAt().isBefore(packagingStartedAt)) packagingStartedAt = jw.getCreatedAt();
@@ -492,7 +496,10 @@ public class BatchServiceImpl implements BatchService {
 				postCuttingAccepted += jwAccepted;
 				postCuttingDamaged += jwDamaged;
 				postCuttingSales += jwSales;
-				if (jw.getJobworkType() == JobworkType.STITCHING) {
+				if (jw.getJobworkType() == JobworkType.EMBROIDERY) {
+					// Embroidery completed = accepted + unrepairable + supplier damage (all processed items)
+					embroideryCompleted += (jwAccepted + jwUnrepairable + jwSupplierDamage);
+				} else if (jw.getJobworkType() == JobworkType.STITCHING) {
 					// Stitching completed = accepted + unrepairable + supplier damage (all processed items)
 					stitchingCompleted += (jwAccepted + jwUnrepairable + jwSupplierDamage);
 				} else if (jw.getJobworkType() == JobworkType.PACKAGING) {
@@ -563,6 +570,7 @@ public class BatchServiceImpl implements BatchService {
 			.lastEventAt(lastEvent)
 			.totalDurationFromItemCreation(TimeDifferenceUtil.formatDuration(firstItemReceipt, LocalDateTime.now()))
 			.cuttingJobworkCount((int) jobworks.stream().filter(jw -> jw.getJobworkType() == JobworkType.CUTTING).count())
+//			.embroideryJobworkCount((int) jobworks.stream().filter(jw -> jw.getJobworkType() == JobworkType.EMBROIDERY).count())
 			.stitchingJobworkCount((int) jobworks.stream().filter(jw -> jw.getJobworkType() == JobworkType.STITCHING).count())
 			.packagingJobworkCount((int) jobworks.stream().filter(jw -> jw.getJobworkType() == JobworkType.PACKAGING).count())
 			.uniqueEmployeesAssigned((int) jobworks.stream().map(jw -> jw.getAssignedTo()).filter(e -> e != null).map(e -> e.getName()).distinct().count())
@@ -594,6 +602,13 @@ public class BatchServiceImpl implements BatchService {
 
 		// For stitching & packaging: progress = (accepted + unrepairable + supplier damage) / total post-cutting quantity
 		// These represent all items that have been processed (successfully or terminated)
+		BatchTimelineResponse.StageProgress embroideryProgress = BatchTimelineResponse.StageProgress.builder()
+				.totalQuantity(totalPostCuttingQuantity)
+				.completedQuantity(embroideryCompleted)
+				.firstStartedAt(embroideryStartedAt)
+				.progressPercentage(totalPostCuttingQuantity > 0 ? (Math.round((double) embroideryCompleted / totalPostCuttingQuantity * 100)) + "%" : "0%")
+				.build();
+
 		BatchTimelineResponse.StageProgress stitchingProgress = BatchTimelineResponse.StageProgress.builder()
 			.totalQuantity(totalPostCuttingQuantity)
 			.completedQuantity(stitchingCompleted)
@@ -623,6 +638,7 @@ public class BatchServiceImpl implements BatchService {
 			.items(itemSummaries)
 			.subCategories(subCatSummaries)
 			.cuttingProgress(cuttingProgress)
+			.embroideryProgress(embroideryProgress)
 			.stitchingProgress(stitchingProgress)
 			.packagingProgress(packagingProgress)
 			.quantityFlow(quantityFlow)
@@ -739,25 +755,60 @@ public class BatchServiceImpl implements BatchService {
 			allowedJobworkTypes.add(JobworkType.CUTTING);
 		}
 
-		// conditions for adding stitching
+		// conditions for adding embroidery (optional step after cutting)
 		List<JobworkReceipt> cuttingJobworkReceipts = receiptRepository
 				.findByJobworkBatchSerialCodeAndJobworkJobworkType(batchSerialCode, JobworkType.CUTTING);
 		LOGGER.debug("Fetched {} jobwork receipts for CUTTING of batch {}", cuttingJobworkReceipts.size(),
 				batchSerialCode);
 
-		Long totalAcceptedQuantity = !cuttingJobworkReceipts.isEmpty() ? cuttingJobworkReceipts.stream()
+		Long totalAcceptedQuantityFromCutting = !cuttingJobworkReceipts.isEmpty() ? cuttingJobworkReceipts.stream()
 				.flatMap(receipt -> receipt.getJobworkReceiptItems().stream())
 				.map(JobworkReceiptItem::getAcceptedQuantity).filter(Objects::nonNull).mapToLong(Long::longValue).sum()
 				: 0L;
 		LOGGER.debug("Accepted quantities received for batch {} from CUTTING jobs : {}", batchSerialCode,
-				totalAcceptedQuantity);
+				totalAcceptedQuantityFromCutting);
 
-		// conditions for removing stitching
+		// EMBROIDERY is optional - can be allowed if cutting output is available
+		Long assignedEmbroideryQuantities = jobworkRepository.getAssignedQuantities(batchSerialCode,
+				JobworkType.EMBROIDERY.name());
+		Long damagedRepairableEmbroideryQuantities = damageRepository.getDamagedQuantity(batchSerialCode,
+				DamageType.REPAIRABLE.name(), JobworkType.EMBROIDERY.name());
+		long availableForEmbroidery = totalAcceptedQuantityFromCutting - assignedEmbroideryQuantities
+				+ damagedRepairableEmbroideryQuantities;
+
+		if (availableForEmbroidery > 0) {
+			allowedJobworkTypes.add(JobworkType.EMBROIDERY);
+		}
+
+		// conditions for adding stitching
+		// Stitching can happen after:
+		// 1. Cutting (if embroidery is skipped)
+		// 2. Embroidery (if embroidery was done)
+		// Calculate available quantity for stitching from both sources
+		
+		// From embroidery receipts (if embroidery was done)
+		List<JobworkReceipt> embroideryJobworkReceipts = receiptRepository
+				.findByJobworkBatchSerialCodeAndJobworkJobworkType(batchSerialCode, JobworkType.EMBROIDERY);
+		LOGGER.debug("Fetched {} jobwork receipts for EMBROIDERY of batch {}", embroideryJobworkReceipts.size(),
+				batchSerialCode);
+
+		Long totalAcceptedQuantityFromEmbroidery = !embroideryJobworkReceipts.isEmpty() ? embroideryJobworkReceipts.stream()
+				.flatMap(receipt -> receipt.getJobworkReceiptItems().stream())
+				.map(JobworkReceiptItem::getAcceptedQuantity).filter(Objects::nonNull).mapToLong(Long::longValue).sum()
+				: 0L;
+		LOGGER.debug("Accepted quantities received for batch {} from EMBROIDERY jobs : {}", batchSerialCode,
+				totalAcceptedQuantityFromEmbroidery);
+
+		// If embroidery was done, use embroidery output; otherwise use cutting output
+		Long inputQuantityForStitching = totalAcceptedQuantityFromEmbroidery > 0 
+				? totalAcceptedQuantityFromEmbroidery 
+				: totalAcceptedQuantityFromCutting;
+
 		Long assignedStitchingQuantities = jobworkRepository.getAssignedQuantities(batchSerialCode,
 				JobworkType.STITCHING.name());
 		Long damagedRepairableStitchingQuantities = damageRepository.getDamagedQuantity(batchSerialCode,
 				DamageType.REPAIRABLE.name(), JobworkType.STITCHING.name());
-		long availableForStitching = totalAcceptedQuantity - assignedStitchingQuantities
+		long availableForStitching = inputQuantityForStitching - assignedStitchingQuantities
 				+ damagedRepairableStitchingQuantities;
 
 		if (availableForStitching > 0) {

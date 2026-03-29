@@ -63,5 +63,4 @@ public interface JobworkService<T extends CreateJobworkRequest> {
     // Get closed jobworks issued prior to the given jobwork (for damage source selection)
     List<PriorJobworkResponse> getPriorClosedJobworks(String currentJobworkNumber);
 
-
 }

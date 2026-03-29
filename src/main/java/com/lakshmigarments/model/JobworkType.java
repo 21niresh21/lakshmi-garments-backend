@@ -4,7 +4,10 @@ import java.util.Optional;
 
 public enum JobworkType {
 	CUTTING,
+	EMBROIDERY,
 	STITCHING,
+    OVERLOCK,
+    IRONING,
 	PACKAGING;
 	
 	public static Optional<JobworkType> fromString(String value) {

@@ -128,7 +128,7 @@ public class JobworkReceiptServiceImpl implements JobworkReceiptService {
 						// Set damage source only for REPAIRABLE damage type
 						if (damage.getDamageType() == DamageType.REPAIRABLE && damageRequest.getSource() != null && !damageRequest.getSource().isEmpty()) {
 							damage.setDamageSource(DamageSource.fromString(damageRequest.getSource()));
-												
+																								
 							// Set causedBy based on damage source
 							if (DamageSource.CURRENT_JOBWORK == damage.getDamageSource()) {
 								damage.setCausedBy(jobwork);

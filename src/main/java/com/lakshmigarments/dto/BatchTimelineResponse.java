@@ -41,6 +41,7 @@ public class BatchTimelineResponse {
 
     // ─── Stage Progress ───────────────────────────────────────
     private StageProgress cuttingProgress;
+    private StageProgress embroideryProgress;
     private StageProgress stitchingProgress;
     private StageProgress packagingProgress;
 

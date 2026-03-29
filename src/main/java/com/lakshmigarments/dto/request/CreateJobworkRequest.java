@@ -21,7 +21,8 @@ import lombok.Setter;
 	@JsonSubTypes({
 	    @JsonSubTypes.Type(value = CreateCuttingJobworkRequest.class, name = "CUTTING"),
 	    @JsonSubTypes.Type(value = CreateItemBasedJobworkRequest.class, name = "STITCHING"),
-	    @JsonSubTypes.Type(value = CreateItemBasedJobworkRequest.class, name = "PACKAGING")
+	    @JsonSubTypes.Type(value = CreateItemBasedJobworkRequest.class, name = "PACKAGING"),
+	    @JsonSubTypes.Type(value = CreateItemBasedJobworkRequest.class, name = "EMBROIDERY")
 	})
 @JsonIgnoreProperties(ignoreUnknown = true)
 public abstract class CreateJobworkRequest {

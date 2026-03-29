@@ -90,4 +90,9 @@ public interface JobworkRepository extends JpaRepository<Jobwork, Long>, JpaSpec
 			"AND jw.jobwork_status <> 'REASSIGNED'", nativeQuery = true)
 	Long getTotalCuttingQuantityIssued(@Param("batchId") Long batchId);
 
+	// return a boolean if there are any jobworks issued for the batch based on batch serial code in any of 
+	// the given jobwork types - STITCHING, EMBROIDERY, PACKAGING
+	@Query(value = "SELECT CASE WHEN COUNT(jw) > 0 THEN true ELSE false END FROM Jobwork jw WHERE jw.batch.serialCode = :serialCode AND jw.jobworkType IN ('STITCHING', 'EMBROIDERY', 'PACKAGING', 'OVERLOCK', 'IRONING') AND jw.jobworkStatus <> 'REASSIGNED'")
+	boolean existsByBatchSerialCodeForItem(@Param("serialCode") String serialCode);
+
 }
