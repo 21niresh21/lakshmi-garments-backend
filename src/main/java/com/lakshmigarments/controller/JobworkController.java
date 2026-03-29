@@ -33,6 +33,7 @@ import com.lakshmigarments.dto.response.ItemResponse;
 import com.lakshmigarments.dto.response.JobworkDetailDTO;
 import com.lakshmigarments.dto.response.JobworkResponse;
 import com.lakshmigarments.dto.response.PriorJobworkResponse;
+import com.lakshmigarments.dto.response.BatchJobworkResponse;
 import com.lakshmigarments.model.Employee;
 import com.lakshmigarments.model.Jobwork;
 import com.lakshmigarments.model.JobworkStatus;
@@ -170,6 +171,13 @@ public class JobworkController {
 	public ResponseEntity<List<PriorJobworkResponse>> getPriorClosedJobworks(@PathVariable String jobworkNumber) {
 		LOGGER.info("Received request for prior closed jobworks for {}", jobworkNumber);
 		List<PriorJobworkResponse> priorJobworks = jobworkService.getPriorClosedJobworks(jobworkNumber);
+		return ResponseEntity.ok(priorJobworks);
+	}
+
+	@GetMapping("/{jobworkNumber}/batch-prior-jobworks")
+	public ResponseEntity<List<BatchJobworkResponse>> getPriorJobworksByBatch(@PathVariable String jobworkNumber) {
+		LOGGER.info("Received request for prior jobworks in batch for {}", jobworkNumber);
+		List<BatchJobworkResponse> priorJobworks = jobworkService.getPriorJobworksByBatch(jobworkNumber);
 		return ResponseEntity.ok(priorJobworks);
 	}
 

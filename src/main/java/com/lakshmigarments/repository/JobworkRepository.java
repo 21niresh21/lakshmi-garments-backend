@@ -95,4 +95,7 @@ public interface JobworkRepository extends JpaRepository<Jobwork, Long>, JpaSpec
 	@Query(value = "SELECT CASE WHEN COUNT(jw) > 0 THEN true ELSE false END FROM Jobwork jw WHERE jw.batch.serialCode = :serialCode AND jw.jobworkType IN ('STITCHING', 'EMBROIDERY', 'PACKAGING', 'OVERLOCK', 'IRONING') AND jw.jobworkStatus <> 'REASSIGNED'")
 	boolean existsByBatchSerialCodeForItem(@Param("serialCode") String serialCode);
 
+	// Find all jobworks in a batch created before a specific date
+	List<Jobwork> findByBatchSerialCodeAndCreatedAtBefore(String serialCode, LocalDateTime createdAt);
+
 }

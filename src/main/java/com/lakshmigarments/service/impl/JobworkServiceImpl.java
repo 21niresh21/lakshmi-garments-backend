@@ -37,6 +37,7 @@ import com.lakshmigarments.dto.TimelineEventType;
 import com.lakshmigarments.dto.TimelineItemDetail;
 import com.lakshmigarments.dto.response.JobworkResponse;
 import com.lakshmigarments.dto.response.PriorJobworkResponse;
+import com.lakshmigarments.dto.response.BatchJobworkResponse;
 import com.lakshmigarments.model.Batch;
 import com.lakshmigarments.model.BatchItem;
 import com.lakshmigarments.model.BatchStatus;
@@ -1099,6 +1100,34 @@ public class JobworkServiceImpl implements JobworkService<CreateJobworkRequest> 
 						.jobworkType(jw.getJobworkType() != null ? jw.getJobworkType().toString() : null)
 						.createdAt(jw.getCreatedAt())
 						.build())
+				.collect(Collectors.toList());
+	}
+
+	@Override
+	public List<BatchJobworkResponse> getPriorJobworksByBatch(String jobworkNumber) {
+		// Find the current jobwork
+		Jobwork currentJobwork = jobworkRepository.findByJobworkNumber(jobworkNumber)
+				.orElseThrow(() -> {
+					LOGGER.error("Jobwork with number {} not found", jobworkNumber);
+					return new JobworkNotFoundException("Jobwork not found with number: " + jobworkNumber);
+				});
+
+		// Get the batch serial code
+		String batchSerialCode = currentJobwork.getBatch().getSerialCode();
+		LocalDateTime currentCreatedAt = currentJobwork.getCreatedAt();
+
+		// Find all jobworks in the same batch created before the current jobwork
+		List<Jobwork> priorJobworks = jobworkRepository.findByBatchSerialCodeAndCreatedAtBefore(batchSerialCode, currentCreatedAt);
+
+		// Convert to response DTO
+		return priorJobworks.stream()
+				.map(jw -> {
+					BatchJobworkResponse response = new BatchJobworkResponse();
+					response.setJobworkNumber(jw.getJobworkNumber());
+					response.setEmployeeName(jw.getAssignedTo() != null ? jw.getAssignedTo().getName() : "Unassigned");
+					response.setJobworkType(jw.getJobworkType() != null ? jw.getJobworkType().toString() : null);
+					return response;
+				})
 				.collect(Collectors.toList());
 	}
 

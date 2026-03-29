@@ -163,6 +163,19 @@ public class BatchItemServiceImpl implements BatchItemService {
                 yield receiptItemRepository.getAcceptedQuantityByBatchAndJobworkTypeAndItem(
                     serialCode, JobworkType.STITCHING.name(), itemName);
             }
+            case OVERLOCK -> {
+                // Overlock receives output from Cutting
+                yield receiptItemRepository.getAcceptedQuantityByBatchAndJobworkTypeAndItem(
+                    serialCode, JobworkType.CUTTING.name(), itemName);
+            }
+            case IRONING -> {
+                // Ironing receives output from Stitching (or Packaging if done)
+                Long fromPackaging = receiptItemRepository.getAcceptedQuantityByBatchAndJobworkTypeAndItem(
+                    serialCode, JobworkType.PACKAGING.name(), itemName);
+                yield (fromPackaging != null && fromPackaging > 0) ? fromPackaging :
+                    receiptItemRepository.getAcceptedQuantityByBatchAndJobworkTypeAndItem(
+                        serialCode, JobworkType.STITCHING.name(), itemName);
+            }
         };
     }
     
