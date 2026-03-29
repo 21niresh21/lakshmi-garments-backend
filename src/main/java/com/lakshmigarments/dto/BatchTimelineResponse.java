@@ -264,5 +264,26 @@ public class BatchTimelineResponse {
         private LocalDateTime firstEventAt;
         private LocalDateTime lastEventAt;
         private String totalDurationFromItemCreation;
+        
+        // ─── Additional Performance Metrics ─────────────────────
+        private Integer cuttingJobworkCount;
+        private Integer stitchingJobworkCount;
+        private Integer packagingJobworkCount;
+        private Integer uniqueEmployeesAssigned;    // Number of unique employees who worked on this batch
+        private String averageTimeBetweenJobworks;
+        private String averageTimeBetweenReceipts;
+        private Double totalWagesPaid;
+        private Double totalSalesRevenue;
+        private Double totalCostOfProduction;
+        private Long totalItemsProduced;            // Items from cutting
+        private Long totalItemsAccepted;             // Final accepted items
+        private Long totalItemsDamaged;
+        private Long totalItemsSold;
+        private Double overallAcceptanceRate;       // accepted / totalReturned * 100
+        private Double overallDamageRate;            // damaged / totalReturned * 100
+        private Double overallSalesRate;             // sales / totalReturned * 100
+        private String productionEfficiencyScore;    // A/B/C/D rating
+        private Long totalReworkCount;               // Items sent for rework
+        private String estimatedCompletionTime;      // Estimated time to complete remaining work
     }
 }

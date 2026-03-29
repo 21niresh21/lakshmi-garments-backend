@@ -83,7 +83,18 @@ public class JobworkTimelineResponse {
         private Long totalPending;
         private Double totalWagesEarned;
         private Double totalSalesDeduction;
+        private Double netWagesEarned;
         private String completionPercentage; // e.g. "85%"
+        
+        // ─── Additional Performance Metrics ───────────────────
+        private Integer receiptCount;           // Number of submissions
+        private String averageTimePerReceipt;   // Average time between receipts
+        private String totalDuration;           // Time from assignment to last activity
+        private Double damageRate;              // damaged / totalReturned * 100
+        private Double salesRate;               // sales / totalReturned * 100
+        private Double acceptanceRate;          // accepted / totalReturned * 100
+        private String efficiencyScore;         // Combined efficiency rating (A/B/C/D)
+        private Long reworkCount;               // Items sent for rework
     }
 
     @Getter
@@ -125,6 +136,7 @@ public class JobworkTimelineResponse {
     public static class DamageDetail {
         private Long quantity;
         private String damageType;
+        private String damageSource;
         private String reworkJobworkNumber;
     }
 

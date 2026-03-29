@@ -36,10 +36,12 @@ import com.lakshmigarments.dto.JobworkTimelineResponse;
 import com.lakshmigarments.dto.TimelineEventType;
 import com.lakshmigarments.dto.TimelineItemDetail;
 import com.lakshmigarments.dto.response.JobworkResponse;
+import com.lakshmigarments.dto.response.PriorJobworkResponse;
 import com.lakshmigarments.model.Batch;
 import com.lakshmigarments.model.BatchItem;
 import com.lakshmigarments.model.BatchStatus;
 import com.lakshmigarments.model.Damage;
+import com.lakshmigarments.model.DamageSource;
 import com.lakshmigarments.model.DamageType;
 import com.lakshmigarments.model.Employee;
 import com.lakshmigarments.model.Item;
@@ -163,14 +165,26 @@ public class JobworkServiceImpl implements JobworkService<CreateJobworkRequest> 
 
 			LOGGER.debug("Cutting jobwork creation request received for batch {}", cuttingRequest.getBatchSerialCode());
 
-			// Validate batch has enough available quantity
-			Long availableQuantity = batch.getAvailableQuantity();
+			// Calculate total quantity already issued for cutting from this batch
+			Long totalQuantityAlreadyIssued = jobworkRepository.getTotalCuttingQuantityIssued(batch.getId());
+			LOGGER.debug("Total cutting quantity already issued from batch {}: {}", batch.getSerialCode(), totalQuantityAlreadyIssued);
+			
+			// Get total repairable damages that will return to this batch
+			Long totalRepairableDamages = damageRepository.getTotalRepairableDamagesForBatch(batch.getId());
+			LOGGER.debug("Total repairable damages for batch {}: {}", batch.getSerialCode(), totalRepairableDamages);
+			
+			// Available quantity = Original batch quantity - (Already issued - Repairable damages pending)
+			Long effectiveAvailableQuantity = batch.getQuantity() - (totalQuantityAlreadyIssued - totalRepairableDamages);
 			Long requestedQuantity = cuttingRequest.getQuantity();
 			
-			if (availableQuantity < requestedQuantity) {
-				LOGGER.error("Insufficient batch quantity. Available: {}, Requested: {}", availableQuantity, requestedQuantity);
+			LOGGER.info("Batch {} | Original qty: {}, Already issued: {}, Repairable returns: {}, Effective available: {}, Requested: {}",
+				batch.getSerialCode(), batch.getQuantity(), totalQuantityAlreadyIssued, totalRepairableDamages, 
+				effectiveAvailableQuantity, requestedQuantity);
+			
+			if (effectiveAvailableQuantity < requestedQuantity) {
+				LOGGER.error("Insufficient batch quantity. Effective available: {}, Requested: {}", effectiveAvailableQuantity, requestedQuantity);
 				throw new InsufficientBatchQuantityException(
-					"Insufficient quantity in batch. Available: " + availableQuantity + ", Requested: " + requestedQuantity);
+					"Insufficient quantity in batch. Available: " + effectiveAvailableQuantity + ", Requested: " + requestedQuantity);
 			}
 
 			LOGGER.debug("Validated cutting jobwork - Batch has sufficient quantity");
@@ -296,7 +310,7 @@ public class JobworkServiceImpl implements JobworkService<CreateJobworkRequest> 
 	private JobworkItemResponse toReceiptItemDTO(JobworkReceiptItem item) {
 		JobworkItemResponse jobworkItemResponse = new JobworkItemResponse();
 
-		jobworkItemResponse.setItemName(item.getItem() != null ? item.getItem().getName() : "Unknown");
+		jobworkItemResponse.setItemName(item.getItem() != null ? item.getItem().getName() : "Piece(s)");
 		jobworkItemResponse.setAcceptedQuantity(item.getAcceptedQuantity());
 		jobworkItemResponse.setSalesQuantity(item.getSalesQuantity());
 		jobworkItemResponse.setSalesPrice(item.getSalesPrice());
@@ -780,7 +794,7 @@ public class JobworkServiceImpl implements JobworkService<CreateJobworkRequest> 
 		long totalAssignedQty = jobworkItems.stream().mapToLong(ji -> ji.getQuantity() != null ? ji.getQuantity() : 0L).sum();
 		String currentMsg;
 		if (jobwork.getJobworkOrigin() == JobworkOrigin.REASSIGNED && jobwork.getParentJobwork() != null) {
-			String parentEmployee = jobwork.getParentJobwork().getAssignedTo() != null ? jobwork.getParentJobwork().getAssignedTo().getName() : "Unknown";
+			String parentEmployee = jobwork.getParentJobwork().getAssignedTo() != null ? jobwork.getParentJobwork().getAssignedTo().getName() : "Piece(s)";
 			currentMsg = String.format("Jobwork reassigned from %s to %s for %s with %d items", 
 				parentEmployee, jobwork.getAssignedTo().getName(), jobwork.getJobworkType(), totalAssignedQty);
 		} else {
@@ -811,7 +825,7 @@ public class JobworkServiceImpl implements JobworkService<CreateJobworkRequest> 
 			List<JobworkTimelineResponse.ReceiptItemDetail> rItems = new ArrayList<>();
 
 			for (JobworkReceiptItem jwri : receipt.getJobworkReceiptItems()) {
-				String name = jwri.getItem() != null ? jwri.getItem().getName() : "Unknown";
+				String name = jwri.getItem() != null ? jwri.getItem().getName() : "Piece(s)";
 				long acc = jwri.getAcceptedQuantity() != null ? jwri.getAcceptedQuantity() : 0L;
 				long dmg = jwri.getDamagedQuantity() != null ? jwri.getDamagedQuantity() : 0L;
 				long sal = jwri.getSalesQuantity() != null ? jwri.getSalesQuantity() : 0L;
@@ -845,6 +859,7 @@ public class JobworkServiceImpl implements JobworkService<CreateJobworkRequest> 
 					JobworkTimelineResponse.DamageDetail.builder()
 						.quantity(d.getQuantity())
 						.damageType(d.getDamageType().toString())
+						.damageSource(d.getDamageSource() != null ? d.getDamageSource().toString() : null)
 						.reworkJobworkNumber(d.getReworkJobWork() != null ? d.getReworkJobWork().getJobworkNumber() : null)
 						.build()
 				).collect(Collectors.toList());
@@ -915,6 +930,51 @@ public class JobworkServiceImpl implements JobworkService<CreateJobworkRequest> 
 		long totalReturned = totalAccepted + totalDamaged + totalSales;
 		String completion = totalAssignedQty > 0 ? (Math.round((double)totalReturned / totalAssignedQty * 100)) + "%" : "0%";
 
+		// ─── Additional Metrics Calculation ─────────────────────
+		int receiptCount = receipts.size();
+		
+		// Calculate average time between receipts
+		String avgTimePerReceipt = "N/A";
+		if (receiptCount > 0) {
+			if (receiptCount > 1) {
+				long totalMillis = 0;
+				for (int i = 1; i < receipts.size(); i++) {
+					long diff = java.time.Duration.between(
+						receipts.get(i-1).getCreatedAt(), 
+						receipts.get(i).getCreatedAt()).toMillis();
+					totalMillis += diff;
+				}
+				long avgMillis = totalMillis / (receiptCount - 1);
+				avgTimePerReceipt = formatDuration(avgMillis);
+			} else {
+				avgTimePerReceipt = "First submission";
+			}
+		}
+		
+		// Total duration from assignment to last activity
+		String totalDuration = "N/A";
+		LocalDateTime lastActivity = jobwork.getLastModifiedAt();
+		if (lastActivity != null && jobwork.getCreatedAt() != null) {
+			long durationMillis = java.time.Duration.between(jobwork.getCreatedAt(), lastActivity).toMillis();
+			totalDuration = formatDuration(durationMillis);
+		}
+		
+		// Rates calculation
+		Double damageRate = totalReturned > 0 ? Math.round((double) totalDamaged / totalReturned * 10000.0) / 100.0 : 0.0;
+		Double salesRate = totalReturned > 0 ? Math.round((double) totalSales / totalReturned * 10000.0) / 100.0 : 0.0;
+		Double acceptanceRate = totalReturned > 0 ? Math.round((double) totalAccepted / totalReturned * 10000.0) / 100.0 : 0.0;
+		
+		// Efficiency Score: A (excellent) to D (poor)
+		String efficiencyScore = calculateEfficiencyScore(acceptanceRate, damageRate, completion);
+		
+		// Count rework items (damages that have a rework jobwork assigned)
+		long reworkCount = receipts.stream()
+			.flatMap(r -> r.getJobworkReceiptItems().stream())
+			.flatMap(ri -> ri.getDamages().stream())
+			.filter(d -> d.getReworkJobWork() != null)
+			.mapToLong(d -> d.getQuantity())
+			.sum();
+
 		JobworkTimelineResponse.JobworkMetrics metrics = JobworkTimelineResponse.JobworkMetrics.builder()
 			.totalIssued(totalAssignedQty)
 			.totalAccepted(totalAccepted)
@@ -923,7 +983,16 @@ public class JobworkServiceImpl implements JobworkService<CreateJobworkRequest> 
 			.totalPending(totalAssignedQty - totalReturned)
 			.totalWagesEarned(totalWages)
 			.totalSalesDeduction(totalSalesAmt)
+			.netWagesEarned(totalWages - totalSalesAmt)
 			.completionPercentage(completion)
+			.receiptCount(receiptCount)
+			.averageTimePerReceipt(avgTimePerReceipt)
+			.totalDuration(totalDuration)
+			.damageRate(damageRate)
+			.salesRate(salesRate)
+			.acceptanceRate(acceptanceRate)
+			.efficiencyScore(efficiencyScore)
+			.reworkCount(reworkCount)
 			.build();
 
 		return JobworkTimelineResponse.builder()
@@ -940,7 +1009,7 @@ public class JobworkServiceImpl implements JobworkService<CreateJobworkRequest> 
 			.lastModifiedBy(jobwork.getLastModifiedBy())
 			.lastModifiedAt(jobwork.getLastModifiedAt())
 			.parentJobworkNumber(jobwork.getParentJobwork() != null ? jobwork.getParentJobwork().getJobworkNumber() : null)
-			// .childJobworkNumbers(jobworkRepository.findByParentJobwork(jobwork).stream().map(Jobwork::getJobworkNumber).collect(Collectors.toList()))
+			.childJobworkNumbers(jobworkRepository.findByParentJobwork(jobwork).stream().map(Jobwork::getJobworkNumber).collect(Collectors.toList()))
 			.items(new ArrayList<>(itemProgress.values()))
 			.metrics(metrics)
 			.receipts(receiptDetails)
@@ -959,7 +1028,7 @@ public class JobworkServiceImpl implements JobworkService<CreateJobworkRequest> 
 		} else if (ji.getSubCategory() != null) {
 			return ji.getSubCategory().getName();
 		}
-		return "Unknown";
+		return "Piece(s)";
 	}
 
 	private Jobwork getJobworkOrThrow(String jobworkNumber) {
@@ -967,6 +1036,70 @@ public class JobworkServiceImpl implements JobworkService<CreateJobworkRequest> 
 			LOGGER.error("Jobwork not found: {}", jobworkNumber);
 			return new JobworkNotFoundException("Jobwork not found: " + jobworkNumber);
 		});
+	}
+
+	/**
+	 * Calculate efficiency score based on acceptance rate, damage rate, and completion.
+	 * Score ranges from A (excellent) to D (poor).
+	 */
+	private String calculateEfficiencyScore(Double acceptanceRate, Double damageRate, String completion) {
+		try {
+			double completionPct = Double.parseDouble(completion.replace("%", ""));
+			
+			// Weighted score calculation
+			double score = (acceptanceRate * 0.5) + (completionPct * 0.3) - (damageRate * 0.2);
+			
+			if (score >= 80) return "A";
+			if (score >= 60) return "B";
+			if (score >= 40) return "C";
+			return "D";
+		} catch (NumberFormatException e) {
+			return "N/A";
+		}
+	}
+
+	/**
+	 * Format duration in milliseconds to human-readable format.
+	 */
+	private String formatDuration(long millis) {
+		long days = java.util.concurrent.TimeUnit.MILLISECONDS.toDays(millis);
+		long hours = java.util.concurrent.TimeUnit.MILLISECONDS.toHours(millis) % 24;
+		long minutes = java.util.concurrent.TimeUnit.MILLISECONDS.toMinutes(millis) % 60;
+		
+		if (days > 0) {
+			return String.format("%dd %dh %dm", days, hours, minutes);
+		} else if (hours > 0) {
+			return String.format("%dh %dm", hours, minutes);
+		} else {
+			return String.format("%dm", minutes);
+		}
+	}
+
+	@Override
+	public List<PriorJobworkResponse> getPriorClosedJobworks(String currentJobworkNumber) {
+		LOGGER.info("Fetching prior closed jobworks for current jobwork: {}", currentJobworkNumber);
+		
+		// Get the current jobwork to find its creation date
+		Jobwork currentJobwork = getJobworkOrThrow(currentJobworkNumber);
+		LocalDateTime currentCreatedAt = currentJobwork.getCreatedAt();
+		
+		if (currentCreatedAt == null) {
+			LOGGER.warn("Current jobwork {} has no creation date", currentJobworkNumber);
+			return new ArrayList<>();
+		}
+		
+		// Find all closed jobworks created before the current jobwork
+		List<Jobwork> priorJobworks = jobworkRepository.findClosedJobworksCreatedBefore(currentCreatedAt);
+		
+		// Convert to response DTO
+		return priorJobworks.stream()
+				.map(jw -> PriorJobworkResponse.builder()
+						.jobworkNumber(jw.getJobworkNumber())
+						.assignedTo(jw.getAssignedTo() != null ? jw.getAssignedTo().getName() : "Unassigned")
+						.jobworkType(jw.getJobworkType() != null ? jw.getJobworkType().toString() : null)
+						.createdAt(jw.getCreatedAt())
+						.build())
+				.collect(Collectors.toList());
 	}
 
 }

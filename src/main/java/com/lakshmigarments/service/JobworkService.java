@@ -17,6 +17,7 @@ import com.lakshmigarments.dto.response.ItemResponse;
 import com.lakshmigarments.dto.response.JobworkDetailDTO;
 import com.lakshmigarments.dto.response.JobworkResponse;
 import com.lakshmigarments.dto.JobworkTimelineResponse;
+import com.lakshmigarments.dto.response.PriorJobworkResponse;
 import com.lakshmigarments.model.Jobwork;
 import com.lakshmigarments.model.JobworkStatus;
 import com.lakshmigarments.model.JobworkType;
@@ -59,6 +60,8 @@ public interface JobworkService<T extends CreateJobworkRequest> {
 
     JobworkTimelineResponse getJobworkTimeline(String jobworkNumber);
 
+    // Get closed jobworks issued prior to the given jobwork (for damage source selection)
+    List<PriorJobworkResponse> getPriorClosedJobworks(String currentJobworkNumber);
 
 
 }

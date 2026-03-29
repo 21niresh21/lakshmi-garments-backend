@@ -9,12 +9,7 @@ import org.springframework.stereotype.Component;
 import com.lakshmigarments.dto.request.CreateCuttingJobworkRequest;
 import com.lakshmigarments.dto.request.CreateItemBasedJobworkRequest;
 import com.lakshmigarments.exception.InsufficientBatchQuantityException;
-import com.lakshmigarments.exception.InsufficientInventoryException;
-import com.lakshmigarments.model.Damage;
 import com.lakshmigarments.model.DamageType;
-import com.lakshmigarments.model.Jobwork;
-import com.lakshmigarments.model.JobworkItem;
-import com.lakshmigarments.model.JobworkReceipt;
 import com.lakshmigarments.model.JobworkType;
 
 @Component
@@ -28,7 +23,7 @@ public class JobworkCreationValidator {
 		LOGGER.debug("Assigned quantities {} for batch", assignedQuantity);
 		LOGGER.debug("Repairable damages quantity {}", repairableDamages);
 
-		boolean isAvailable = (batchQuantity - assignedQuantity + repairableDamages) >= request.getQuantities().get(0) ? true
+		boolean isAvailable = (batchQuantity - assignedQuantity + repairableDamages) >= request.getQuantity() ? true
 				: false;
 		if (!isAvailable) {
 			LOGGER.error("All the quantities of the batch has been processed for CUTTING");

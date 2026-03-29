@@ -25,6 +25,7 @@ import com.lakshmigarments.model.Batch;
 import com.lakshmigarments.model.BatchItem;
 import com.lakshmigarments.model.BatchStatus;
 import com.lakshmigarments.model.Damage;
+import com.lakshmigarments.model.DamageSource;
 import com.lakshmigarments.model.DamageType;
 import com.lakshmigarments.model.Item;
 import com.lakshmigarments.model.Jobwork;
@@ -122,8 +123,24 @@ public class JobworkReceiptServiceImpl implements JobworkReceiptService {
 						damage.setJobworkReceiptItem(jobworkReceiptItem);
 						damage.setQuantity(damageRequest.getQuantity());
 						damage.setDamageType(DamageType.valueOf(damageRequest.getType()));
+						damage.setReportedFrom(jobwork);
+											
+						// Set damage source only for REPAIRABLE damage type
+						if (damage.getDamageType() == DamageType.REPAIRABLE && damageRequest.getSource() != null && !damageRequest.getSource().isEmpty()) {
+							damage.setDamageSource(DamageSource.fromString(damageRequest.getSource()));
+												
+							// Set causedBy based on damage source
+							if (DamageSource.CURRENT_JOBWORK == damage.getDamageSource()) {
+								damage.setCausedBy(jobwork);
+							} else if (DamageSource.PREVIOUS_JOBWORK == damage.getDamageSource()) {
+								// For previous jobwork damage, we need to find the responsible jobwork
+								// This can be set later or determined from the batch's jobwork history
+								LOGGER.debug("Previous jobwork damage reported for item {}", receiptItemRequest.getItemName());
+							}
+						}
+											
 						damageRepository.save(damage);
-						
+									
 						totalDamagesForItem += damageRequest.getQuantity();
 					}
 				}

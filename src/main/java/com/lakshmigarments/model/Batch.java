@@ -32,6 +32,8 @@ public class Batch extends BaseAuditable {
 	@Column(length = 100, nullable = false, unique = true)
 	private String serialCode;
 	
+	private Long quantity;
+	
 	private Long availableQuantity;
 	
 	@ManyToOne

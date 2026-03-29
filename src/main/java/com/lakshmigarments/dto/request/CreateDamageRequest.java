@@ -15,4 +15,7 @@ public class CreateDamageRequest {
 	private String type;
 	private Long quantity = 0L;
 
+	// Source is only required for REPAIRABLE damage type
+	private String source;
+
 }

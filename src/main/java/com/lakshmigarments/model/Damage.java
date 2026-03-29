@@ -25,9 +25,17 @@ public class Damage {
     @Column(name = "damage_type", nullable = false)
     private DamageType damageType;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "damage_source")
+    private DamageSource damageSource;
+
     @ManyToOne
     private Jobwork reworkJobWork;
 
     @ManyToOne
     private Jobwork reportedFrom;
+
+    @ManyToOne
+    @JoinColumn(name = "caused_by_jobwork_id")
+    private Jobwork causedBy;
 }

@@ -32,6 +32,7 @@ import com.lakshmigarments.dto.response.EmployeeJobworkResponse;
 import com.lakshmigarments.dto.response.ItemResponse;
 import com.lakshmigarments.dto.response.JobworkDetailDTO;
 import com.lakshmigarments.dto.response.JobworkResponse;
+import com.lakshmigarments.dto.response.PriorJobworkResponse;
 import com.lakshmigarments.model.Employee;
 import com.lakshmigarments.model.Jobwork;
 import com.lakshmigarments.model.JobworkStatus;
@@ -163,6 +164,13 @@ public class JobworkController {
 		LOGGER.info("Received request for jobwork timeline of {}", jobworkNumber);
 		JobworkTimelineResponse timeline = jobworkService.getJobworkTimeline(jobworkNumber);
 		return ResponseEntity.ok(timeline);
+	}
+
+	@GetMapping("/{jobworkNumber}/prior-closed")
+	public ResponseEntity<List<PriorJobworkResponse>> getPriorClosedJobworks(@PathVariable String jobworkNumber) {
+		LOGGER.info("Received request for prior closed jobworks for {}", jobworkNumber);
+		List<PriorJobworkResponse> priorJobworks = jobworkService.getPriorClosedJobworks(jobworkNumber);
+		return ResponseEntity.ok(priorJobworks);
 	}
 
 }

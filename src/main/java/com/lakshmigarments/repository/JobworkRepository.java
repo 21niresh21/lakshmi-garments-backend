@@ -60,10 +60,15 @@ public interface JobworkRepository extends JpaRepository<Jobwork, Long>, JpaSpec
 
 	List<Jobwork> findByBatch(Batch batch);
 
-	// List<Jobwork> findByParentJobwork(Jobwork parentJobwork);
+	// Find all child jobworks (reassigned/split from a parent)
+	List<Jobwork> findByParentJobwork(Jobwork parentJobwork);
 
 	// Find all jobworks assigned to a specific employee by name
 	List<Jobwork> findByAssignedToNameOrderByCreatedAtDesc(String employeeName);
+
+	// Find closed jobworks created before a specific date (for damage source selection)
+	@Query("SELECT j FROM Jobwork j WHERE j.createdAt < :createdAt AND j.jobworkStatus = 'CLOSED' ORDER BY j.createdAt DESC")
+	List<Jobwork> findClosedJobworksCreatedBefore(@Param("createdAt") LocalDateTime createdAt);
 
 	// Count pending jobworks (not CLOSED or REASSIGNED) for an employee
 	@Query("SELECT COUNT(j) FROM Jobwork j WHERE j.assignedTo.name = :employeeName " +
@@ -78,5 +83,11 @@ public interface JobworkRepository extends JpaRepository<Jobwork, Long>, JpaSpec
 			@Param("employeeName") String employeeName,
 			@Param("startDate") LocalDateTime startDate,
 			@Param("endDate") LocalDateTime endDate);
+
+	// Get total cutting quantity issued for a batch (for dynamic validation)
+	@Query(value = "SELECT COALESCE(SUM(jwi.quantity), 0) FROM jobworks jw, jobwork_items jwi " +
+			"WHERE jw.id = jwi.jobwork_id AND jw.batch_id = :batchId AND jw.jobwork_type = 'CUTTING' " +
+			"AND jw.jobwork_status <> 'REASSIGNED'", nativeQuery = true)
+	Long getTotalCuttingQuantityIssued(@Param("batchId") Long batchId);
 
 }

@@ -7,7 +7,9 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import com.lakshmigarments.model.Damage;
+import com.lakshmigarments.model.DamageSource;
 import com.lakshmigarments.model.DamageType;
+import com.lakshmigarments.model.Jobwork;
 import com.lakshmigarments.model.JobworkType;
 
 public interface DamageRepository extends JpaRepository<Damage, Long> {
@@ -44,5 +46,26 @@ public interface DamageRepository extends JpaRepository<Damage, Long> {
 			+ "  AND jw.jobwork_type = :jobworkType\r\n" + "  AND b.serial_code = :serialCode\r\n"
 			+ "  AND i.name = :itemName\r\n" + "", nativeQuery = true)
 	Long getDamagedQuantity(String serialCode, String damageType, String jobworkType, String itemName);
+
+	// Find all damages caused by a specific jobwork
+	List<Damage> findByCausedBy(Jobwork jobwork);
+
+	// Find all damages reported from a specific jobwork
+	List<Damage> findByReportedFrom(Jobwork jobwork);
+
+	// Find damages by damage source
+	List<Damage> findByDamageSource(DamageSource damageSource);
+
+	// Find damages by jobwork and damage source
+	List<Damage> findByCausedByAndDamageSource(Jobwork jobwork, DamageSource damageSource);
+
+	// Get total repairable damages for a batch (pieces that will return after cutting)
+	@Query(value = "SELECT COALESCE(SUM(d.quantity), 0) FROM damages d " +
+			"JOIN jobwork_receipt_items jwri ON d.jobwork_receipt_item_id = jwri.id " +
+			"JOIN jobwork_receipts jwr ON jwri.jobwork_receipt_id = jwr.id " +
+			"JOIN jobworks jw ON jwr.jobwork_id = jw.id " +
+			"WHERE jw.batch_id = :batchId AND d.damage_type = 'REPAIRABLE' " +
+			"AND jw.jobwork_type = 'CUTTING' AND jw.jobwork_status <> 'REASSIGNED'", nativeQuery = true)
+	Long getTotalRepairableDamagesForBatch(@Param("batchId") Long batchId);
 
 }

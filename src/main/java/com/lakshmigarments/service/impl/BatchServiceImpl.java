@@ -6,10 +6,12 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.HashSet;
 
 import java.util.List;
 import java.util.Objects;
 import java.util.Date;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
@@ -128,6 +130,7 @@ public class BatchServiceImpl implements BatchService {
 		batch.setSerialCode(batchRequestDTO.getSerialCode());
 		batch.setIsUrgent(batchRequestDTO.getIsUrgent());
 		batch.setRemarks(batchRequestDTO.getRemarks());
+		batch.setQuantity(batchRequestDTO.getTotalQuantity());
 		batch.setAvailableQuantity(batchRequestDTO.getTotalQuantity());
 
 		Batch createdBatch = batchRepository.save(batch);
@@ -232,7 +235,7 @@ public class BatchServiceImpl implements BatchService {
 		List<BatchTimelineResponse.BatchItemSummary> itemSummaries = batchItems.stream().map(bi ->
 			BatchTimelineResponse.BatchItemSummary.builder()
 				.itemId(bi.getId())
-				.itemName(bi.getItem() != null ? bi.getItem().getName() : "Unknown")
+				.itemName(bi.getItem() != null ? bi.getItem().getName() : "Piece(s)")
 				.quantity(bi.getQuantity())
 				.build()
 		).collect(Collectors.toList());
@@ -241,7 +244,7 @@ public class BatchServiceImpl implements BatchService {
 		List<BatchTimelineResponse.SubCategorySummary> subCatSummaries = batchSubCategories.stream().map(bsc ->
 			BatchTimelineResponse.SubCategorySummary.builder()
 				.id(bsc.getId())
-				.subCategoryName(bsc.getSubCategory() != null ? bsc.getSubCategory().getName() : "Unknown")
+				.subCategoryName(bsc.getSubCategory() != null ? bsc.getSubCategory().getName() : "Piece(s)")
 				.originalQuantity(bsc.getQuantity())
 				.availableQuantity(bsc.getAvailableQuantity())
 				.build()
@@ -284,7 +287,7 @@ public class BatchServiceImpl implements BatchService {
 			.totalQuantity(totalPreCuttingQuantity)
 			.items(batchSubCategories.stream().map(bsc -> {
 				TimelineItemDetail tid = new TimelineItemDetail();
-				tid.setItemName(bsc.getSubCategory() != null ? bsc.getSubCategory().getName() : "Unknown");
+				tid.setItemName(bsc.getSubCategory() != null ? bsc.getSubCategory().getName() : "Piece(s)");
 				tid.setQuantity(bsc.getQuantity());
 				return tid;
 			}).collect(Collectors.toList()))
@@ -329,7 +332,7 @@ public class BatchServiceImpl implements BatchService {
 			// Build assigned items
 			List<BatchTimelineResponse.JobworkItemDetail> assignedItems = jw.getJobworkItems().stream().map(ji ->
 				BatchTimelineResponse.JobworkItemDetail.builder()
-					.itemName(ji.getItem() != null ? ji.getItem().getName() : (ji.getSubCategory() != null ? ji.getSubCategory().getName() : "Unknown"))
+					.itemName(ji.getItem() != null ? ji.getItem().getName() : (ji.getSubCategory() != null ? ji.getSubCategory().getName() : "Piece(s)"))
 					.quantity(ji.getQuantity())
 					.itemStatus(ji.getJobworkItemStatus() != null ? ji.getJobworkItemStatus().toString() : null)
 					.build()
@@ -352,7 +355,7 @@ public class BatchServiceImpl implements BatchService {
 					timelineEvents.get(timelineEvents.size() - 1).getPerformedAt(), jw.getCreatedAt()))
 				.items(jw.getJobworkItems().stream().map(ji -> {
 					TimelineItemDetail tid = new TimelineItemDetail();
-					tid.setItemName(ji.getItem() != null ? ji.getItem().getName() : (ji.getSubCategory() != null ? ji.getSubCategory().getName() : "Unknown"));
+					tid.setItemName(ji.getItem() != null ? ji.getItem().getName() : (ji.getSubCategory() != null ? ji.getSubCategory().getName() : "Piece(s)"));
 					tid.setQuantity(ji.getQuantity());
 					return tid;
 				}).collect(Collectors.toList()))
@@ -365,6 +368,7 @@ public class BatchServiceImpl implements BatchService {
 				.collect(Collectors.toList());
 
 			long jwAccepted = 0, jwDamaged = 0, jwSales = 0;
+			long jwUnrepairable = 0, jwSupplierDamage = 0;
 			double jwWages = 0.0, jwSalesAmt = 0.0;
 			List<BatchTimelineResponse.ReceiptSummary> receiptSummaries = new ArrayList<>();
 
@@ -397,8 +401,14 @@ public class BatchServiceImpl implements BatchService {
 							for (Damage damage : jwri.getDamages()) {
 								if (jw.getJobworkType() != JobworkType.CUTTING) {
 									if (damage.getDamageType() == DamageType.REPAIRABLE) postCuttingRepairable += damage.getQuantity();
-									else if (damage.getDamageType() == DamageType.UNREPAIRABLE) postCuttingUnrepairable += damage.getQuantity();
-									else if (damage.getDamageType() == DamageType.SUPPLIER_DAMAGE) postCuttingSupplierDamage += damage.getQuantity();
+									else if (damage.getDamageType() == DamageType.UNREPAIRABLE) {
+										postCuttingUnrepairable += damage.getQuantity();
+										jwUnrepairable += damage.getQuantity();
+									}
+									else if (damage.getDamageType() == DamageType.SUPPLIER_DAMAGE) {
+										postCuttingSupplierDamage += damage.getQuantity();
+										jwSupplierDamage += damage.getQuantity();
+									}
 								}
 
 								if (damage.getDamageType() == DamageType.UNREPAIRABLE && jwri.getSalesPrice() != null) {
@@ -416,7 +426,7 @@ public class BatchServiceImpl implements BatchService {
 						rWages -= itemDeduction;
 
 						receiptItemDetails.add(BatchTimelineResponse.ReceiptItemDetail.builder()
-							.itemName(jwri.getItem() != null ? jwri.getItem().getName() : "Unknown")
+							.itemName(jwri.getItem() != null ? jwri.getItem().getName() : "Piece(s)")
 							.acceptedQuantity(acc)
 							.damagedQuantity(dmg)
 							.salesQuantity(sal)
@@ -483,11 +493,14 @@ public class BatchServiceImpl implements BatchService {
 				postCuttingDamaged += jwDamaged;
 				postCuttingSales += jwSales;
 				if (jw.getJobworkType() == JobworkType.STITCHING) {
-					stitchingCompleted += jwAccepted;
+					// Stitching completed = accepted + unrepairable + supplier damage (all processed items)
+					stitchingCompleted += (jwAccepted + jwUnrepairable + jwSupplierDamage);
 				} else if (jw.getJobworkType() == JobworkType.PACKAGING) {
-					packagingCompleted += jwAccepted;
+					// Packaging completed = accepted + unrepairable + supplier damage (all processed items)
+					packagingCompleted += (jwAccepted + jwUnrepairable + jwSupplierDamage);
 				}
 			} else {
+				// Cutting consumed = accepted from cutting (which becomes post-cutting quantity)
 				cuttingCompleted += jwAccepted;
 			}
 			totalWages += jwWages;
@@ -549,9 +562,29 @@ public class BatchServiceImpl implements BatchService {
 			.firstEventAt(firstEvent)
 			.lastEventAt(lastEvent)
 			.totalDurationFromItemCreation(TimeDifferenceUtil.formatDuration(firstItemReceipt, LocalDateTime.now()))
+			.cuttingJobworkCount((int) jobworks.stream().filter(jw -> jw.getJobworkType() == JobworkType.CUTTING).count())
+			.stitchingJobworkCount((int) jobworks.stream().filter(jw -> jw.getJobworkType() == JobworkType.STITCHING).count())
+			.packagingJobworkCount((int) jobworks.stream().filter(jw -> jw.getJobworkType() == JobworkType.PACKAGING).count())
+			.uniqueEmployeesAssigned((int) jobworks.stream().map(jw -> jw.getAssignedTo()).filter(e -> e != null).map(e -> e.getName()).distinct().count())
+			.averageTimeBetweenJobworks(calculateAvgTimeBetweenJobworks(jobworks))
+			.averageTimeBetweenReceipts(calculateAvgTimeBetweenReceipts(allReceipts))
+			.totalWagesPaid(totalWages)
+			.totalSalesRevenue(totalSalesAmount)
+			.totalCostOfProduction(totalWages - totalSalesAmount)
+			.totalItemsProduced(totalPostCuttingQuantity)
+			.totalItemsAccepted(postCuttingAccepted)
+			.totalItemsDamaged(postCuttingDamaged)
+			.totalItemsSold(postCuttingSales)
+			.overallAcceptanceRate(calculateRate(postCuttingAccepted, postCuttingAccepted + postCuttingDamaged + postCuttingSales))
+			.overallDamageRate(calculateRate(postCuttingDamaged, postCuttingAccepted + postCuttingDamaged + postCuttingSales))
+			.overallSalesRate(calculateRate(postCuttingSales, postCuttingAccepted + postCuttingDamaged + postCuttingSales))
+			.productionEfficiencyScore(calculateProductionEfficiencyScore(postCuttingAccepted, postCuttingDamaged, postCuttingSales))
+			.totalReworkCount(calculateReworkCount(allReceipts))
+			.estimatedCompletionTime("N/A")
 			.build();
 
 		// ─── Stage Progress ───────────────────────────────────
+		// For cutting: progress = consumed / total pre-cutting quantity
 		BatchTimelineResponse.StageProgress cuttingProgress = BatchTimelineResponse.StageProgress.builder()
 			.totalQuantity(totalPreCuttingQuantity)
 			.completedQuantity(preCuttingConsumed)
@@ -559,6 +592,8 @@ public class BatchServiceImpl implements BatchService {
 			.progressPercentage(totalPreCuttingQuantity > 0 ? (Math.round((double) preCuttingConsumed / totalPreCuttingQuantity * 100)) + "%" : "0%")
 			.build();
 
+		// For stitching & packaging: progress = (accepted + unrepairable + supplier damage) / total post-cutting quantity
+		// These represent all items that have been processed (successfully or terminated)
 		BatchTimelineResponse.StageProgress stitchingProgress = BatchTimelineResponse.StageProgress.builder()
 			.totalQuantity(totalPostCuttingQuantity)
 			.completedQuantity(stitchingCompleted)
@@ -945,6 +980,105 @@ public class BatchServiceImpl implements BatchService {
 	public List<String> getSubCategoriesBySerialCode(String serialCode) {
 		LOGGER.debug("Fetching sub-categories for batch serial code: {}", serialCode);
 		return batchSubCategoryRepository.findSubCategoriesBySerialCode(serialCode);
+	}
+
+	// ══════════════════════════════════════════════════════════
+	//  HELPER METHODS FOR BATCH TIMELINE METRICS
+	// ══════════════════════════════════════════════════════════
+
+	/**
+	 * Calculate average time between jobwork assignments.
+	 */
+	private String calculateAvgTimeBetweenJobworks(List<Jobwork> jobworks) {
+		if (jobworks == null || jobworks.size() <= 1) return "N/A";
+		
+		long totalMillis = 0;
+		List<Jobwork> sorted = jobworks.stream()
+			.sorted(Comparator.comparing(Jobwork::getCreatedAt))
+			.collect(Collectors.toList());
+		for (int i = 1; i < sorted.size(); i++) {
+			totalMillis += java.time.Duration.between(
+				sorted.get(i-1).getCreatedAt(), 
+				sorted.get(i).getCreatedAt()).toMillis();
+		}
+		return formatDuration(totalMillis / (jobworks.size() - 1));
+	}
+
+	/**
+	 * Calculate average time between receipts.
+	 */
+	private String calculateAvgTimeBetweenReceipts(List<JobworkReceipt> receipts) {
+		if (receipts == null || receipts.size() <= 1) return "N/A";
+		
+		long totalMillis = 0;
+		List<JobworkReceipt> sorted = receipts.stream()
+			.sorted(Comparator.comparing(JobworkReceipt::getCreatedAt))
+			.collect(Collectors.toList());
+		for (int i = 1; i < sorted.size(); i++) {
+			totalMillis += java.time.Duration.between(
+				sorted.get(i-1).getCreatedAt(), 
+				sorted.get(i).getCreatedAt()).toMillis();
+		}
+		return formatDuration(totalMillis / (receipts.size() - 1));
+	}
+
+	/**
+	 * Calculate rate as percentage.
+	 */
+	private Double calculateRate(long numerator, long denominator) {
+		if (denominator <= 0) return 0.0;
+		return Math.round((double) numerator / denominator * 10000.0) / 100.0;
+	}
+
+	/**
+	 * Calculate production efficiency score (A-D rating).
+	 */
+	private String calculateProductionEfficiencyScore(long accepted, long damaged, long sales) {
+		long total = accepted + damaged + sales;
+		if (total <= 0) return "N/A";
+		
+		double acceptanceRate = (double) accepted / total * 100;
+		double damageRate = (double) damaged / total * 100;
+		
+		// Weighted score: acceptance (60%), damage penalty (40%)
+		double score = (acceptanceRate * 0.6) - (damageRate * 0.4);
+		
+		if (score >= 70) return "A";
+		if (score >= 50) return "B";
+		if (score >= 30) return "C";
+		return "D";
+	}
+
+	/**
+	 * Count items sent for rework.
+	 */
+	private Long calculateReworkCount(List<JobworkReceipt> receipts) {
+		if (receipts == null) return 0L;
+		return receipts.stream()
+			.filter(r -> r.getJobworkReceiptItems() != null)
+			.flatMap(r -> r.getJobworkReceiptItems().stream())
+			.filter(ri -> ri.getDamages() != null)
+			.flatMap(ri -> ri.getDamages().stream())
+			.filter(d -> d.getReworkJobWork() != null)
+			.mapToLong(d -> d.getQuantity() != null ? d.getQuantity() : 0L)
+			.sum();
+	}
+
+	/**
+	 * Format duration in milliseconds to human-readable format.
+	 */
+	private String formatDuration(long millis) {
+		long days = java.util.concurrent.TimeUnit.MILLISECONDS.toDays(millis);
+		long hours = java.util.concurrent.TimeUnit.MILLISECONDS.toHours(millis) % 24;
+		long minutes = java.util.concurrent.TimeUnit.MILLISECONDS.toMinutes(millis) % 60;
+		
+		if (days > 0) {
+			return String.format("%dd %dh %dm", days, hours, minutes);
+		} else if (hours > 0) {
+			return String.format("%dh %dm", hours, minutes);
+		} else {
+			return String.format("%dm", minutes);
+		}
 	}
 
 }
