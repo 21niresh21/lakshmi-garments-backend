@@ -1,5 +1,8 @@
 package com.lakshmigarments.service;
 
+import java.time.LocalDate;
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -29,23 +32,83 @@ public class IDService {
 	}
 	
 	public String getSerialCode(String categoryName) {
-	    String latestSerialCode = batchRepository.findLatestSerialCodeByCategoryName(categoryName).orElse(null);
 	    String categoryCode = categoryRepository.findCodeByName(categoryName).orElse(null);
 	    
-	    if (latestSerialCode == null) {
-	        return categoryCode + "0001";
+	    // Get current financial year (e.g., "25/26" for April 2025 - March 2026)
+	    String financialYear = getCurrentFinancialYear();
+	    
+	    // Build the prefix: CategoryCode + FinancialYear + "-"
+	    String prefix = categoryCode + financialYear + "-";
+	    
+	    // Get all serial codes for this category, ordered by createdAt DESC
+	    List<String> allSerialCodes = batchRepository.findAllSerialCodesByCategoryName(categoryName);
+	    
+	    // Find the latest serial code that matches the current financial year
+	    String latestInFinancialYear = null;
+	    for (String serialCode : allSerialCodes) {
+	        if (serialCode != null && serialCode.contains(prefix)) {
+	            latestInFinancialYear = serialCode;
+	            break; // Since list is ordered by createdAt DESC, first match is the latest
+	        }
+	    }
+	    
+	    if (latestInFinancialYear == null) {
+	        // No batches in this financial year yet, start with 0001
+	        return prefix + "0001";
 	    }
 
-	    // Strip any parenthetical suffix like (U)
-	    String cleanedSerialCode = latestSerialCode.contains("(")
-	            ? latestSerialCode.substring(0, latestSerialCode.indexOf('(')).trim()
-	            : latestSerialCode;
-
-	    Integer numericPart = Integer.parseInt(cleanedSerialCode.substring(categoryCode.length()));
-	    numericPart++;
-
-	    String incrementedNumericPart = String.format("%04d", numericPart);
-	    return categoryCode + incrementedNumericPart;
+	    // Extract the numeric part from the latest serial code
+	    // Format expected: P25/26-0001
+	    // Find the position of the last hyphen and extract everything after it
+	    int lastHyphenIndex = latestInFinancialYear.lastIndexOf('-');
+	    if (lastHyphenIndex == -1 || lastHyphenIndex >= latestInFinancialYear.length() - 1) {
+	        // If no hyphen found or nothing after hyphen, start fresh
+	        return prefix + "0001";
+	    }
+	    
+	    String numericPartStr = latestInFinancialYear.substring(lastHyphenIndex + 1);
+	    
+	    // Strip any parenthetical suffix like (U) from numeric part
+	    if (numericPartStr.contains("(")) {
+	        numericPartStr = numericPartStr.substring(0, numericPartStr.indexOf('(')).trim();
+	    }
+	    
+	    try {
+	        Integer numericPart = Integer.parseInt(numericPartStr.trim());
+	        numericPart++;
+	        String incrementedNumericPart = String.format("%04d", numericPart);
+	        return prefix + incrementedNumericPart;
+	    } catch (NumberFormatException e) {
+	        LOGGER.error("Failed to parse numeric part from serial code: {}", latestInFinancialYear, e);
+	        // If parsing fails, start fresh with 0001
+	        return prefix + "0001";
+	    }
+	}
+	
+	/**
+	 * Gets the current financial year in format "YY/YY"
+	 * Financial year runs from April 1st to March 31st of next year
+	 * Example: April 2025 - March 2026 returns "25/26"
+	 */
+	private String getCurrentFinancialYear() {
+	    LocalDate now = LocalDate.now();
+	    int year = now.getYear();
+	    int month = now.getMonthValue();
+	    
+	    // Financial year starts in April
+	    int startYear, endYear;
+	    if (month >= 4) {
+	        // We're in April or later, so financial year is current year to next year
+	        startYear = year % 100;  // Get last 2 digits
+	        endYear = (year + 1) % 100;
+	    } else {
+	        // We're before April, so financial year is previous year to current year
+	        startYear = (year - 1) % 100;
+	        endYear = year % 100;
+	    }
+	    
+	    // Format as "YY/YY" with leading zeros if needed
+	    return String.format("%02d/%02d", startYear, endYear);
 	}
 
 

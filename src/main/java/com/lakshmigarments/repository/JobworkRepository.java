@@ -53,6 +53,10 @@ public interface JobworkRepository extends JpaRepository<Jobwork, Long>, JpaSpec
 	@Query(value = "SELECT COALESCE(SUM(jwi.quantity), 0) FROM jobworks jw, jobwork_items jwi, batches b, items i "
 			+ " WHERE jw.id = jwi.jobwork_id AND jw.batch_id = b.id AND b.serial_code = :serialCode and jw.jobwork_type = :jobworkType and jwi.item_id = i.id and i.name = :itemName AND jw.jobwork_status <> 'REASSIGNED'", nativeQuery = true)
 	Long getAssignedQuantities(String serialCode, String jobworkType, String itemName);
+	
+	@Query(value = "SELECT COALESCE(SUM(jwi.quantity), 0) FROM jobworks jw, jobwork_items jwi, batches b, items i "
+			+ " WHERE jw.id = jwi.jobwork_id AND jw.batch_id = b.id AND b.serial_code = :serialCode and jw.jobwork_type = :jobworkType and jwi.item_id = i.id and i.name = :itemName AND (jw.jobwork_status = 'REASSIGNED' OR jw.jobwork_status = 'IN_PROGRESS')", nativeQuery = true)
+	Long getAssignedQuantitiesInProgress(String serialCode, String jobworkType, String itemName);
 
 	@Query(value = "SELECT COALESCE(SUM(jwi.quantity), 0) FROM jobworks jw, jobwork_items jwi, batches b, sub_categories sc "
 			+ " WHERE jw.id = jwi.jobwork_id AND jw.batch_id = b.id AND b.serial_code = :serialCode and jw.jobwork_type = :jobworkType and jwi.sub_category_id = sc.id and sc.name = :subCategoryName AND jw.jobwork_status <> 'REASSIGNED'", nativeQuery = true)
@@ -83,6 +87,11 @@ public interface JobworkRepository extends JpaRepository<Jobwork, Long>, JpaSpec
 			@Param("employeeName") String employeeName,
 			@Param("startDate") LocalDateTime startDate,
 			@Param("endDate") LocalDateTime endDate);
+
+	// Get list of pending jobwork numbers for an employee (without date filter)
+	@Query("SELECT j.jobworkNumber FROM Jobwork j WHERE j.assignedTo.name = :employeeName " +
+			"AND j.jobworkStatus NOT IN ('CLOSED', 'REASSIGNED')")
+	List<String> findPendingJobworkNumbersByEmployeeName(@Param("employeeName") String employeeName);
 
 	// Get total cutting quantity issued for a batch (for dynamic validation)
 	@Query(value = "SELECT COALESCE(SUM(jwi.quantity), 0) FROM jobworks jw, jobwork_items jwi " +

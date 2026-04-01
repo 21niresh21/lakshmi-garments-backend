@@ -44,8 +44,19 @@ public interface DamageRepository extends JpaRepository<Damage, Long> {
 			+ "  ON jwr.jobwork_id = jw.id\r\n" + "JOIN batches b\r\n" + "  ON jw.batch_id = b.id\r\n"
 			+ "JOIN items i\r\n" + "  ON jwri.item_id = i.id\r\n" + "WHERE d.damage_type = :damageType\r\n"
 			+ "  AND jw.jobwork_type = :jobworkType\r\n" + "  AND b.serial_code = :serialCode\r\n"
-			+ "  AND i.name = :itemName\r\n" + "", nativeQuery = true)
+			+ "  AND i.name = :itemName\r\n" + "  AND d.rework_job_work_id IS NULL\r\n" + "", nativeQuery = true)
 	Long getDamagedQuantity(String serialCode, String damageType, String jobworkType, String itemName);
+	
+	@Query(value = "SELECT COALESCE(SUM(d.quantity), 0)\r\n" + "FROM damages d\r\n"
+			+ "JOIN jobwork_receipt_items jwri\r\n" + "  ON d.jobwork_receipt_item_id = jwri.id\r\n"
+			+ "JOIN jobwork_receipts jwr\r\n" + "  ON jwri.jobwork_receipt_id = jwr.id\r\n" + "JOIN jobworks jw\r\n"
+			+ "  ON jwr.jobwork_id = jw.id\r\n" + "JOIN batches b\r\n" + "  ON jw.batch_id = b.id\r\n"
+			+ "JOIN items i\r\n" + "  ON jwri.item_id = i.id\r\n" + "WHERE d.damage_type = :damageType\r\n"
+			+ "  AND jw.jobwork_type = :jobworkType\r\n" + "  AND b.serial_code = :serialCode\r\n"
+			+ "  AND i.name = :itemName\r\n" + "  AND d.rework_job_work_id IS NULL\r\n"
+			+ "  AND d.damage_source = :damageSource\r\n" + "", nativeQuery = true)
+	Long getDamagedQuantityByDamageSource(String serialCode, String damageType, String jobworkType, String itemName, 
+			String damageSource);
 
 	// Find all damages caused by a specific jobwork
 	List<Damage> findByCausedBy(Jobwork jobwork);

@@ -654,18 +654,29 @@ public class JobworkServiceImpl implements JobworkService<CreateJobworkRequest> 
 				List<JobworkReceiptItem> itemReceipts = riByItem.getOrDefault(itemName, List.of());
 				
 				long issued = jwi.getQuantity();
-				long accepted = itemReceipts.stream().mapToLong(JobworkReceiptItem::getAcceptedQuantity).sum();
-				long damaged = itemReceipts.stream().mapToLong(JobworkReceiptItem::getDamagedQuantity).sum();
-				long sales = itemReceipts.stream().mapToLong(JobworkReceiptItem::getSalesQuantity).sum();
+				long accepted = !itemReceipts.isEmpty() ? itemReceipts.stream().mapToLong(JobworkReceiptItem::getAcceptedQuantity).sum() : 0L;
+				long damaged = !itemReceipts.isEmpty() ? itemReceipts.stream().mapToLong(JobworkReceiptItem::getDamagedQuantity).sum() : 0L;
+				long sales = !itemReceipts.isEmpty() ? itemReceipts.stream().mapToLong(JobworkReceiptItem::getSalesQuantity).sum() : 0L;
+				
+				// Get sales price and wage from first receipt item, or use defaults
+				Double salesPrice = 0.0;
+				Double wagePerItem = 0.0;
+				if (!itemReceipts.isEmpty()) {
+					JobworkReceiptItem firstReceipt = itemReceipts.get(0);
+					salesPrice = firstReceipt.getSalesPrice() != null ? firstReceipt.getSalesPrice() : 0.0;
+					wagePerItem = firstReceipt.getWagePerItem() != null ? firstReceipt.getWagePerItem() : 0.0;
+				}
 				
 				Map<String, Long> itemDamageBreakdown = new HashMap<>();
-				itemReceipts.stream()
-						.flatMap(ri -> ri.getDamages().stream())
-						.forEach(d -> {
-							String type = d.getDamageType().name();
-							itemDamageBreakdown.put(type, itemDamageBreakdown.getOrDefault(type, 0L) + d.getQuantity());
-							overallDamageBreakdown.put(type, overallDamageBreakdown.getOrDefault(type, 0L) + d.getQuantity());
-						});
+				if (!itemReceipts.isEmpty()) {
+					itemReceipts.stream()
+							.flatMap(ri -> ri.getDamages().stream())
+							.forEach(d -> {
+								String type = d.getDamageType().name();
+								itemDamageBreakdown.put(type, itemDamageBreakdown.getOrDefault(type, 0L) + d.getQuantity());
+								overallDamageBreakdown.put(type, overallDamageBreakdown.getOrDefault(type, 0L) + d.getQuantity());
+							});
+				}
 
 				itemDetails.add(DetailedEmployeeJobworkResponse.ItemDetail.builder()
 						.itemName(itemName)
@@ -673,9 +684,9 @@ public class JobworkServiceImpl implements JobworkService<CreateJobworkRequest> 
 						.acceptedQuantity(accepted)
 						.damagedQuantity(damaged)
 						.salesQuantity(sales)
-						.salesPrice(itemReceipts.isEmpty() ? 0.0 : itemReceipts.get(0).getSalesPrice())
-						.wagePerItem(itemReceipts.isEmpty() ? 0.0 : itemReceipts.get(0).getWagePerItem())
-						.status(jwi.getJobworkItemStatus().name())
+						.salesPrice(salesPrice)
+						.wagePerItem(wagePerItem)
+						.status(jwi.getJobworkItemStatus() != null ? jwi.getJobworkItemStatus().name() : "UNKNOWN")
 						.damageBreakdown(itemDamageBreakdown)
 						.build());
 				

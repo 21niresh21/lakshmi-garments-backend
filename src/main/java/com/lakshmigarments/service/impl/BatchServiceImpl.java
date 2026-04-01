@@ -756,6 +756,9 @@ public class BatchServiceImpl implements BatchService {
 		}
 
 		// conditions for adding embroidery (optional step after cutting)
+		// check from batch item total quantity for the items
+		// deduct the currently assigned emb jobworks and add the repairable damages done to those
+		// deduct the stitching jobs assigned for those items
 		List<JobworkReceipt> cuttingJobworkReceipts = receiptRepository
 				.findByJobworkBatchSerialCodeAndJobworkJobworkType(batchSerialCode, JobworkType.CUTTING);
 		LOGGER.debug("Fetched {} jobwork receipts for CUTTING of batch {}", cuttingJobworkReceipts.size(),
@@ -773,7 +776,9 @@ public class BatchServiceImpl implements BatchService {
 				JobworkType.EMBROIDERY.name());
 		Long damagedRepairableEmbroideryQuantities = damageRepository.getDamagedQuantity(batchSerialCode,
 				DamageType.REPAIRABLE.name(), JobworkType.EMBROIDERY.name());
-		long availableForEmbroidery = totalAcceptedQuantityFromCutting - assignedEmbroideryQuantities
+		Long assignedStitchingQuantities = jobworkRepository.getAssignedQuantities(batchSerialCode, 
+				JobworkType.STITCHING.name());
+		long availableForEmbroidery = totalAcceptedQuantityFromCutting - assignedEmbroideryQuantities - assignedStitchingQuantities 
 				+ damagedRepairableEmbroideryQuantities;
 
 		if (availableForEmbroidery > 0) {
@@ -804,12 +809,22 @@ public class BatchServiceImpl implements BatchService {
 				? totalAcceptedQuantityFromEmbroidery 
 				: totalAcceptedQuantityFromCutting;
 
-		Long assignedStitchingQuantities = jobworkRepository.getAssignedQuantities(batchSerialCode,
-				JobworkType.STITCHING.name());
+//		Long assignedStitchingQuantities = jobworkRepository.getAssignedQuantities(batchSerialCode,
+//				JobworkType.STITCHING.name());
 		Long damagedRepairableStitchingQuantities = damageRepository.getDamagedQuantity(batchSerialCode,
 				DamageType.REPAIRABLE.name(), JobworkType.STITCHING.name());
+		
+		// Deduct embroidery quantities that are currently in progress (not yet closed)
+		List<Jobwork> ongoingEmbroideryJobworks = jobworkRepository.findByBatchSerialCodeAndJobworkStatusIn(
+				batchSerialCode, Arrays.asList(JobworkStatus.IN_PROGRESS, JobworkStatus.REASSIGNED, JobworkStatus.AWAITING_CLOSE));
+		Long assignedEmbroideryInProgressQuantity = ongoingEmbroideryJobworks.stream()
+				.filter(jw -> jw.getJobworkType() == JobworkType.EMBROIDERY)
+				.flatMap(jw -> jw.getJobworkItems().stream())
+				.mapToLong(ji -> ji.getQuantity() != null ? ji.getQuantity() : 0L)
+				.sum();
+		
 		long availableForStitching = inputQuantityForStitching - assignedStitchingQuantities
-				+ damagedRepairableStitchingQuantities;
+				+ damagedRepairableStitchingQuantities - assignedEmbroideryInProgressQuantity;
 
 		if (availableForStitching > 0) {
 			allowedJobworkTypes.add(JobworkType.STITCHING);
@@ -830,6 +845,49 @@ public class BatchServiceImpl implements BatchService {
 
 		if (totalAcceptedQuantityForStitching > 0) {
 			allowedJobworkTypes.add(JobworkType.PACKAGING);
+		}
+
+		// OVERLOCK is optional - happens after STITCHING (before ironing/packaging)
+		// Calculate available quantity for overlock from stitching receipts
+		Long assignedOverlockQuantities = jobworkRepository.getAssignedQuantities(batchSerialCode,
+				JobworkType.OVERLOCK.name());
+		Long damagedRepairableOverlockQuantities = damageRepository.getDamagedQuantity(batchSerialCode,
+				DamageType.REPAIRABLE.name(), JobworkType.OVERLOCK.name());
+		long availableForOverlock = totalAcceptedQuantityForStitching - assignedOverlockQuantities
+				+ damagedRepairableOverlockQuantities;
+
+		if (availableForOverlock > 0) {
+			allowedJobworkTypes.add(JobworkType.OVERLOCK);
+		}
+
+		// IRONING is optional - can happen after stitching OR after overlock
+		// Calculate available quantity for ironing from both stitching and overlock receipts
+		List<JobworkReceipt> overlockJobworkReceipts = receiptRepository
+				.findByJobworkBatchSerialCodeAndJobworkJobworkType(batchSerialCode, JobworkType.OVERLOCK);
+		LOGGER.debug("Fetched {} jobwork receipts for OVERLOCK of batch {}", overlockJobworkReceipts.size(),
+				batchSerialCode);
+
+		Long totalAcceptedQuantityFromOverlock = !overlockJobworkReceipts.isEmpty() ? overlockJobworkReceipts.stream()
+				.flatMap(receipt -> receipt.getJobworkReceiptItems().stream())
+				.map(JobworkReceiptItem::getAcceptedQuantity).filter(Objects::nonNull).mapToLong(Long::longValue).sum()
+				: 0L;
+		LOGGER.debug("Accepted quantities received for batch {} from OVERLOCK jobs : {}", batchSerialCode,
+				totalAcceptedQuantityFromOverlock);
+
+		// If overlock was done, use overlock output; otherwise use stitching output
+		Long inputQuantityForIroning = totalAcceptedQuantityFromOverlock > 0 
+				? totalAcceptedQuantityFromOverlock 
+				: totalAcceptedQuantityForStitching;
+
+		Long assignedIroningQuantities = jobworkRepository.getAssignedQuantities(batchSerialCode,
+				JobworkType.IRONING.name());
+		Long damagedRepairableIroningQuantities = damageRepository.getDamagedQuantity(batchSerialCode,
+				DamageType.REPAIRABLE.name(), JobworkType.IRONING.name());
+		long availableForIroning = inputQuantityForIroning - assignedIroningQuantities
+				+ damagedRepairableIroningQuantities;
+
+		if (availableForIroning > 0) {
+			allowedJobworkTypes.add(JobworkType.IRONING);
 		}
 
 		return allowedJobworkTypes;

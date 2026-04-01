@@ -1,5 +1,7 @@
 package com.lakshmigarments.controller;
 
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Date;
 
@@ -78,8 +80,9 @@ public class BatchController {
 	// gets the possible jobwork types for a batch
 	@GetMapping("/{serialCode}/jobwork-types")
 	public ResponseEntity<List<JobworkType>> getJobworkTypes(@PathVariable String serialCode) {
-		LOGGER.info("Received request to fetch the allowed jobwork types for the batch");
-		List<JobworkType> allowedJobworkTypes = batchService.getAllowedJobworkTypes(serialCode);
+		String decodedSerialCode = decodeSerialCode(serialCode);
+		LOGGER.info("Received request to fetch the allowed jobwork types for the batch: {}", decodedSerialCode);
+		List<JobworkType> allowedJobworkTypes = batchService.getAllowedJobworkTypes(decodedSerialCode);
 		return new ResponseEntity<>(allowedJobworkTypes, HttpStatus.OK);
 	}
 
@@ -101,23 +104,27 @@ public class BatchController {
 	@GetMapping("/{serialCode}/{jobworkType}/available-quantity")
 	public ResponseEntity<Long> getAvailableQuantity(@PathVariable String serialCode,
 			@PathVariable String jobworkType) {
-		Long availableQuantity = batchService.getAvailableQuantities(serialCode, jobworkType);
+		String decodedSerialCode = decodeSerialCode(serialCode);
+		LOGGER.info("Received request for available quantities for batch {} and jobwork type {}", decodedSerialCode, jobworkType);
+		Long availableQuantity = batchService.getAvailableQuantities(decodedSerialCode, jobworkType);
 		return new ResponseEntity<>(availableQuantity, HttpStatus.OK);
 	}
 	
 	//get the quantity available for cutting for a batch
 	@GetMapping("/{serialCode}/cutting/available-quantity")
 	public ResponseEntity<Long> getAvailableQuantityForCutting(@PathVariable String serialCode) {
-		LOGGER.info("Received request for available quantities for cutting work for batch {}", serialCode);
-	    Long availableQuantity = batchService.getAvailableQuantitiesForCutting(serialCode);
+		String decodedSerialCode = decodeSerialCode(serialCode);
+		LOGGER.info("Received request for available quantities for cutting work for batch {}", decodedSerialCode);
+	    Long availableQuantity = batchService.getAvailableQuantitiesForCutting(decodedSerialCode);
 	    return ResponseEntity.ok(availableQuantity);
 	}
 
 	@GetMapping("/{serialCode}/cutting/{subCategoryName}/available-quantity")
 	public ResponseEntity<Long> getAvailableQuantityBySubCategory(@PathVariable String serialCode,
 			@PathVariable String subCategoryName) {
-		LOGGER.info("Received request for available quantities for sub-category {} for cutting work for batch {}", subCategoryName, serialCode);
-		Long availableQuantity = batchService.getAvailableQuantitiesBySubCategory(serialCode, subCategoryName);
+		String decodedSerialCode = decodeSerialCode(serialCode);
+		LOGGER.info("Received request for available quantities for sub-category {} for cutting work for batch {}", subCategoryName, decodedSerialCode);
+		Long availableQuantity = batchService.getAvailableQuantitiesBySubCategory(decodedSerialCode, subCategoryName);
 		return ResponseEntity.ok(availableQuantity);
 	}
 
@@ -138,10 +145,27 @@ public class BatchController {
 
 	@GetMapping("/serial-code/{serialCode}/sub-categories")
 	public ResponseEntity<List<String>> getSubCategoriesBySerialCode(@PathVariable String serialCode) {
-		LOGGER.info("Received request to get sub-categories for serial code: {}", serialCode);
-		List<String> subCategories = batchService.getSubCategoriesBySerialCode(serialCode);
-		LOGGER.info("Returning sub-categories for serial code: {}", serialCode);
+		String decodedSerialCode = decodeSerialCode(serialCode);
+		LOGGER.info("Received request to get sub-categories for serial code: {}", decodedSerialCode);
+		List<String> subCategories = batchService.getSubCategoriesBySerialCode(decodedSerialCode);
+		LOGGER.info("Returning sub-categories for serial code: {}", decodedSerialCode);
 		return ResponseEntity.ok(subCategories);
+	}
+	
+	/**
+	 * Decodes URL-encoded serial codes.
+	 * Handles encoded slashes (%2F) in serial codes like "P26%2F27-0001" -> "P26/27-0001"
+	 */
+	private String decodeSerialCode(String serialCode) {
+		if (serialCode == null || serialCode.isEmpty()) {
+			return serialCode;
+		}
+		try {
+			return URLDecoder.decode(serialCode, StandardCharsets.UTF_8.name());
+		} catch (Exception e) {
+			LOGGER.error("Failed to decode serial code: {}", serialCode, e);
+			return serialCode;
+		}
 	}
 	
 }

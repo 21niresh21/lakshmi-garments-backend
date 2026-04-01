@@ -1,5 +1,8 @@
 package com.lakshmigarments.controller;
 
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
 
@@ -30,10 +33,11 @@ public class BatchItemController {
 	@GetMapping("/batch/{serialCode}/{jobworkType}/available-quantity")
 	public ResponseEntity<List<BatchItemResponse>> getItemsByBatchId(@PathVariable String serialCode,
 			@PathVariable String jobworkType) {
+		String decodedSerialCode = decodeSerialCode(serialCode);
 		LOGGER.info("Received request to get available quantity of items for batch serial: {} and jobwork type {}",
-				serialCode, jobworkType);
-		List<BatchItemResponse> items = batchItemService.getBatchItemsByBatchSerial(serialCode, jobworkType);
-		LOGGER.info("Found {} items by batch serial code: {}", items.size(), serialCode);
+				decodedSerialCode, jobworkType);
+		List<BatchItemResponse> items = batchItemService.getBatchItemsByBatchSerial(decodedSerialCode, jobworkType);
+		LOGGER.info("Found {} items by batch serial code: {}", items.size(), decodedSerialCode);
 		return new ResponseEntity<>(items, HttpStatus.OK);
 	}
 
@@ -45,4 +49,20 @@ public class BatchItemController {
 //		return ResponseEntity.ok(availableQuantity);
 //	}
 
+	/**
+	 * Decodes URL-encoded serial codes.
+	 * Handles encoded slashes (%2F) in serial codes like "P26%2F27-0001" -> "P26/27-0001"
+	 */
+	private String decodeSerialCode(String serialCode) {
+		if (serialCode == null || serialCode.isEmpty()) {
+			return serialCode;
+		}
+		try {
+			return URLDecoder.decode(serialCode, StandardCharsets.UTF_8.name());
+		} catch (Exception e) {
+			LOGGER.error("Failed to decode serial code: {}", serialCode, e);
+			return serialCode;
+		}
+	}
+	
 }

@@ -76,10 +76,10 @@ public class JobworkReceiptServiceImpl implements JobworkReceiptService {
 		LOGGER.debug("Items issued for this jobwork {}", itemNames);
 		
 		Jobwork jobwork = this.getJobworkOrThrow(jobworkReceiptRequest.getJobworkNumber());
-		if (jobwork.getJobworkStatus() == JobworkStatus.CLOSED) {
-			LOGGER.error("Jobwork already closed.");
-			throw new JobworkClosedException("Jobwork already closed");
-		}
+//		if (jobwork.getJobworkStatus() == JobworkStatus.CLOSED) {
+//			LOGGER.error("Jobwork already closed.");
+//			throw new JobworkClosedException("Jobwork already closed");
+//		}
 //		Batch batch = this.getBatchOrThrow(jobwork.getBatch().getSerialCode());
 		
 		JobworkReceipt jobworkReceipt = new JobworkReceipt();
@@ -111,6 +111,9 @@ public class JobworkReceiptServiceImpl implements JobworkReceiptService {
 			totalQuantitiesAccountedForJobwork += receiptItemRequest.getAcceptedQuantity() +
 					receiptItemRequest.getSalesQuantity();
 			
+			// Save the jobwork receipt item first before creating damages that reference it
+			receiptItemRepository.save(jobworkReceiptItem);
+			
 			int totalDamagesForItem = 0;
 			if (receiptItemRequest.getDamages() == null || receiptItemRequest.getDamages().isEmpty()) {
 				LOGGER.debug("No damages for jobwork receipt item {}", receiptItemRequest.getItemName());
@@ -123,7 +126,22 @@ public class JobworkReceiptServiceImpl implements JobworkReceiptService {
 						damage.setJobworkReceiptItem(jobworkReceiptItem);
 						damage.setQuantity(damageRequest.getQuantity());
 						damage.setDamageType(DamageType.valueOf(damageRequest.getType()));
-						damage.setReportedFrom(jobwork);
+						
+						// Set reportedFrom based on request - default to current jobwork if not specified
+						if (damageRequest.getReportedJobworkFrom() != null && !damageRequest.getReportedJobworkFrom().isEmpty()) {
+							// Use the specified jobwork from the request
+							Jobwork reportedFromJobwork = jobworkRepository.findByJobworkNumber(damageRequest.getReportedJobworkFrom())
+									.orElseThrow(() -> {
+										LOGGER.error("Reported from jobwork not found with number: {}", damageRequest.getReportedJobworkFrom());
+										return new JobworkNotFoundException("Reported from jobwork not found with number: " + damageRequest.getReportedJobworkFrom());
+									});
+							damage.setReportedFrom(reportedFromJobwork);
+							LOGGER.debug("Damage reported from jobwork {}", reportedFromJobwork.getJobworkNumber());
+						} else {
+							// Default to current jobwork
+							damage.setReportedFrom(jobwork);
+							LOGGER.debug("Damage reported from current jobwork {} (default)", jobwork.getJobworkNumber());
+						}
 											
 						// Set damage source only for REPAIRABLE damage type
 						if (damage.getDamageType() == DamageType.REPAIRABLE && damageRequest.getSource() != null && !damageRequest.getSource().isEmpty()) {
@@ -132,10 +150,24 @@ public class JobworkReceiptServiceImpl implements JobworkReceiptService {
 							// Set causedBy based on damage source
 							if (DamageSource.CURRENT_JOBWORK == damage.getDamageSource()) {
 								damage.setCausedBy(jobwork);
+								// Set rework_job_work_id to current jobwork - this damage will be reworked by the same jobwork
+								damage.setReworkJobWork(jobwork);
+								LOGGER.debug("Damage marked for rework by current jobwork {}", jobwork.getJobworkNumber());
 							} else if (DamageSource.PREVIOUS_JOBWORK == damage.getDamageSource()) {
-								// For previous jobwork damage, we need to find the responsible jobwork
-								// This can be set later or determined from the batch's jobwork history
-								LOGGER.debug("Previous jobwork damage reported for item {}", receiptItemRequest.getItemName());
+								// For previous jobwork damage, set the rework jobwork if provided in request
+								if (damageRequest.getReworkJobworkNumber() != null && !damageRequest.getReworkJobworkNumber().isEmpty()) {
+									Jobwork reworkJobwork = jobworkRepository.findByJobworkNumber(damageRequest.getReworkJobworkNumber())
+											.orElseThrow(() -> {
+												LOGGER.error("Rework jobwork not found with number: {}", damageRequest.getReworkJobworkNumber());
+												return new JobworkNotFoundException("Rework jobwork not found with number: " + damageRequest.getReworkJobworkNumber());
+											});
+									damage.setReworkJobWork(reworkJobwork);
+									LOGGER.debug("Damage from PREVIOUS_JOBWORK assigned for rework to jobwork {}", reworkJobwork.getJobworkNumber());
+								} else {
+									LOGGER.warn("REPAIRABLE damage from PREVIOUS_JOBWORK without reworkJobworkNumber for item {}", receiptItemRequest.getItemName());
+								}
+								// The causedBy should be the previous jobwork that caused the damage (if known)
+								// For now, we leave causedBy as null since we don't know which previous jobwork caused it
 							}
 						}
 											
@@ -146,7 +178,7 @@ public class JobworkReceiptServiceImpl implements JobworkReceiptService {
 				}
 				LOGGER.debug("Total damages for receipt item {}", totalDamagesForItem);
 			}
-			totalQuantitiesAccountedForJobwork += totalDamagesForItem;
+			// Update damaged quantity after saving all damages
 			jobworkReceiptItem.setDamagedQuantity(Long.valueOf(totalDamagesForItem));
 			receiptItemRepository.save(jobworkReceiptItem);
 			LOGGER.debug("Created jobwork receipt item {}", receiptItemRequest.getItemName());

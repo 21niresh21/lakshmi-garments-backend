@@ -5,28 +5,32 @@ INSERT INTO roles (name) VALUES ('Production Admin');
 --INSERT INTO users (is_active, name, password, role_id) VALUES (true, 'admin', 'admin', 1);
 --INSERT INTO users (is_active, name, password, role_id) VALUES (true, 'bala', 'bala', 2);
 
--- INSERT INTO transports (name) VALUES ('A1');
+INSERT INTO transports (name) VALUES ('A1');
 
 -- INSERT INTO suppliers (location, name) VALUES ('annur', 'siva');
--- INSERT INTO suppliers (location, name) VALUES ('cbe', 'anoop');
+INSERT INTO suppliers (location, name) VALUES ('cbe', 'anoop');
 
 -- INSERT INTO categories (code, name) VALUES ('D', 'dull');
--- INSERT INTO categories (code, name) VALUES ('P', 'Premium');
+INSERT INTO categories (code, name) VALUES ('P', 'Premium');
 
--- INSERT INTO sub_categories (name) VALUES ('sleeve');
--- INSERT INTO sub_categories (name) VALUES ('half-sleeve');
+INSERT INTO sub_categories (name) VALUES ('mix & match');
+INSERT INTO sub_categories (name) VALUES ('procin allover');
 
--- INSERT INTO items (name) VALUES ('premium piping');
--- INSERT INTO items (name) VALUES ('premium gown model');
+INSERT INTO items (name) VALUES ('piping');
+INSERT INTO items (name) VALUES ('premium gown model');
 
--- INSERT INTO employees (name) VALUES ('niresh');
--- INSERT INTO employees (name) VALUES ('haris');
+INSERT INTO employees (name) VALUES ('niresh');
+INSERT INTO employees (name) VALUES ('bala');
+INSERT INTO employees (name) VALUES ('haris');
 
--- INSERT INTO skills (name) VALUES ('cutting');
--- INSERT INTO skills (name) VALUES ('stitching');
+INSERT INTO skills (name) VALUES ('cutting');
+INSERT INTO skills (name) VALUES ('stitching');
+INSERT INTO skills (name) VALUES ('embroidery');
+--INSERT INTO skills (name) VALUES ('stitching');
 
--- INSERT INTO employee_skills (employee_id, skill_id) VALUES (1,1);
--- INSERT INTO employee_skills (employee_id, skill_id) VALUES (2,2);
+INSERT INTO employee_skills (employee_id, skill_id) VALUES (1,1);
+INSERT INTO employee_skills (employee_id, skill_id) VALUES (2,3);
+INSERT INTO employee_skills (employee_id, skill_id) VALUES (3,2);
 
 -- INSERT INTO batch_statuses (name) VALUES ('Created');
 -- INSERT INTO batch_statuses (name) VALUES ('Work In Progress');

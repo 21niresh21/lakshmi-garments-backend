@@ -24,9 +24,9 @@ public interface BatchRepository extends JpaRepository<Batch, Long>, JpaSpecific
 			+ "WHERE b.serial_code = :serialCode AND b.id = bsc.batch_id", nativeQuery = true)
 	Long findQuantityBySerialCode(@Param("serialCode") String serialCode);
 
-	// JPQL query to get the latest serial code for a given category
-	@Query("SELECT b.serialCode FROM Batch b WHERE b.category.name = :categoryName ORDER BY b.createdAt DESC LIMIT 1")
-	Optional<String> findLatestSerialCodeByCategoryName(String categoryName);
+	// JPQL query to get the latest serial code for a given category (most recent by createdAt)
+	@Query("SELECT b.serialCode FROM Batch b WHERE b.category.name = :categoryName ORDER BY b.createdAt DESC")
+	List<String> findAllSerialCodesByCategoryName(String categoryName);
 
 	@Query("SELECT b FROM Batch b WHERE LOWER(b.serialCode) LIKE LOWER(CONCAT('%', :searchTerm, '%')) ORDER BY b.createdAt DESC ")
 	List<Batch> findBySerialCodeContaining(@Param("searchTerm") String searchTerm);

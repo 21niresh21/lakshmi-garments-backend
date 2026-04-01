@@ -18,6 +18,8 @@ import com.lakshmigarments.dto.PaydayDTO;
 import com.lakshmigarments.model.Damage;
 import com.lakshmigarments.model.DamageType;
 import com.lakshmigarments.model.Employee;
+import com.lakshmigarments.model.Jobwork;
+import com.lakshmigarments.model.JobworkItem;
 import com.lakshmigarments.model.JobworkReceipt;
 import com.lakshmigarments.model.JobworkReceiptItem;
 import com.lakshmigarments.repository.EmployeeRepository;
@@ -131,8 +133,14 @@ public class PaydayServiceImpl implements PaydayService {
 		Long pendingCount = jobworkRepository.countPendingJobworksByEmployeeName(employeeName);
 		payday.setPendingJobworkCount(pendingCount != null ? pendingCount : 0L);
 
+		// Get list of pending jobwork numbers
+		List<String> pendingJobworkNumbers = jobworkRepository.findPendingJobworkNumbersByEmployeeName(employeeName);
+		payday.setPendingJobworks(pendingJobworkNumbers != null ? pendingJobworkNumbers : new ArrayList<>());
+
 		// Initialize counters
-		long totalAcceptedQuantity = 0;
+		long totalAssignedQuantity = 0; // From jobwork items
+		long totalAcceptedQuantity = 0; // From receipt items
+		long totalDamagedQuantity = 0; // Total all damages
 		double grossWage = 0.0;
 		long salesQuantity = 0;
 		double salesDeduction = 0.0;
@@ -143,6 +151,14 @@ public class PaydayServiceImpl implements PaydayService {
 
 		// Calculate totals from all receipt items
 		for (JobworkReceipt receipt : receipts) {
+			// Add assigned quantities from the jobwork items
+			if (receipt.getJobwork() != null && receipt.getJobwork().getJobworkItems() != null) {
+				for (JobworkItem jobworkItem : receipt.getJobwork().getJobworkItems()) {
+					Long assignedQty = jobworkItem.getQuantity() != null ? jobworkItem.getQuantity() : 0L;
+					totalAssignedQuantity += assignedQty;
+				}
+			}
+
 			for (JobworkReceiptItem item : receipt.getJobworkReceiptItems()) {
 				// Accepted quantity and gross wage
 				Long acceptedQty = item.getAcceptedQuantity() != null ? item.getAcceptedQuantity() : 0L;
@@ -150,34 +166,50 @@ public class PaydayServiceImpl implements PaydayService {
 				totalAcceptedQuantity += acceptedQty;
 				grossWage += acceptedQty * wagePerItem;
 
-				// Sales deduction
+				// Sales deduction (only if there's a sales price)
 				Long salesQty = item.getSalesQuantity() != null ? item.getSalesQuantity() : 0L;
 				Double salesPrice = item.getSalesPrice() != null ? item.getSalesPrice() : 0.0;
 				salesQuantity += salesQty;
-				salesDeduction += salesQty * salesPrice;
+				
+				// Deduct sales amount from wage
+				if (salesPrice > 0) {
+					salesDeduction += salesQty * salesPrice;
+				}
 
 				// Process damages
 				for (Damage damage : item.getDamages()) {
 					Long damageQty = damage.getQuantity() != null ? damage.getQuantity() : 0L;
+					totalDamagedQuantity += damageQty; // Count all damages
 					
 					if (damage.getDamageType() == DamageType.UNREPAIRABLE) {
 						unrepairableDamageQty += damageQty;
-						// Deduct unrepairable damages at sales price
-						unrepairableDamageDeduction += damageQty * salesPrice;
+						unrepairableDamageDeduction += unrepairableDamageQty * salesPrice;
+						// Only deduct unrepairable if NOT already counted as sales
+						// Unrepairable damages that are sold should use salesPrice, otherwise no additional deduction
+						if (item.getSalesPrice() == null || item.getSalesPrice() == 0.0) {
+							// No sales price set, so no deduction for unrepairable
+							// (already handled by not paying for accepted quantity)
+						}
 					} else if (damage.getDamageType() == DamageType.REPAIRABLE) {
 						repairableDamageQty += damageQty;
+						// Repairable damages are not deducted - employee will rework these
 					} else if (damage.getDamageType() == DamageType.SUPPLIER_DAMAGE) {
 						supplierDamageQty += damageQty;
+						// Supplier damages are not deducted from employee wage
 					}
 				}
 			}
 		}
 
-		// Calculate net wage
+		// Calculate net wage: gross wage - sales deductions
+		// Note: Unrepairable damages are already not paid (not in acceptedQty), so no need to deduct again
+		// Only deduct actual sales (items sold to customers)
 		double netWage = grossWage - salesDeduction - unrepairableDamageDeduction;
 
 		// Set all values
+		payday.setTotalAssignedQuantity(totalAssignedQuantity);
 		payday.setTotalAcceptedQuantity(totalAcceptedQuantity);
+		payday.setTotalDamagedQuantity(totalDamagedQuantity);
 		payday.setGrossWage(grossWage);
 		payday.setSalesQuantity(salesQuantity);
 		payday.setSalesDeduction(salesDeduction);
