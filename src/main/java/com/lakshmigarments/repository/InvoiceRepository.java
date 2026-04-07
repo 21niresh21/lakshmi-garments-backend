@@ -32,7 +32,7 @@ public interface InvoiceRepository extends JpaRepository<Invoice, Long>, JpaSpec
 		    JOIN lorry_receipts lr ON i.id = lr.invoice_id
 		    JOIN bales b ON b.lorry_receipt_id = lr.id
 		    JOIN sub_categories sc ON b.sub_category_id = sc.id
-		    JOIN categories c ON sc.category_id = c.id
+		    JOIN categories c ON b.category_id = c.id
 		    WHERE i.id = ?1
 		""", nativeQuery = true)
 		List<String> findDistinctCategories(Long invoiceId);
@@ -49,6 +49,30 @@ public interface InvoiceRepository extends JpaRepository<Invoice, Long>, JpaSpec
 	@Query(value = "SELECT DISTINCT(b.length) FROM invoices i, lorry_receipts lr, bales b WHERE "
 			+ "i.id = lr.invoice_id AND lr.id = b.lorry_receipt_id AND i.id = ?1", nativeQuery = true)
 	List<Double> findDistinctLengths(Long id);
+	
+	boolean existsByInvoiceNumberAndSupplierNameAndIdNot(String invNo, String supplierName, Long id);
+	
+	boolean existsByInvoiceNumberAndSupplierId(String invNo, Long supplierId);
+	
+	@Query("SELECT COALESCE(SUM(b.quantity * b.price), 0) FROM Invoice i JOIN i.lorryReceipts lr JOIN lr.bales b " +
+           "WHERE i.receivedDate BETWEEN :startDate AND :endDate")
+    Double findTotalRevenueBetweenDates(java.time.LocalDate startDate, java.time.LocalDate endDate);
+	
+	@Query("SELECT COUNT(*) FROM Invoice i " +
+	           "WHERE i.receivedDate BETWEEN :startDate AND :endDate")
+	    Double findTotalInvoiceCountBetweenDates(java.time.LocalDate startDate, java.time.LocalDate endDate);
+
+    @Query("SELECT COALESCE(SUM(i.transportCost), 0) FROM Invoice i WHERE i.isPaid = false")
+    Double findTotalPendingTransportPayments();
+    
+    @Query("SELECT COUNT(i) FROM Invoice i WHERE i.isPaid = false")
+    Long countPendingInvoices();
+
+    @Query("SELECT i.supplier.name, SUM(b.quantity * b.price) FROM Invoice i JOIN i.lorryReceipts lr JOIN lr.bales b " +
+           "WHERE i.receivedDate BETWEEN :startDate AND :endDate " +
+           "GROUP BY i.supplier.name")
+    List<Object[]> findSupplierPerformanceBetweenDates(java.time.LocalDate startDate, java.time.LocalDate endDate);
+
 	
 	
 }

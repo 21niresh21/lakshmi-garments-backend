@@ -7,12 +7,15 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 import com.lakshmigarments.model.User;
 
-public interface UserRepository extends JpaRepository<User, Long>, JpaSpecificationExecutor<User> {
-
-	Optional<User> findByName(String name);
+public interface UserRepository extends JpaRepository<User, Long>, 
+	JpaSpecificationExecutor<User> {
 	
-	Optional<User> findByNameAndPassword(String name, String password);
+	Optional<User> findByUsername(String username);
 	
-	Boolean existsByName(String name);
+	Boolean existsByUsername(String username);
+	
+	Boolean existsByUsernameAndIdNot(String username, Long id);
+	
+	long countByRoleNameAndIsActiveTrue(String roleName);
 	
 }

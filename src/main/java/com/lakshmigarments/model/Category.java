@@ -1,13 +1,10 @@
 package com.lakshmigarments.model;
 
-import java.util.List;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,7 +13,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "categories")
 @Data
 @NoArgsConstructor
-public class Category {
+public class Category extends BaseAuditable {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,7 +22,7 @@ public class Category {
 	@Column(length = 200, nullable = false, unique = true)
 	private String name;
 	
-	@Column(length = 10, unique = true)
+	@Column(length = 10, nullable = false, unique = true)
 	private String code;
 	
 }

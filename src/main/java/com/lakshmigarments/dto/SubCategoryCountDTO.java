@@ -8,5 +8,6 @@ public class SubCategoryCountDTO {
 
 	private String subCategoryName;
 	private Long count;
+	private Double percentageOfCategory;
 
 }

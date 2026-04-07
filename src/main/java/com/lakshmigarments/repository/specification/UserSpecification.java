@@ -13,9 +13,20 @@ import jakarta.persistence.criteria.Predicate;
 
 public class UserSpecification {
 
-	public static Specification<User> filterByName(String name) {
-		return (root, query, criteriaBuilder) -> criteriaBuilder.like(criteriaBuilder.lower(root.get("name")),
-				"%" + name + "%");
+    public static Specification<User> filterByFirstName(String firstName) {
+        return (root, query, criteriaBuilder) -> criteriaBuilder.like(criteriaBuilder.lower(root.get("firstName")),
+                "%" + firstName.toLowerCase() + "%");
+    }
+	
+	public static Specification<User> filterByUsername(String username) {
+		return (root, query, criteriaBuilder) -> criteriaBuilder.like(criteriaBuilder.lower(root.get("username")),
+				"%" + username.toLowerCase() + "%");
+	}
+	
+	
+	public static Specification<User> filterByLastName(String lastName) {
+		return (root, query, criteriaBuilder) -> criteriaBuilder.like(criteriaBuilder.lower(root.get("lastName")),
+				"%" + lastName.toLowerCase() + "%");
 	}
 
 	public static Specification<User> filterByRoles(List<String> roleNames) {

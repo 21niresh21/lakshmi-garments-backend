@@ -18,6 +18,8 @@ public class BatchSubCategory {
 	private Long id;
 
 	private Long quantity;
+	
+	private Long availableQuantity;
 
 	@ManyToOne
 	@JoinColumn(name = "sub_category_id", nullable = false)

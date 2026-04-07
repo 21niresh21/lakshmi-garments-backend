@@ -1,0 +1,12 @@
+package com.lakshmigarments.dto;
+
+public enum TimelineEventType {
+	BATCH_CREATED,
+	BATCH_DISCARDED,
+	JOBWORK_ASSIGNED,
+	JOBWORK_RECEIPT,
+	JOBWORK_COMPLETED,
+	JOBWORK_REASSIGNED,
+	DAMAGE_RECORDED,
+	SALES_DONE
+}

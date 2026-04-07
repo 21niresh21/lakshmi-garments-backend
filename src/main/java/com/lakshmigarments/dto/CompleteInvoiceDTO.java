@@ -1,6 +1,7 @@
 package com.lakshmigarments.dto;
 
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 import com.lakshmigarments.model.LorryReceipt;
@@ -14,11 +15,13 @@ public class CompleteInvoiceDTO {
 
 private Long id;
 	
+	private boolean canEdit;
+
 	private String invoiceNumber;
 	
-	private Date invoiceDate;
+	private LocalDate invoiceDate;
 	
-	private Date receivedDate;
+	private LocalDate receivedDate;
 	
 	private String supplierName;
 	

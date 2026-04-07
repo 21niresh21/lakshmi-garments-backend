@@ -24,8 +24,8 @@ public class LorryReceipt {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@Column(length = 100, nullable = false, unique = true)
-	private String LRNumber;
+	@Column(length = 100, nullable = false)
+	private String LrNumber;
 	
 	@ManyToOne
 	private Invoice invoice;

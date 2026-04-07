@@ -4,9 +4,9 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,52 +16,60 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.lakshmigarments.dto.EmployeeRequestDTO;
-import com.lakshmigarments.dto.EmployeeResponseDTO;
+import com.lakshmigarments.dto.request.EmployeeRequest;
+import com.lakshmigarments.dto.response.EmployeeResponse;
+import com.lakshmigarments.dto.EmployeeStatsDTO;
 import com.lakshmigarments.service.EmployeeService;
 
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/employees")
-@CrossOrigin(origins = "*", allowedHeaders = "*")
+@RequiredArgsConstructor
 public class EmployeeController {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(EmployeeController.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(EmployeeController.class);
 
-    private final EmployeeService employeeService;
+	private final EmployeeService employeeService;
 
-    public EmployeeController(EmployeeService employeeService) {
-        this.employeeService = employeeService;
-    }
+	@GetMapping
+	public ResponseEntity<Page<EmployeeResponse>> getAllEmployees(
+			@RequestParam(required = false, defaultValue = "0") Integer pageNo,
+			@RequestParam(required = false, defaultValue = "10") Integer pageSize,
+			@RequestParam(required = false, defaultValue = "id") String sortBy,
+			@RequestParam(required = false, defaultValue = "asc") String sortOrder,
+			@RequestParam(required = false) List<String> employeeNames,
+			@RequestParam(required = false) List<String> skillNames,
+			@RequestParam(required = false) Boolean isActive,
+			@RequestParam(required = false) String search) {
+		LOGGER.info("Received request to fetch all employees matching search: {}", search);
+		Page<EmployeeResponse> employees = employeeService.getEmployees(
+				pageNo, pageSize, sortBy, sortOrder, employeeNames, skillNames, isActive, search);
+		return ResponseEntity.ok(employees);
+	}
 
-    @GetMapping
-    public ResponseEntity<List<EmployeeResponseDTO>> getAllEmployees(@RequestParam(required = false) String search) {
-        LOGGER.info("Received request to get all employees");
-        List<EmployeeResponseDTO> employees = employeeService.getAllEmployees(search);
-        LOGGER.info("Employees retrieved successfully");
-        return ResponseEntity.status(HttpStatus.OK).body(employees);
-    }
+	@PostMapping
+	public ResponseEntity<EmployeeResponse> createEmployee(
+			@RequestBody @Valid EmployeeRequest request) {
+		LOGGER.info("Received request to create employee: {}", request.getName());
+		EmployeeResponse response = employeeService.createEmployee(request);
+		return new ResponseEntity<>(response, HttpStatus.CREATED);
+	}
 
-    @PostMapping
-    public ResponseEntity<EmployeeResponseDTO> createEmployee(
-            @Valid @RequestBody EmployeeRequestDTO employeeRequestDTO) {
-        LOGGER.info("Received request to create employee: {}", employeeRequestDTO.getName());
+	@PutMapping("/{id}")
+	public ResponseEntity<EmployeeResponse> updateEmployee(@PathVariable Long id,
+			@RequestBody @Valid EmployeeRequest request) {
+		LOGGER.info("Received request to update employee ID: {}", id);
+		EmployeeResponse response = employeeService.updateEmployee(id, request);
+		return ResponseEntity.ok(response);
+	}
 
-        EmployeeResponseDTO responseDTO = employeeService.createEmployee(employeeRequestDTO);
-
-        LOGGER.info("Employee created successfully with ID: {}", responseDTO.getId());
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<EmployeeResponseDTO> updateEmployee(@PathVariable Long id,
-            @Valid @RequestBody EmployeeRequestDTO employeeRequestDTO) {
-        LOGGER.info("Received request to update employee with ID: {}", id);
-        EmployeeResponseDTO responseDTO = employeeService.updateEmployee(id, employeeRequestDTO);
-        LOGGER.info("Employee updated successfully with ID: {}", id);
-        return ResponseEntity.status(HttpStatus.OK).body(responseDTO);
-    }
+	@GetMapping("/stats/{id}")
+	public ResponseEntity<EmployeeStatsDTO> getEmployeeStats(@PathVariable Long id) {
+		LOGGER.info("Received request to fetch stats for employee ID: {}", id);
+		EmployeeStatsDTO stats = employeeService.getEmployeeStats(id);
+		return ResponseEntity.ok(stats);
+	}
 
 }

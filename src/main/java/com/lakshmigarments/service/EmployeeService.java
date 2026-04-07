@@ -1,19 +1,27 @@
 package com.lakshmigarments.service;
 
 import java.util.List;
+import org.springframework.data.domain.Page;
+import com.lakshmigarments.dto.request.EmployeeRequest;
+import com.lakshmigarments.dto.response.EmployeeResponse;
+import com.lakshmigarments.dto.EmployeeStatsDTO;
 
-import org.springframework.stereotype.Service;
-
-import com.lakshmigarments.dto.EmployeeRequestDTO;
-import com.lakshmigarments.dto.EmployeeResponseDTO;
-
-@Service
 public interface EmployeeService {
 	
-	EmployeeResponseDTO createEmployee(EmployeeRequestDTO employeeRequestDTO);
+	EmployeeResponse createEmployee(EmployeeRequest employeeRequest);
 	
-	EmployeeResponseDTO updateEmployee(Long id, EmployeeRequestDTO employeeRequestDTO);
+	EmployeeResponse updateEmployee(Long id, EmployeeRequest employeeRequest);
 
-	List<EmployeeResponseDTO> getAllEmployees(String search);
+	Page<EmployeeResponse> getEmployees(
+	        Integer pageNo,
+	        Integer pageSize,
+	        String sortBy,
+	        String sortOrder,
+	        List<String> employeeNames,
+	        List<String> skillNames,
+	        Boolean isActive,
+	        String search);
+
+	EmployeeStatsDTO getEmployeeStats(Long employeeId);
 
 }

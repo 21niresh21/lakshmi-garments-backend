@@ -20,16 +20,16 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Bale {
+public class Bale extends BaseAuditable {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@Column(length = 100, nullable = false, unique = true)
+	@Column(length = 100, nullable = false)
 	private String baleNumber;
 	
-	private Integer quantity;
+	private Long quantity;
 	
 	private Double length;
 	
@@ -48,8 +48,8 @@ public class Bale {
 	@ManyToOne
 	private SubCategory subCategory;
 	
-	public Bale(String baleNumber, Integer quantity, Double length, Double price, String quality, 
-			 SubCategory subCategory, LorryReceipt lorryReceipt) {
+	public Bale(String baleNumber, Long quantity, Double length, Double price, String quality,
+			 	SubCategory subCategory, Category category, LorryReceipt lorryReceipt) {
 		this.baleNumber = baleNumber;
 		this.quantity = quantity;
 		this.length = length;
@@ -57,6 +57,7 @@ public class Bale {
 		this.quality = quality;
 		this.lorryReceipt = lorryReceipt;
 		this.subCategory = subCategory;
+		this.category = category;
 	}
 	
 }

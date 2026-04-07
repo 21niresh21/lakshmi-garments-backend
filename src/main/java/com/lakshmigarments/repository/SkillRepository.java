@@ -10,6 +10,8 @@ import com.lakshmigarments.model.Skill;
 public interface SkillRepository extends JpaRepository<Skill, Long>,  
 	JpaSpecificationExecutor<Skill>	{
 	
-	boolean existsByName(String name);
+	boolean existsByNameIgnoreCase(String name);
+	
+	boolean existsByNameIgnoreCaseAndIdNot(String name, Long id);
 
 }

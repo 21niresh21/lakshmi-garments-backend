@@ -1,7 +1,13 @@
 package com.lakshmigarments.dto;
 
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
+
+import org.hibernate.annotations.CreationTimestamp;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -13,6 +19,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class CreateStockDTO {
 	
 	@NotBlank(message = "Invoice number is mandatory")
@@ -20,10 +27,12 @@ public class CreateStockDTO {
 	private String invoiceNumber;
 	
 	@PastOrPresent
-	private Date invoiceDate;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
+	private LocalDate invoiceDate;
 	
 	@PastOrPresent
-	private Date shipmentReceivedDate;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
+	private LocalDate receivedDate;
 	
 	@NotNull(message = "Supplier ID is mandatory")
 	@Positive(message = "Supplier ID should be positive")
@@ -36,8 +45,6 @@ public class CreateStockDTO {
 	private Double transportCost;
 	
 	private Boolean isTransportPaid;
-	
-	private Long createdById;
 	
 	@NotNull
 	private List<CreateLorryReceiptDTO> lorryReceipts;

@@ -11,7 +11,7 @@ public class BaleDTO {
 	
 	private String baleNumber;
 	
-	private Integer quantity;
+	private Long quantity;
 	
 	private Double length;
 	
@@ -22,4 +22,5 @@ public class BaleDTO {
 	private String category;
 	
 	private String subCategory;
+	
 }

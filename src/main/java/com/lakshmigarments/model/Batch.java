@@ -1,16 +1,17 @@
 package com.lakshmigarments.model;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -22,7 +23,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Batch {
+public class Batch extends BaseAuditable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,8 +32,9 @@ public class Batch {
 	@Column(length = 100, nullable = false, unique = true)
 	private String serialCode;
 	
-	@CreationTimestamp
-	private Timestamp createdAt;
+	private Long quantity;
+	
+	private Long availableQuantity;
 	
 	@ManyToOne
 	private Category category;
@@ -41,8 +43,8 @@ public class Batch {
 	
 	private Boolean isUrgent;
 	
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "batch_status_id")
-	private BatchStatus batchStatus;
+	@Enumerated(EnumType.STRING)
+    @Column(name = "batch_status", nullable = false)
+    private BatchStatus batchStatus;
 
 }

@@ -1,19 +1,15 @@
 package com.lakshmigarments.service;
 
 import java.util.List;
+import com.lakshmigarments.dto.request.SkillRequest;
+import com.lakshmigarments.dto.response.SkillResponse;
 
-import org.springframework.stereotype.Service;
-
-import com.lakshmigarments.dto.SkillRequestDTO;
-import com.lakshmigarments.dto.SkillResponseDTO;
-
-@Service
 public interface SkillService {
 	
-	SkillResponseDTO createSkill(SkillRequestDTO skillRequestDTO);
+	SkillResponse createSkill(SkillRequest skillRequest);
 	
-	List<SkillResponseDTO> getAllSkills(String search);
+	List<SkillResponse> getAllSkills(String search);
 
-	SkillResponseDTO updateSkill(Long id, SkillRequestDTO skillRequestDTO);
+	SkillResponse updateSkill(Long id, SkillRequest skillRequest);
 
 }

@@ -5,24 +5,16 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(
-    name = "sub_categories",
-    uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"name", "category_id"})
-    }
-)
+@Table(name = "sub_categories")
 @Data
 @NoArgsConstructor
-public class SubCategory {
+public class SubCategory extends BaseAuditable {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
-    @Column(length = 200, nullable = false)
-    private String name;
+	@Column(length = 200, unique = true, nullable = false)
+	private String name;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "category_id", nullable = false)
-    private Category category;
 }
